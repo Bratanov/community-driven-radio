@@ -1,0 +1,25 @@
+<style>
+	#text{
+		height: 200px;
+		width: 99%;
+		border: 1px solid #aaa;
+		overflow: scroll;
+	}
+	#message {
+		width: 80%;
+	}
+</style>
+
+<div id='content'>
+	<input id="my-name" style="width: 19%" value="unnamed" /><input id="message" placeholder="type a message here"/>
+	<div id="text"></div>
+	<div><span id="usersCount">-</span> users.</div>
+</div>
+
+<div>Now playing: <span id="song-info"></span></div>
+<div>Queue: <div id="queue-info"></div></div>
+<iframe width="320" height="180"></iframe>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/badass-client.js"></script>
