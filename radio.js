@@ -23,9 +23,10 @@ var youTubeApi = {
 	}
 }
 
-var Song = function(youtubeId, duration) {
+var Song = function(youtubeId, title, duration) {
 	this.youtubeId = youtubeId;
 	this.duration = duration;
+	this.title = title;
 
 	// Limit duration of a song to 5min
 	this.duration = Math.min(this.duration, 5 * 60 * 1000);
@@ -90,7 +91,7 @@ var Song = function(youtubeId, duration) {
 	 * @return {string}
 	 */
 	this.getInfo = function() {
-		return this.youtubeId + ' ' + 
+		return this.title + ' (' + this.youtubeId + ') ' + 
 		(   
 			( ! this.isOver()) ? // if the song is not over it's either playing or still in queue
 				this.getCurrentSeekPosition() + '/' + this.getDurationInSec() :
@@ -130,11 +131,16 @@ var Queue = function(ioUsers) {
 	this.add = function(videoId) {
 		youTubeApi.getVideo(videoId, function(data) {
 			if(data.pageInfo.totalResults > 0) {
+				if( ! data.items[0].status.embeddable) {
+					return; // Show error?
+				}
+
+				var title = data.items[0].snippet.title;
 				var resultDuration = data.items[0].contentDetails.duration;
 
 				var durationInMs = moment.duration(resultDuration).asMilliseconds();
 
-				self.items.push(new Song(videoId, durationInMs));
+				self.items.push(new Song(videoId, title, durationInMs));
 
 				onQueueChanged();
 			}
