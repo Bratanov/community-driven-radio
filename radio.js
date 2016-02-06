@@ -1,8 +1,27 @@
-var YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY || console.error('Please set a YOUTUBE_API_KEY environment variable');
 var request = require('request');
 var moment = require('moment');
 var express = require('express');
 var socketio = require('socket.io');
+
+var youTubeApi = {
+	YOUTUBE_API_KEY: process.env.YOUTUBE_API_KEY || console.error('Please set a YOUTUBE_API_KEY environment variable'),
+	getVideo: function(youtubeId, callbackSuccess, callbackError) {
+		var youTubeApiRequestUrl = 'https://www.googleapis.com/youtube/v3/videos?id=' + youtubeId + '&part=contentDetails,status,snippet&key=' + youTubeApi.YOUTUBE_API_KEY;
+		request(youTubeApiRequestUrl, function (error, response, body) {
+		    if ( ! error && response.statusCode == 200) {
+		        var data = JSON.parse(body); // Parse response from YouTube
+		        
+		        if(typeof callbackSuccess === 'function') {
+		        	callbackSuccess(data);
+		        }
+			} else {
+				if(typeof callbackError === 'function') {
+					callbackError(error);
+				}
+			}
+		});
+	}
+}
 
 var Song = function(youtubeId, duration) {
 	this.youtubeId = youtubeId;
@@ -109,21 +128,16 @@ var Queue = function(ioUsers) {
 	}
 
 	this.add = function(videoId) {
-		var youTubeApiRequestUrl = 'https://www.googleapis.com/youtube/v3/videos?id=' + videoId + '&part=contentDetails&key=' + YOUTUBE_API_KEY;
-		request(youTubeApiRequestUrl, function (error, response, body) {
-		    if ( ! error && response.statusCode == 200) {
-		        var data = JSON.parse(body); // Parse response from YouTube
+		youTubeApi.getVideo(videoId, function(data) {
+			if(data.pageInfo.totalResults > 0) {
+				var resultDuration = data.items[0].contentDetails.duration;
 
-		        if(data.pageInfo.totalResults > 0) {
-		        	var resultDuration = data.items[0].contentDetails.duration;
+				var durationInMs = moment.duration(resultDuration).asMilliseconds();
 
-		        	var durationInMs = moment.duration(resultDuration).asMilliseconds();
+				self.items.push(new Song(videoId, durationInMs));
 
-		        	self.items.push(new Song(videoId, durationInMs));
-
-		        	onQueueChanged();
-		        }
-		     }
+				onQueueChanged();
+			}
 		});
 	}
 
