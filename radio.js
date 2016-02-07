@@ -119,10 +119,52 @@ var Queue = function(ioUsers) {
 		ioUsers.emit('queue_info', self.getInfo());
 	}
 
+	var getVotesCount = function(song) {
+		var votes = 0;
+
+		// Loop through the currently connected users
+		for(var userId in ioUsers.connected) {
+			var userSocket = ioUsers.connected[userId];
+
+			// Get the votes array from this users Socket object
+			var votes = userSocket.votes || [];
+
+			// Check if the song id is contained inside
+			if(votes.indexOf(song.id) !== -1) {
+				return votes++;
+			}
+		}
+
+		return votes;
+	}
+
+	/**
+	 * Returns the items in the queue
+	 * sorted by the priority based
+	 * on the votes of the users
+	 * 
+	 * @return {array} Array of song items, sorted by votes/pos
+	 */
+	this.getItems = function() {
+		// Make a fresh copy of the original items
+		var copyItems = this.items.slice();
+
+		copyItems.sort(function(item1, item2) {
+			var votesForItem1 = getVotesCount(item1);
+			var votesForItem2 = getVotesCount(item2);
+
+			return votesForItem1 < votesForItem2;
+		});
+
+		return copyItems;
+	}
+
 	this.getInfo = function() {
 		var queueInfo = [];
-		for(var itemIndex in self.items) {
-			queueInfo.push(self.items[itemIndex].getInfo());
+		var queueSortedItems = this.getItems();
+
+		for(var itemIndex in queueSortedItems) {
+			queueInfo.push(queueSortedItems[itemIndex].getInfo());
 		}
 
 		return queueInfo;
@@ -197,7 +239,7 @@ server.listen(4000);
 var io = socketio.listen(server);
 
 // Start our song queue
-var queue = new Queue(io);
+var queue = new Queue(io.sockets);
 queue.run();
 
 var usersCount = 0;
