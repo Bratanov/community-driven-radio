@@ -45,7 +45,7 @@ var Song = function(youtubeId, title, duration) {
 	this.relatedVideos = [];
 
 	// Limit duration of a song to 5min
-	this.duration = Math.min(this.duration, 15000);//5 * 60 * 1000);
+	this.duration = Math.min(this.duration, 5 * 60 * 1000);
 
 	var startedPlayingAt = null;
 	var shouldStopPlayingAt = null;
