@@ -24,12 +24,18 @@ var youTubeApi = {
 }
 
 var Song = function(youtubeId, title, duration) {
+	/**
+	 * Generate a unique id for the song
+	 * Doesn't have to be very random
+	 * @type {string}
+	 */
+	this.id = Date.now().toString() + (Math.random() * 10000000000000000).toString();
 	this.youtubeId = youtubeId;
 	this.duration = duration;
 	this.title = title;
 
 	// Limit duration of a song to 5min
-	this.duration = Math.min(this.duration, 5 * 60 * 1000);
+	this.duration = Math.min(this.duration, 15000);//5 * 60 * 1000);
 
 	var startedPlayingAt = null;
 	var shouldStopPlayingAt = null;
@@ -91,13 +97,21 @@ var Song = function(youtubeId, title, duration) {
 	 * @return {string}
 	 */
 	this.getInfo = function() {
-		return this.title + ' (' + this.youtubeId + ') ' + 
-		(   
-			( ! this.isOver()) ? // if the song is not over it's either playing or still in queue
-				this.getCurrentSeekPosition() + '/' + this.getDurationInSec() :
-				this.getDurationInSec() + ' sec.'
-		)
-		;
+		// return this.title + ' (' + this.youtubeId + ') ' + 
+		// (   
+		// 	( ! this.isOver()) ? // if the song is not over it's either playing or still in queue
+		// 		this.getCurrentSeekPosition() + '/' + this.getDurationInSec() :
+		// 		this.getDurationInSec() + ' sec.'
+		// )
+		// ;
+		
+		return {
+			id: this.id,
+			title: this.title,
+			youtubeId: this.youtubeId,
+			duration: this.getDurationInSec(),
+			playTime: ( ! this.isOver()) ? (this.getCurrentSeekPosition() + '/' + this.getDurationInSec()) : false
+		}
 	}
 }
 
@@ -120,7 +134,7 @@ var Queue = function(ioUsers) {
 	}
 
 	var getVotesCount = function(song) {
-		var votes = 0;
+		var votesCount = 0;
 
 		// Loop through the currently connected users
 		for(var userId in ioUsers.connected) {
@@ -131,11 +145,11 @@ var Queue = function(ioUsers) {
 
 			// Check if the song id is contained inside
 			if(votes.indexOf(song.id) !== -1) {
-				return votes++;
+				return votesCount++;
 			}
 		}
 
-		return votes;
+		return votesCount;
 	}
 
 	/**
@@ -164,7 +178,13 @@ var Queue = function(ioUsers) {
 		var queueSortedItems = this.getItems();
 
 		for(var itemIndex in queueSortedItems) {
-			queueInfo.push(queueSortedItems[itemIndex].getInfo());
+			// Get info for the song
+			var songInfo = queueSortedItems[itemIndex].getInfo();
+
+			// Attach votes (stored in the queue, not on the song)
+			songInfo.votes = getVotesCount(queueSortedItems[itemIndex]);
+
+			queueInfo.push(songInfo);
 		}
 
 		return queueInfo;
@@ -196,7 +216,13 @@ var Queue = function(ioUsers) {
 				return;
 			}
 
-			var newSong = self.items.shift();
+			// The next song would be the first one from the sorted queue
+			var newSong = self.getItems().shift();
+
+			// Remove the song we just took - from the original items array
+			var newSongIndexInQueue = self.items.indexOf(newSong);
+			self.items.splice(newSongIndexInQueue, 1);
+
 			onQueueChanged();
 
 			newSong.play();

@@ -14,13 +14,17 @@
 			$(this).val('');
 		}
 	});
+
+	$('body').on('click', 'btn-vote', function() {
+		socket.emit('vote', $(this).data('song-id'));
+	});
 	
 	socket.on('chat_msg', function(data){
 		addMessage(data);
 	});
 
 	socket.on('new_song', function(song) {
-		$('#text').prepend('<p>Now plaing: '+song+'</p>');
+		$('#text').prepend('<p>Now plaing: ' + song + '</p>');
 		play(song);
 		console.log(song);
 	});
@@ -34,7 +38,7 @@
 	});
 
 	socket.on('song_info', function(data) {
-		$('#song-info').text(data);
+		$('#song-info').html(renderSong(data));
 	});
 
 	socket.on('queue_info', function(data) {
@@ -43,9 +47,21 @@
 		$queue_info = $queue_info.find('ol');
 
 		for(var song in data) {
-			$queue_info.append('<li>' + data[song] + '</li>');
+			$queue_info.append('<li>' + renderSong(data[song]) + '</li>');
 		}
 	});
+
+	function renderSong(song) {
+		// Default votes to 0
+		song.votes = song.votes || 0;
+
+		return '<a href="https://youtube.com/watch?v=' + song.youtubeId + '" target="_blank">' 
+			+ song.title 
+			+ '</a> - ' 
+			+ ((song.playTime) ? song.playTime : song.duration) + 'sec. '
+			+ '<button class="btn-vote" data-song-id="' + song.id + '">Vote up (' + song.votes + ')</button>'
+		;
+	}
 
 	function play(thingie) {
 		$('iframe').attr('src', 'https://www.youtube.com/embed/' + thingie);
