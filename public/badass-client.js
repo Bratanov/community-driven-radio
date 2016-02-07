@@ -15,6 +15,16 @@
 		}
 	});
 
+	$('#newSong').on('keyup', function(e){
+		if(e.keyCode == 13){
+			//Send msg
+			socket.emit('new_song', $(this).val());
+
+			//Clear text in input
+			$(this).val('');
+		}
+	});
+
 	$('body').on('click', '.btn-vote', function() {
 		socket.emit('vote', $(this).data('song-id'));
 	});

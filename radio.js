@@ -281,6 +281,7 @@ var lastMessages = [];
 
 //Event user connected
 io.on('connection', function(socket){
+	var isAdmin = false; // TODO: Implement admin functionalities
 	usersCount++;
 	io.emit('usersCount', usersCount);
 
@@ -300,7 +301,7 @@ io.on('connection', function(socket){
 		socket.broadcast.emit('chat_msg', data);
 
 		lastMessages.push(data);
-		if(lastMessages.length > 15) {
+		if(lastMessages.length > 50) {
 			lastMessages.shift();
 		}
 	});
@@ -311,6 +312,7 @@ io.on('connection', function(socket){
 	});
 
 	socket.on('vote', function(songId) {
+		// Upvote this song
 		queue.addVote(socket, songId);
 	});
 
@@ -320,7 +322,9 @@ io.on('connection', function(socket){
 		io.emit('usersCount', usersCount);
 	});
 
-	socket.on('refresh-them', function() {
-		io.emit('getRefreshed', true);
-	});
+	if(isAdmin) {
+		socket.on('refresh-them', function() {
+			io.emit('getRefreshed', true);
+		});
+	}
 });
