@@ -15,7 +15,7 @@
 		}
 	});
 
-	$('body').on('click', 'btn-vote', function() {
+	$('body').on('click', '.btn-vote', function() {
 		socket.emit('vote', $(this).data('song-id'));
 	});
 	
@@ -49,6 +49,11 @@
 		for(var song in data) {
 			$queue_info.append('<li>' + renderSong(data[song]) + '</li>');
 		}
+	});
+
+	socket.on('be_alerted', function(message) {
+		// alert lolzorz
+		alert(message);
 	});
 
 	function renderSong(song) {

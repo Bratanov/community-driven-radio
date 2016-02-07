@@ -29,7 +29,7 @@ var Song = function(youtubeId, title, duration) {
 	 * Doesn't have to be very random
 	 * @type {string}
 	 */
-	this.id = Date.now().toString() + (Math.random() * 10000000000000000).toString();
+	this.id = Date.now().toString() + parseInt(Math.random() * 100000000000).toString();
 	this.youtubeId = youtubeId;
 	this.duration = duration;
 	this.title = title;
@@ -97,14 +97,6 @@ var Song = function(youtubeId, title, duration) {
 	 * @return {string}
 	 */
 	this.getInfo = function() {
-		// return this.title + ' (' + this.youtubeId + ') ' + 
-		// (   
-		// 	( ! this.isOver()) ? // if the song is not over it's either playing or still in queue
-		// 		this.getCurrentSeekPosition() + '/' + this.getDurationInSec() :
-		// 		this.getDurationInSec() + ' sec.'
-		// )
-		// ;
-		
 		return {
 			id: this.id,
 			title: this.title,
@@ -145,11 +137,25 @@ var Queue = function(ioUsers) {
 
 			// Check if the song id is contained inside
 			if(votes.indexOf(song.id) !== -1) {
-				return votesCount++;
+				votesCount++;
 			}
 		}
 
 		return votesCount;
+	}
+
+	this.addVote = function(userSocket, songId) {
+		var currentVotes = userSocket.votes || [];
+
+		if(currentVotes.indexOf(songId) === -1) {
+			currentVotes.push(songId);
+			// Put the votes back in the socket object
+			userSocket.votes = currentVotes;
+
+			onQueueChanged();
+		} else {
+			userSocket.emit('be_alerted', 'You\'ve already voted for this song');
+		}
 	}
 
 	/**
@@ -234,7 +240,9 @@ var Queue = function(ioUsers) {
 		}
 
 		// Send current song info:
-		ioUsers.emit('song_info', self.active.getInfo());
+		var newSongInfo = self.active.getInfo();
+		newSongInfo.votes = getVotesCount(self.active);
+		ioUsers.emit('song_info', newSongInfo);
 	}
 
 	this.run = function() {
@@ -300,6 +308,10 @@ io.on('connection', function(socket){
 	socket.on('new_song', function(data){
 		// Add to queue
 		queue.add(data);
+	});
+
+	socket.on('vote', function(songId) {
+		queue.addVote(socket, songId);
 	});
 
 	socket.on('disconnect', function () {
