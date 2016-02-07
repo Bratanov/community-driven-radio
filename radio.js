@@ -350,6 +350,7 @@ io.on('connection', function(socket){
 	if(queue.active && ! queue.active.isOver()) {
 		socket.emit('new_song', queue.active.getVideoUrlParams());
 		socket.emit('queue_info', queue.getInfo());
+		socket.emit('related_info', queue.active.relatedVideos);
 	}
 
 	// Send history to user
