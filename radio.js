@@ -259,6 +259,15 @@ var Queue = function(ioUsers) {
 	this.stop = function() {
 		clearInterval(this.queueInterval);
 	}
+
+	/**
+	 * Use this to manually trigger an update to the queue/positions
+	 * and display it to all users. Can be used for example when a
+	 * user disconnects and we want to update visually the queue
+	 */
+	this.triggerOnQueueChanged = function() {
+		onQueueChanged();
+	}
 }
 
 // App is the express server that serves the static files in public
@@ -320,6 +329,13 @@ io.on('connection', function(socket){
 		usersCount--;
 
 		io.emit('usersCount', usersCount);
+
+		/**
+		 * A user has left which would cause the
+		 * sorting of the queue to potentially
+		 * change, we need to let users know 
+		 */
+		queue.triggerOnQueueChanged();
 	});
 
 	if(isAdmin) {
