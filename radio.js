@@ -56,21 +56,6 @@ var Song = function(youtubeId, title, duration) {
 	this.play = function() {
 		startedPlayingAt = Date.now();
 		shouldStopPlayingAt = startedPlayingAt + this.duration;
-
-		// Load and add related videos in the self.relatedVideos array
-		youTubeApi.getRelatedVideos(this.youtubeId, function(data) {
-			if(data.pageInfo.totalResults > 0 && data.items.length) {
-				for(var itemId in data.items) {
-					// The data we need from the YouTube response
-					var relatedVideoInfo = {
-						youtubeId: data.items[itemId].id.videoId,
-						title: data.items[itemId].snippet.title
-					}
-
-					self.relatedVideos.push(relatedVideoInfo);
-				}
-			}
-		});
 	}
 
 	/**
@@ -127,8 +112,7 @@ var Song = function(youtubeId, title, duration) {
 			title: this.title,
 			youtubeId: this.youtubeId,
 			duration: this.getDurationInSec(),
-			playTime: ( ! this.isOver()) ? (this.getCurrentSeekPosition() + '/' + this.getDurationInSec()) : false,
-			relatedVideos: this.relatedVideos
+			playTime: ( ! this.isOver()) ? (this.getCurrentSeekPosition() + '/' + this.getDurationInSec()) : false
 		}
 	}
 }
@@ -152,6 +136,11 @@ var Queue = function(ioUsers) {
 		ioUsers.emit('queue_info', self.getInfo());
 	}
 
+	var onRelatedChanged = function(song) {
+		// Send queue info:
+		ioUsers.emit('related_info', song.relatedVideos);
+	}
+
 	var getVotesCount = function(song) {
 		var votesCount = 0;
 
@@ -169,6 +158,25 @@ var Queue = function(ioUsers) {
 		}
 
 		return votesCount;
+	}
+
+	var loadRelatedVideos = function(song) {
+		// Load and add related videos in the self.relatedVideos array
+		youTubeApi.getRelatedVideos(song.youtubeId, function(data) {
+			if(data.pageInfo.totalResults > 0 && data.items.length) {
+				for(var itemId in data.items) {
+					// The data we need from the YouTube response
+					var relatedVideoInfo = {
+						youtubeId: data.items[itemId].id.videoId,
+						title: data.items[itemId].snippet.title
+					}
+
+					song.relatedVideos.push(relatedVideoInfo);
+				}
+
+				onRelatedChanged(song);
+			}
+		});
 	}
 
 	this.addVote = function(userSocket, songId) {
@@ -275,6 +283,9 @@ var Queue = function(ioUsers) {
 			newSong.play();
 
 			self.active = newSong;
+
+			// Load related videos for newly played active song
+			loadRelatedVideos(self.active);
 
 			// Emit to all users:
 			ioUsers.emit('new_song', self.active.getVideoUrlParams());
