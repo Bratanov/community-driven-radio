@@ -28,6 +28,10 @@
 	$('body').on('click', '.btn-vote', function() {
 		socket.emit('vote', $(this).data('song-id'));
 	});
+
+	$('body').on('click', '.add-song', function() {
+		socket.emit('new_song', $(this).data('youtube-id'));
+	});
 	
 	socket.on('chat_msg', function(data){
 		addMessage(data);
@@ -66,15 +70,30 @@
 		alert(message);
 	});
 
+	function renderRelatedSongs(songs) {
+		var view = '<ul>Related <i>(First one will play if nothing in queue)</i>:';
+
+		for(var relatedId in songs) {
+			var relatedSong = songs[relatedId];
+			view += '<li>' + relatedSong.title + ' <button class="add-song" data-youtube-id="' + relatedSong.youtubeId + '">Add to queue</button></li>'
+		}
+
+		view += '</ul>';
+
+		return view;
+	}
+
 	function renderSong(song) {
 		// Default votes to 0
 		song.votes = song.votes || 0;
+		var relatedVideosView = (song.relatedVideos.length ? renderRelatedSongs(song.relatedVideos) : '');
 
 		return '<a href="https://youtube.com/watch?v=' + song.youtubeId + '" target="_blank">' 
 			+ song.title 
 			+ '</a> - ' 
 			+ ((song.playTime) ? song.playTime : song.duration) + 'sec. '
 			+ '<button class="btn-vote" data-song-id="' + song.id + '">Vote up (' + song.votes + ')</button>'
+			+ relatedVideosView
 		;
 	}
 

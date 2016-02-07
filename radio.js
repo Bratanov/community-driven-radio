@@ -5,8 +5,8 @@ var socketio = require('socket.io');
 
 var youTubeApi = {
 	YOUTUBE_API_KEY: process.env.YOUTUBE_API_KEY || console.error('Please set a YOUTUBE_API_KEY environment variable'),
-	getVideo: function(youtubeId, callbackSuccess, callbackError) {
-		var youTubeApiRequestUrl = 'https://www.googleapis.com/youtube/v3/videos?id=' + youtubeId + '&part=contentDetails,status,snippet&key=' + youTubeApi.YOUTUBE_API_KEY;
+	URL_BASE: 'https://www.googleapis.com/youtube/v3/',
+	simpleGetRequest: function(youTubeApiRequestUrl, callbackSuccess, callbackError) {
 		request(youTubeApiRequestUrl, function (error, response, body) {
 		    if ( ! error && response.statusCode == 200) {
 		        var data = JSON.parse(body); // Parse response from YouTube
@@ -20,10 +20,19 @@ var youTubeApi = {
 				}
 			}
 		});
+	},
+	getVideo: function(youtubeId, callbackSuccess, callbackError) {
+		var youTubeApiRequestUrl = this.URL_BASE + 'videos?id=' + youtubeId + '&part=contentDetails,status,snippet&key=' + this.YOUTUBE_API_KEY;
+		this.simpleGetRequest(youTubeApiRequestUrl, callbackSuccess, callbackError);
+	},
+	getRelatedVideos: function(youtubeId, callbackSuccess, callbackError) {
+		var youTubeApiRequestUrl = this.URL_BASE + 'search?type=video&relatedToVideoId=' + youtubeId + '&part=snippet&key=' + this.YOUTUBE_API_KEY;
+		this.simpleGetRequest(youTubeApiRequestUrl, callbackSuccess, callbackError);
 	}
 }
 
 var Song = function(youtubeId, title, duration) {
+	var self = this;
 	/**
 	 * Generate a unique id for the song
 	 * Doesn't have to be very random
@@ -33,6 +42,7 @@ var Song = function(youtubeId, title, duration) {
 	this.youtubeId = youtubeId;
 	this.duration = duration;
 	this.title = title;
+	this.relatedVideos = [];
 
 	// Limit duration of a song to 5min
 	this.duration = Math.min(this.duration, 15000);//5 * 60 * 1000);
@@ -46,6 +56,21 @@ var Song = function(youtubeId, title, duration) {
 	this.play = function() {
 		startedPlayingAt = Date.now();
 		shouldStopPlayingAt = startedPlayingAt + this.duration;
+
+		// Load and add related videos in the self.relatedVideos array
+		youTubeApi.getRelatedVideos(this.youtubeId, function(data) {
+			if(data.pageInfo.totalResults > 0 && data.items.length) {
+				for(var itemId in data.items) {
+					// The data we need from the YouTube response
+					var relatedVideoInfo = {
+						youtubeId: data.items[itemId].id.videoId,
+						title: data.items[itemId].snippet.title
+					}
+
+					self.relatedVideos.push(relatedVideoInfo);
+				}
+			}
+		});
 	}
 
 	/**
@@ -102,7 +127,8 @@ var Song = function(youtubeId, title, duration) {
 			title: this.title,
 			youtubeId: this.youtubeId,
 			duration: this.getDurationInSec(),
-			playTime: ( ! this.isOver()) ? (this.getCurrentSeekPosition() + '/' + this.getDurationInSec()) : false
+			playTime: ( ! this.isOver()) ? (this.getCurrentSeekPosition() + '/' + this.getDurationInSec()) : false,
+			relatedVideos: this.relatedVideos
 		}
 	}
 }
@@ -114,6 +140,7 @@ var Queue = function(ioUsers) {
 	this.active = null;
 
 	var queueInterval = null;
+	var relatedVideoIsLoading = false;
 
 	/**
 	 * When the queue changes we want to
@@ -217,10 +244,24 @@ var Queue = function(ioUsers) {
 
 	this.work = function() {
 		if(self.active === null || self.active.isOver()) {
+			// When nothing is in the queue
 			if(self.items.length === 0) {
-				// No items in queue, play something random?
+				if(relatedVideoIsLoading) {
+					// Wait for the related video to load
+					return;
+				}
+
+				// Add the first related video to queue (asynchronous!)
+				if(self.active !== null && self.active.relatedVideos.length) {
+					self.add(self.active.relatedVideos[0].youtubeId);
+					relatedVideoIsLoading = true;
+				}
+
+				// Nothing active or no related videos found
 				return;
 			}
+			// Reset the value of the flag, used when loading related videos on empty queue
+			relatedVideoIsLoading = false;
 
 			// The next song would be the first one from the sorted queue
 			var newSong = self.getItems().shift();
