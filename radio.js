@@ -211,7 +211,15 @@ var Queue = function(ioUsers) {
 		}
 
 		copyItems.sort(function(item1, item2) {
-			return item1.votes < item2.votes;
+			if(item1.votes > item2.votes) {
+				return -1;
+			}
+
+			if(item1.votes < item2.votes) {
+				return 1;
+			}
+
+			return 0;
 		});
 
 		return copyItems;
