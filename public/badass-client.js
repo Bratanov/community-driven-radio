@@ -37,9 +37,9 @@ socket.on('chat_msg', function(data){
 });
 
 socket.on('new_song', function(song) {
-	$('#text').prepend('<p>Now plaing: ' + song + '</p>');
+	$('#text').append('<p>Now plaing: ' + song + '</p>');
+	$('#text').scrollTop(999999999);
 	play(song);
-	console.log(song);
 });
 
 socket.on('usersCount', function(data){
