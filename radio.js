@@ -201,14 +201,25 @@ var Queue = function(ioUsers) {
 	 * @return {array} Array of song items, sorted by votes/pos
 	 */
 	this.getItems = function() {
-		// Make a fresh copy of the original items
-		var copyItems = this.items.slice();
+		// Make a fresh copy of the original items with votes included
+		var copyItems = [];
+		for(var itemIndex in this.items) {
+			var item = this.items[itemIndex];
+			item.votes = getVotesCount(item);
+
+			copyItems.push(item);
+		}
 
 		copyItems.sort(function(item1, item2) {
-			var votesForItem1 = getVotesCount(item1);
-			var votesForItem2 = getVotesCount(item2);
+			if(item1.votes > item2.votes) {
+				return -1;
+			}
 
-			return votesForItem1 < votesForItem2;
+			if(item1.votes < item2.votes) {
+				return 1;
+			}
+
+			return 0;
 		});
 
 		return copyItems;
@@ -219,11 +230,12 @@ var Queue = function(ioUsers) {
 		var queueSortedItems = this.getItems();
 
 		for(var itemIndex in queueSortedItems) {
+			var item = queueSortedItems[itemIndex];
 			// Get info for the song
-			var songInfo = queueSortedItems[itemIndex].getInfo();
+			var songInfo = item.getInfo();
 
 			// Attach votes (stored in the queue, not on the song)
-			songInfo.votes = getVotesCount(queueSortedItems[itemIndex]);
+			songInfo.votes = getVotesCount(item);
 
 			queueInfo.push(songInfo);
 		}
