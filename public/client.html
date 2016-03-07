@@ -17,7 +17,7 @@
 	}
 </style>
 
-<div id='content'>
+<div id="content">
 	<input id="my-name" style="width: 19%" value="unnamed" /><input id="message" placeholder="type a message here"/>
 	<div id="text"></div>
 	<div><span id="usersCount">-</span> users.</div>
@@ -25,7 +25,8 @@
 
 <div>
 	<div id="song-container">
-		<iframe width="320" height="180"></iframe>
+		<div id="player"></div>
+		<!--<iframe width="320" height="180"></iframe>-->
 	</div>
 	<div id="song-stuff">
 		<div>Now playing: <span id="song-info"><i>Nothing yet, add a song below</i></span></div>
@@ -36,5 +37,6 @@
 </div>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/badass-client.js"></script>

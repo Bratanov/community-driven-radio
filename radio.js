@@ -94,6 +94,8 @@ var Song = function(youtubeId, title, duration) {
 	 * @return {string} Include video id, autoplay and time (if needed)
 	 */
 	this.getVideoUrlParams = function() {
+		return this.youtubeId;
+		// TODO: cleanup. these params are needed on player init (badass-client)
 		return this.youtubeId + '?' + 
 			'autoplay=1&controls=0&' + 
 			'start=' + this.getCurrentSeekPosition();

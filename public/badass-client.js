@@ -39,7 +39,7 @@ socket.on('chat_msg', function(data){
 socket.on('new_song', function(song) {
 	$('#text').append('<p>Now plaing: ' + song + '</p>');
 	$('#text').scrollTop(999999999);
-	play(song);
+	player.play(song);
 });
 
 socket.on('usersCount', function(data){
@@ -100,12 +100,68 @@ function renderSong(song) {
 	;
 }
 
-function play(thingie) {
+/*function play(thingie) {
 	$('iframe').attr('src', 'https://www.youtube.com/embed/' + thingie);
-}
+}*/
 
 function addMessage(message) {
 	$('#text').append('<p>Message: '+ $('<div/>').text(message).html() +'</p>');
 
 	$('#text').scrollTop(999999999);
 }
+
+/**
+ * A player object
+ */
+var player = {
+
+	instance: null,
+	ready: false,
+	init: function() {
+		var self = this;
+		// called right after api library is loaded asyncronosly
+		window.onYouTubeIframeAPIReady = function() {
+			self.instance = new YT.Player('player', {
+				height: '390',
+				width: '640',
+				events: {
+					'onReady': self.onPlayerReady,
+					'onStateChange': self.onPlayerStateChange
+				}
+			});
+		}
+	},
+	// functions to call right after player is ready
+	// TODO: mark as private and change name
+	queuedActions: [],
+
+	onPlayerReady: function(event) {
+		var self = player;
+		self.ready = true;
+		if (self.queuedActions.length) {
+			self.queuedActions.forEach(function(action) {
+				if (typeof action === 'function') {
+					action();
+				}
+			});
+		}
+		
+		console.log('player ready');
+	},
+
+	onPlayerStateChange: function() {
+		console.log('player state changed');
+	},
+
+	play: function(videoId) {
+		var self = this;
+		if (self.ready) {
+			self.instance.loadVideoById(videoId);
+			self.instance.playVideo();
+		} else {
+			self.queuedActions.push(self.play.bind(self, videoId));
+		}
+	}
+}
+
+player.init();
