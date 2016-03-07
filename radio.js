@@ -113,6 +113,7 @@ var Song = function(youtubeId, title, duration) {
 			id: this.id,
 			title: this.title,
 			youtubeId: this.youtubeId,
+			playingAt: this.getCurrentSeekPosition(),
 			duration: this.getDurationInSec(),
 			playTime: ( ! this.isOver()) ? (this.getCurrentSeekPosition() + '/' + this.getDurationInSec()) : false
 		}
@@ -261,6 +262,8 @@ var Queue = function(ioUsers) {
 
 				onQueueChanged();
 			}
+		}, function(error) {
+			console.log('Error adding a song: ', error);
 		});
 	}
 

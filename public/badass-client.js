@@ -51,7 +51,10 @@ socket.on('getRefreshed', function(data){
 });
 
 socket.on('song_info', function(data) {
-	$('#song-info').html(renderSong(data));
+	if (data.playTime) {	
+		$('#song-info').html(renderSong(data));
+		player.streamPlayingAt(data.playingAt);
+	}
 });
 
 socket.on('queue_info', function(data) {
@@ -117,13 +120,20 @@ var player = {
 
 	instance: null,
 	ready: false,
-	init: function() {
+	_streamPlayingAt: 0,
+	init: function($player) {
 		var self = this;
+
 		// called right after api library is loaded asyncronosly
 		window.onYouTubeIframeAPIReady = function() {
-			self.instance = new YT.Player('player', {
-				height: '390',
-				width: '640',
+			self.instance = new YT.Player($player.get(0), {
+				height: '180',
+				width: '320',
+				playerVars: {
+					controls: 0, // disable video controls
+					disablekb: 1, // disable keyboard player controls
+					rel: 0 // so not show related videos after song finishes
+				},
 				events: {
 					'onReady': self.onPlayerReady,
 					'onStateChange': self.onPlayerStateChange
@@ -132,14 +142,14 @@ var player = {
 		}
 	},
 	// functions to call right after player is ready
-	// TODO: mark as private and change name
-	queuedActions: [],
+	_queuedActionsAfterInit: [],
 
 	onPlayerReady: function(event) {
+		// Note: event.target === self.instance
 		var self = player;
 		self.ready = true;
-		if (self.queuedActions.length) {
-			self.queuedActions.forEach(function(action) {
+		if (self._queuedActionsAfterInit.length) {
+			self._queuedActionsAfterInit.forEach(function(action) {
 				if (typeof action === 'function') {
 					action();
 				}
@@ -149,19 +159,59 @@ var player = {
 		console.log('player ready');
 	},
 
-	onPlayerStateChange: function() {
+	onPlayerStateChange: function(event) {
+		// TODO: trying to seek player time here,
+		// triggers a nasty recursion...doh
+		// current solution is to use flags in code
+		// 
+		// alternative: binding click handler on iframe doesn't work
+		// since event doesn't bubble up to current page
 		console.log('player state changed');
+
+		var self = player;
+		switch (self.instance.getPlayerState()) {
+			case YT.PlayerState.PAUSED:
+				// player paused. do nothing. for now.
+				break;
+			case YT.PlayerState.PLAYING:
+				// player resumed, seek video to server time.
+				if (!self.seekedFromCode) {
+					var seekToTime = self.streamPlayingAt();
+					self.instance.seekTo(seekToTime, true);
+
+					self.seekedFromCode = true;
+				} else {
+					self.seekedFromCode = false;
+				}
+				break;
+		}
+	},
+
+	/**
+	 * Getter/setter for server playing time of the current song.
+	 * @param  {Number} songSeekTime   Seconds passed from the song start.
+	 * @return {Number}                Last saved stream time.
+	 */
+	streamPlayingAt: function(songSeekTime) {
+		if (arguments.length) {
+			this._streamPlayingAt = songSeekTime;
+		}
+
+		return this._streamPlayingAt;
 	},
 
 	play: function(videoId) {
 		var self = this;
 		if (self.ready) {
 			self.instance.loadVideoById(videoId);
+			var seekToTime = self.streamPlayingAt();
+			self.instance.seekTo(seekToTime, true);
 			self.instance.playVideo();
 		} else {
-			self.queuedActions.push(self.play.bind(self, videoId));
+			// call is defered for when player is ready
+			self._queuedActionsAfterInit.push(self.play.bind(self, videoId));
 		}
 	}
 }
 
-player.init();
+player.init($('#player'));
