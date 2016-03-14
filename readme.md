@@ -12,7 +12,7 @@ A DevLabs Project
 
 `node radio`
 
-Note: You have to set an environment variable called `YOUTUBE_API_KEY` with a valid API key from YouTube for this to work. (For windows you can do something like: `SET YOUTUBE_API_KEY=mykeyhere && node radio`) More on that here: https://developers.google.com/youtube/
+Note: You have to set an environment variable called `YOUTUBE_API_KEY` with a valid API key from YouTube for this to work. (For windows you can do something like: `SET YOUTUBE_API_KEY=mykeyhere && node radio`) Get teh API key here: https://console.developers.google.com/apis/credentials Read the docs here: https://developers.google.com/youtube/
 
 ## Contributions
 
