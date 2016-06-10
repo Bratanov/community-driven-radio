@@ -28,6 +28,10 @@ $('body').on('click', '.btn-vote', function() {
 	socket.emit('vote', $(this).data('song-id'));
 });
 
+$('body').on('click', '.btn-delete', function() {
+	socket.emit('delete_queued', $(this).data('song-id'));
+});
+
 $('body').on('click', '.add-song', function() {
 	socket.emit('new_song', $(this).data('youtube-id'));
 });
@@ -60,7 +64,13 @@ socket.on('queue_info', function(data) {
 	$queue_info = $queue_info.find('ol');
 
 	for(var song in data) {
-		$queue_info.append('<li>' + renderSong(data[song]) + '</li>');
+		var o = data[song];
+		var addedBy = o.addedBy.substring(2);
+		var deleteButton = '';
+		if (addedBy == socket.id) {
+			deleteButton = '<button class="btn-delete" data-song-id="' + o.id + '">Remove</button>';
+		}
+		$queue_info.append('<li>' + renderSong(o) + deleteButton + '</li>');
 	}
 });
 
