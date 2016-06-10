@@ -6,7 +6,7 @@ $('#message').on('keyup', function(e){
 
 		//Send msg
 		socket.emit('chat_msg', message);
-		
+
 		addMessage(message);
 
 		//Clear text in input
@@ -16,8 +16,10 @@ $('#message').on('keyup', function(e){
 
 $('#newSong').on('keyup', function(e){
 	if(e.keyCode == 13){
+		var id = getIdFromYoutubeUrl($(this).val());
+
 		//Send msg
-		socket.emit('new_song', $(this).val());
+		socket.emit('new_song', id);
 
 		//Clear text in input
 		$(this).val('');
@@ -92,9 +94,9 @@ function renderSong(song) {
 	// Default votes to 0
 	song.votes = song.votes || 0;
 
-	return '<a href="https://youtube.com/watch?v=' + song.youtubeId + '" target="_blank">' 
-		+ song.title 
-		+ '</a> - ' 
+	return '<a href="https://youtube.com/watch?v=' + song.youtubeId + '" target="_blank">'
+		+ song.title
+		+ '</a> - '
 		+ ((song.playTime) ? song.playTime : song.duration) + 'sec. '
 		+ '<button class="btn-vote" data-song-id="' + song.id + '">Vote up (' + song.votes + ')</button>'
 	;
@@ -108,4 +110,18 @@ function addMessage(message) {
 	$('#text').append('<p>Message: '+ $('<div/>').text(message).html() +'</p>');
 
 	$('#text').scrollTop(999999999);
+}
+
+function isURL(str) {
+	return /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(str);
+}
+
+function getIdFromYoutubeUrl(url) {
+	var id = "";
+	if (! isURL(url) && url.length == 11) {
+		return url;
+	}
+	var r = new RegExp('^.*(?:youtu.be\/|v\/|e\/|u\/\w+\/|embed\/|v=)([^#\&\?]*).*');
+	var m = url.match(r);
+	return m[1];
 }
