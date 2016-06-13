@@ -6,7 +6,7 @@ $('#message').on('keyup', function(e){
 
 		//Send msg
 		socket.emit('chat_msg', message);
-		
+
 		addMessage(message);
 
 		//Clear text in input
@@ -26,6 +26,10 @@ $('#newSong').on('keyup', function(e){
 
 $('body').on('click', '.btn-vote', function() {
 	socket.emit('vote', $(this).data('song-id'));
+});
+
+$('body').on('click', '.btn-delete', function() {
+	socket.emit('delete_queued', $(this).data('song-id'));
 });
 
 $('body').on('click', '.add-song', function() {
@@ -63,7 +67,13 @@ socket.on('queue_info', function(data) {
 	$queue_info = $queue_info.find('ol');
 
 	for(var song in data) {
-		$queue_info.append('<li>' + renderSong(data[song]) + '</li>');
+		var o = data[song];
+		var addedBy = o.addedBy.substring(2);
+		var deleteButton = '';
+		if (addedBy == socket.id) {
+			deleteButton = '<button class="btn-delete" data-song-id="' + o.id + '">Remove</button>';
+		}
+		$queue_info.append('<li>' + renderSong(o) + deleteButton + '</li>');
 	}
 });
 
@@ -95,9 +105,9 @@ function renderSong(song) {
 	// Default votes to 0
 	song.votes = song.votes || 0;
 
-	return '<a href="https://youtube.com/watch?v=' + song.youtubeId + '" target="_blank">' 
-		+ song.title 
-		+ '</a> - ' 
+	return '<a href="https://youtube.com/watch?v=' + song.youtubeId + '" target="_blank">'
+		+ song.title
+		+ '</a> - '
 		+ ((song.playTime) ? song.playTime : song.duration) + 'sec. '
 		+ '<button class="btn-vote" data-song-id="' + song.id + '">Vote up (' + song.votes + ')</button>'
 	;
