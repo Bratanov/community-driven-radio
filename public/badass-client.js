@@ -215,29 +215,17 @@ var player = {
 		return this._streamPlayingAt;
 	},
 
-<<<<<<< HEAD
-	play: function(videoId) {
-		var self = this;
-		if (self.ready) {
-			self.instance.loadVideoById(videoId);
-			var seekToTime = self.streamPlayingAt();
-=======
 	play: function(videoId, params) {
 		var params = params || {};
 		var self = this;
 		if (self.ready) {
 			var seekToTime = params.start || self.streamPlayingAt();
 			self.instance.loadVideoById(videoId);
->>>>>>> feature/resume-playback
 			self.instance.seekTo(seekToTime, true);
 			self.instance.playVideo();
 		} else {
 			// call is defered for when player is ready
-<<<<<<< HEAD
-			self._queuedActionsAfterInit.push(self.play.bind(self, videoId));
-=======
 			self._queuedActionsAfterInit.push(self.play.bind(self, videoId, params));
->>>>>>> feature/resume-playback
 		}
 	}
 }
@@ -257,8 +245,6 @@ function getIdFromYoutubeUrl(url) {
 	var m = url.match(r);
 	return m[1];
 }
-<<<<<<< HEAD
-=======
 
 function queryStringToObj(q) {
 	var query = {};
@@ -270,4 +256,3 @@ function queryStringToObj(q) {
 	}
 	return query;
 }
->>>>>>> feature/resume-playback
