@@ -16,8 +16,10 @@ $('#message').on('keyup', function(e){
 
 $('#newSong').on('keyup', function(e){
 	if(e.keyCode == 13){
+		var id = getIdFromYoutubeUrl($(this).val());
+
 		//Send msg
-		socket.emit('new_song', $(this).val());
+		socket.emit('new_song', id);
 
 		//Clear text in input
 		$(this).val('');
@@ -55,7 +57,7 @@ socket.on('getRefreshed', function(data){
 });
 
 socket.on('song_info', function(data) {
-	if (data.playTime) {	
+	if (data.playTime) {
 		$('#song-info').html(renderSong(data));
 		player.streamPlayingAt(data.playingAt);
 	}
@@ -165,7 +167,7 @@ var player = {
 				}
 			});
 		}
-		
+
 		console.log('player ready');
 	},
 
@@ -173,7 +175,7 @@ var player = {
 		// TODO: trying to seek player time here,
 		// triggers a nasty recursion...doh
 		// current solution is to use flags in code
-		// 
+		//
 		// alternative: binding click handler on iframe doesn't work
 		// since event doesn't bubble up to current page
 		console.log('player state changed');
@@ -225,3 +227,17 @@ var player = {
 }
 
 player.init($('#player'));
+
+function isURL(str) {
+	return /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(str);
+}
+
+function getIdFromYoutubeUrl(url) {
+	var id = "";
+	if (! isURL(url) && url.length == 11) {
+		return url;
+	}
+	var r = new RegExp('^.*(?:youtu.be\/|v\/|e\/|u\/\w+\/|embed\/|v=)([^#\&\?]*).*');
+	var m = url.match(r);
+	return m[1];
+}
