@@ -296,7 +296,6 @@ var Queue = function(ioUsers) {
 
 				// Add the first related video to queue (asynchronous!)
 				if(self.active !== null && self.active.relatedVideos.length) {
-					console.log(self.active);
 					self.add(self.active.relatedVideos[0].youtubeId);
 					relatedVideoIsLoading = true;
 				}
