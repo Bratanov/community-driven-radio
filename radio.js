@@ -10,9 +10,9 @@ var youTubeApi = {
 		request(youTubeApiRequestUrl, function (error, response, body) {
 		    if ( ! error && response.statusCode == 200) {
 		        var data = JSON.parse(body); // Parse response from YouTube
-		        
+
 		        if(typeof callbackSuccess === 'function') {
-		        	callbackSuccess(data);
+					callbackSuccess(data);
 		        }
 			} else {
 				if(typeof callbackError === 'function') {
@@ -31,7 +31,7 @@ var youTubeApi = {
 	}
 }
 
-var Song = function(youtubeId, title, duration) {
+var Song = function(youtubeId, title, duration, addedBy) {
 	var self = this;
 	/**
 	 * Generate a unique id for the song
@@ -43,6 +43,7 @@ var Song = function(youtubeId, title, duration) {
 	this.duration = duration;
 	this.title = title;
 	this.relatedVideos = [];
+	this.addedBy = addedBy;
 
 	// Limit duration of a song to 5min
 	this.duration = Math.min(this.duration, 5 * 60 * 1000);
@@ -88,16 +89,15 @@ var Song = function(youtubeId, title, duration) {
 	}
 
 	/**
-	 * Those params can be inserted after youtube.com/embed/ 
+	 * Those params can be inserted after youtube.com/embed/
 	 * and are sent to the end users to play the video with
-	 * 
+	 *
 	 * @return {string} Include video id, autoplay and time (if needed)
 	 */
 	this.getVideoUrlParams = function() {
-		return this.youtubeId;
-		// TODO: cleanup. these params are needed on player init (badass-client)
-		return this.youtubeId + '?' + 
-			'autoplay=1&controls=0&' + 
+		// return this.youtubeId;
+		return this.youtubeId + '?' +
+			'autoplay=1&controls=0&' +
 			'start=' + this.getCurrentSeekPosition();
 	}
 
@@ -105,7 +105,7 @@ var Song = function(youtubeId, title, duration) {
 	 * Returns a summary of a song for display to
 	 * users. When playing it includes the time
 	 * played and when over the total duration
-	 * 
+	 *
 	 * @return {string}
 	 */
 	this.getInfo = function() {
@@ -115,14 +115,15 @@ var Song = function(youtubeId, title, duration) {
 			youtubeId: this.youtubeId,
 			playingAt: this.getCurrentSeekPosition(),
 			duration: this.getDurationInSec(),
-			playTime: ( ! this.isOver()) ? (this.getCurrentSeekPosition() + '/' + this.getDurationInSec()) : false
+			playTime: ( ! this.isOver()) ? (this.getCurrentSeekPosition() + '/' + this.getDurationInSec()) : false,
+			addedBy: this.addedBy.id
 		}
 	}
 }
 
 var Queue = function(ioUsers) {
 	var self = this;
-	
+
 	this.items = [];
 	this.active = null;
 
@@ -200,7 +201,7 @@ var Queue = function(ioUsers) {
 	 * Returns the items in the queue
 	 * sorted by the priority based
 	 * on the votes of the users
-	 * 
+	 *
 	 * @return {array} Array of song items, sorted by votes/pos
 	 */
 	this.getItems = function() {
@@ -246,7 +247,9 @@ var Queue = function(ioUsers) {
 		return queueInfo;
 	}
 
-	this.add = function(videoId) {
+	this.add = function(userSocket, videoId) {
+		var songs = userSocket.songs || [];
+
 		youTubeApi.getVideo(videoId, function(data) {
 			if(data.pageInfo.totalResults > 0) {
 				if( ! data.items[0].status.embeddable) {
@@ -258,13 +261,28 @@ var Queue = function(ioUsers) {
 
 				var durationInMs = moment.duration(resultDuration).asMilliseconds();
 
-				self.items.push(new Song(videoId, title, durationInMs));
+				self.items.push(new Song(videoId, title, durationInMs, userSocket));
 
 				onQueueChanged();
 			}
 		}, function(error) {
 			console.log('Error adding a song: ', error);
 		});
+	}
+
+	this.delete = function(userSocket, videoId) {
+		var song = self.items.filter(function (o) {
+			return o.id == videoId;
+		});
+		if (! song.length) {
+			return;
+		}
+		song = song[0];
+		if (song.addedBy.id == userSocket.id) {
+			var idx = self.items.indexOf(song);
+			self.items.splice(idx, 1);
+			onQueueChanged();
+		}
 	}
 
 	this.work = function() {
@@ -387,7 +405,12 @@ io.on('connection', function(socket){
 
 	socket.on('new_song', function(data){
 		// Add to queue
-		queue.add(data);
+		queue.add(socket, data);
+	});
+
+	socket.on('delete_queued', function(data){
+		// Remove from queue
+		queue.delete(socket, data);
 	});
 
 	socket.on('vote', function(songId) {
@@ -403,7 +426,7 @@ io.on('connection', function(socket){
 		/**
 		 * A user has left which would cause the
 		 * sorting of the queue to potentially
-		 * change, we need to let users know 
+		 * change, we need to let users know
 		 */
 		queue.triggerOnQueueChanged();
 	});
