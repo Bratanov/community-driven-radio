@@ -95,7 +95,6 @@ var Song = function(youtubeId, title, duration, addedBy) {
 	 * @return {string} Include video id, autoplay and time (if needed)
 	 */
 	this.getVideoUrlParams = function() {
-		// return this.youtubeId;
 		return this.youtubeId + '?' +
 			'autoplay=1&controls=0&' +
 			'start=' + this.getCurrentSeekPosition();
@@ -285,6 +284,21 @@ var Queue = function(ioUsers) {
 		}
 	}
 
+	this.delete = function(userSocket, videoId) {
+		var song = self.items.filter(function (o) {
+			return o.id == videoId;
+		});
+		if (! song.length) {
+			return;
+		}
+		song = song[0];
+		if (song.addedBy.id == userSocket.id) {
+			var idx = self.items.indexOf(song);
+			self.items.splice(idx, 1);
+			onQueueChanged();
+		}
+	}
+
 	this.work = function() {
 		if(self.active === null || self.active.isOver()) {
 			// When nothing is in the queue
@@ -296,7 +310,7 @@ var Queue = function(ioUsers) {
 
 				// Add the first related video to queue (asynchronous!)
 				if(self.active !== null && self.active.relatedVideos.length) {
-					self.add(self.active.relatedVideos[0].youtubeId);
+					self.add({}, self.active.relatedVideos[0].youtubeId);
 					relatedVideoIsLoading = true;
 				}
 
