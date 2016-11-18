@@ -7,6 +7,12 @@ npm-debug.log*
 *.sublime-project
 *.sublime-workspace
 
+# Vim config
+.vimrc
+
+# Startup script
+start.sh
+
 # Runtime data
 pids
 *.pid
