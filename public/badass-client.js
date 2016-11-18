@@ -181,9 +181,10 @@ var player = {
 		//
 		// alternative: binding click handler on iframe doesn't work
 		// since event doesn't bubble up to current page
-		console.log('player state changed');
-
 		var self = player;
+		console.log('Player state changed to', Object.keys(YT.PlayerState).filter(function(key) {
+			return self.instance.getPlayerState() === YT.PlayerState[key];
+		})[0].toLowerCase() + ".");
 		switch (self.instance.getPlayerState()) {
 			case YT.PlayerState.PAUSED:
 				// player paused. do nothing. for now.
@@ -192,7 +193,7 @@ var player = {
 				// player resumed, seek video to server time.
 				if (!self.seekedFromCode) {
 					var seekToTime = self.streamPlayingAt();
-					self.instance.seekTo(seekToTime, true);
+					self.instance.seekTo(parseFloat(seekToTime), true);
 
 					self.seekedFromCode = true;
 				} else {
@@ -221,7 +222,7 @@ var player = {
 		if (self.ready) {
 			var seekToTime = params.start || self.streamPlayingAt();
 			self.instance.loadVideoById(videoId);
-			self.instance.seekTo(seekToTime, true);
+			self.instance.seekTo(parseFloat(seekToTime), true);
 			self.instance.playVideo();
 		} else {
 			// call is defered for when player is ready
