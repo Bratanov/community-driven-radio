@@ -6,7 +6,7 @@ $('#message').on('keyup', function(e){
 
 		//Send msg
 		socket.emit('chat_msg', message);
-		
+
 		addMessage(message);
 
 		//Clear text in input
@@ -16,8 +16,10 @@ $('#message').on('keyup', function(e){
 
 $('#newSong').on('keyup', function(e){
 	if(e.keyCode == 13){
+		var id = getIdFromYoutubeUrl($(this).val());
+
 		//Send msg
-		socket.emit('new_song', $(this).val());
+		socket.emit('new_song', id);
 
 		//Clear text in input
 		$(this).val('');
@@ -26,6 +28,10 @@ $('#newSong').on('keyup', function(e){
 
 $('body').on('click', '.btn-vote', function() {
 	socket.emit('vote', $(this).data('song-id'));
+});
+
+$('body').on('click', '.btn-delete', function() {
+	socket.emit('delete_queued', $(this).data('song-id'));
 });
 
 $('body').on('click', '.add-song', function() {
@@ -39,7 +45,10 @@ socket.on('chat_msg', function(data){
 socket.on('new_song', function(song) {
 	$('#text').append('<p>Now plaing: ' + song + '</p>');
 	$('#text').scrollTop(999999999);
-	play(song);
+
+	// NOTE <Yavor>: Maybe just send JSON from the server?
+	var song = queryStringToObj(song);
+	player.play(song.url, song);
 });
 
 socket.on('usersCount', function(data){
@@ -51,7 +60,10 @@ socket.on('getRefreshed', function(data){
 });
 
 socket.on('song_info', function(data) {
-	$('#song-info').html(renderSong(data));
+	if (data.playTime) {
+		$('#song-info').html(renderSong(data));
+		player.streamPlayingAt(data.playingAt);
+	}
 });
 
 socket.on('queue_info', function(data) {
@@ -60,7 +72,13 @@ socket.on('queue_info', function(data) {
 	$queue_info = $queue_info.find('ol');
 
 	for(var song in data) {
-		$queue_info.append('<li>' + renderSong(data[song]) + '</li>');
+		var o = data[song];
+		var addedBy = o.addedBy.substring(2);
+		var deleteButton = '';
+		if (addedBy == socket.id) {
+			deleteButton = '<button class="btn-delete" data-song-id="' + o.id + '">Remove</button>';
+		}
+		$queue_info.append('<li>' + renderSong(o) + deleteButton + '</li>');
 	}
 });
 
@@ -92,20 +110,149 @@ function renderSong(song) {
 	// Default votes to 0
 	song.votes = song.votes || 0;
 
-	return '<a href="https://youtube.com/watch?v=' + song.youtubeId + '" target="_blank">' 
-		+ song.title 
-		+ '</a> - ' 
+	return '<a href="https://youtube.com/watch?v=' + song.youtubeId + '" target="_blank">'
+		+ song.title
+		+ '</a> - '
 		+ ((song.playTime) ? song.playTime : song.duration) + 'sec. '
 		+ '<button class="btn-vote" data-song-id="' + song.id + '">Vote up (' + song.votes + ')</button>'
 	;
 }
 
-function play(thingie) {
+/*function play(thingie) {
 	$('iframe').attr('src', 'https://www.youtube.com/embed/' + thingie);
-}
+}*/
 
 function addMessage(message) {
 	$('#text').append('<p>Message: '+ $('<div/>').text(message).html() +'</p>');
 
 	$('#text').scrollTop(999999999);
+}
+
+/**
+ * A player object
+ */
+var player = {
+
+	instance: null,
+	ready: false,
+	_streamPlayingAt: 0,
+	init: function($player) {
+		var self = this;
+
+		// called right after api library is loaded asyncronosly
+		window.onYouTubeIframeAPIReady = function() {
+			self.instance = new YT.Player($player.get(0), {
+				height: '180',
+				width: '320',
+				playerVars: {
+					controls: 0, // disable video controls
+					disablekb: 1, // disable keyboard player controls
+					rel: 0 // so not show related videos after song finishes
+				},
+				events: {
+					'onReady': self.onPlayerReady,
+					'onStateChange': self.onPlayerStateChange
+				}
+			});
+		}
+	},
+	// functions to call right after player is ready
+	_queuedActionsAfterInit: [],
+
+	onPlayerReady: function(event) {
+		// Note: event.target === self.instance
+		var self = player;
+		self.ready = true;
+		if (self._queuedActionsAfterInit.length) {
+			self._queuedActionsAfterInit.forEach(function(action) {
+				if (typeof action === 'function') {
+					action();
+				}
+			});
+		}
+
+		console.log('player ready');
+	},
+
+	onPlayerStateChange: function(event) {
+		// TODO: trying to seek player time here,
+		// triggers a nasty recursion...doh
+		// current solution is to use flags in code
+		//
+		// alternative: binding click handler on iframe doesn't work
+		// since event doesn't bubble up to current page
+		console.log('player state changed');
+
+		var self = player;
+		switch (self.instance.getPlayerState()) {
+			case YT.PlayerState.PAUSED:
+				// player paused. do nothing. for now.
+				break;
+			case YT.PlayerState.PLAYING:
+				// player resumed, seek video to server time.
+				if (!self.seekedFromCode) {
+					var seekToTime = self.streamPlayingAt();
+					self.instance.seekTo(seekToTime, true);
+
+					self.seekedFromCode = true;
+				} else {
+					self.seekedFromCode = false;
+				}
+				break;
+		}
+	},
+
+	/**
+	 * Getter/setter for server playing time of the current song.
+	 * @param  {Number} songSeekTime   Seconds passed from the song start.
+	 * @return {Number}                Last saved stream time.
+	 */
+	streamPlayingAt: function(songSeekTime) {
+		if (arguments.length) {
+			this._streamPlayingAt = songSeekTime;
+		}
+
+		return this._streamPlayingAt;
+	},
+
+	play: function(videoId, params) {
+		var params = params || {};
+		var self = this;
+		if (self.ready) {
+			var seekToTime = params.start || self.streamPlayingAt();
+			self.instance.loadVideoById(videoId);
+			self.instance.seekTo(seekToTime, true);
+			self.instance.playVideo();
+		} else {
+			// call is defered for when player is ready
+			self._queuedActionsAfterInit.push(self.play.bind(self, videoId, params));
+		}
+	}
+}
+
+player.init($('#player'));
+
+function isURL(str) {
+	return /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(str);
+}
+
+function getIdFromYoutubeUrl(url) {
+	var id = "";
+	if (! isURL(url) && url.length == 11) {
+		return url;
+	}
+	var r = new RegExp('^.*(?:youtu.be\/|v\/|e\/|u\/\w+\/|embed\/|v=)([^#\&\?]*).*');
+	var m = url.match(r);
+	return m[1];
+}
+
+function queryStringToObj(q) {
+	var query = {};
+	query.url = q.split('?')[0];
+	var a = q.substr(query.url.length + 1).split('&');
+	for (var i = 0; i < a.length; i++) {
+		var b = a[i].split('=');
+		query[decodeURIComponent(b[0])] = decodeURIComponent(b[1] || '');
+	}
+	return query;
 }
