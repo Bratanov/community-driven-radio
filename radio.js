@@ -284,6 +284,21 @@ var Queue = function(ioUsers) {
 		}
 	}
 
+	this.delete = function(userSocket, videoId) {
+		var song = self.items.filter(function (o) {
+			return o.id == videoId;
+		});
+		if (! song.length) {
+			return;
+		}
+		song = song[0];
+		if (song.addedBy.id == userSocket.id) {
+			var idx = self.items.indexOf(song);
+			self.items.splice(idx, 1);
+			onQueueChanged();
+		}
+	}
+
 	this.work = function() {
 		if(self.active === null || self.active.isOver()) {
 			// When nothing is in the queue
