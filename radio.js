@@ -337,7 +337,8 @@ var Queue = function(ioUsers) {
 			loadRelatedVideos(self.active);
 
 			// Emit to all users:
-			ioUsers.emit('new_song', self.active.getVideoUrlParams());
+			var info = {url_params: self.active.getVideoUrlParams(), info: self.active.getInfo()};
+			ioUsers.emit('new_song', info);
 		}
 
 		// Send current song info:
@@ -397,7 +398,8 @@ io.on('connection', function(socket){
 
 	// Send current song and current queue to user
 	if(queue.active && ! queue.active.isOver()) {
-		socket.emit('new_song', queue.active.getVideoUrlParams());
+		var info = {url_params: queue.active.getVideoUrlParams(), info: queue.active.getInfo()};
+		socket.emit('new_song', info);
 		socket.emit('queue_info', queue.getInfo());
 		socket.emit('related_info', queue.active.relatedVideos);
 	}
