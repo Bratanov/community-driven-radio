@@ -44,14 +44,13 @@ socket.on('chat_msg', function(data){
 
 socket.on('new_song', function(song) {
 	var recv = song;
-	console.log(recv);
 	var song = queryStringToObj(song.url_params);
 
-	$('#text').append('<p>Now plaing: ' + recv.info.title + '</p>');
+	$('#text').append('<p>Now playing: ' + recv.info.title + '</p>');
 	$('#text').scrollTop(999999999);
 
 	player.play(song.url, song);
-	send_notification = function(song) {
+	var sendNotification = function(song) {
 		var options = {
 			body: song.info.title,
 			icon: 'https://i.ytimg.com/vi/' + song.info.youtubeId + '/maxresdefault.jpg'
@@ -61,11 +60,11 @@ socket.on('new_song', function(song) {
 	}
 	if (Notification.permission !== 'denied') {
 		if (Notification.permisson === 'granted') {
-			send_notification(recv);
+			sendNotification(recv);
 		} else {
 			Notification.requestPermission(function (permission) {
 				if (permission === 'granted') {
-					send_notification(recv);
+					sendNotification(recv);
 				}
 			});
 		}
