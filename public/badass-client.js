@@ -43,12 +43,32 @@ socket.on('chat_msg', function(data){
 });
 
 socket.on('new_song', function(song) {
-	$('#text').append('<p>Now plaing: ' + song + '</p>');
+	var recv = song;
+	var song = queryStringToObj(song.url_params);
+
+	$('#text').append('<p>Now playing: ' + recv.info.title + '</p>');
 	$('#text').scrollTop(999999999);
 
-	// NOTE <Yavor>: Maybe just send JSON from the server?
-	var song = queryStringToObj(song);
 	player.play(song.url, song);
+	var sendNotification = function(song) {
+		var options = {
+			body: song.info.title,
+			icon: 'https://i.ytimg.com/vi/' + song.info.youtubeId + '/maxresdefault.jpg'
+		}
+		var n = new Notification('Now playing:', options);
+		setTimeout(function() { n.close(); }, 5000);
+	}
+	if (Notification.permission !== 'denied') {
+		if (Notification.permisson === 'granted') {
+			sendNotification(recv);
+		} else {
+			Notification.requestPermission(function (permission) {
+				if (permission === 'granted') {
+					sendNotification(recv);
+				}
+			});
+		}
+	}
 });
 
 socket.on('usersCount', function(data){
