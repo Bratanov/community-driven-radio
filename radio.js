@@ -247,7 +247,22 @@ var Queue = function(ioUsers) {
 	}
 
 	this.add = function(userSocket, videoId) {
-		var songs = userSocket.songs || [];
+		var self = this;
+
+		// check if song is already playing, prevent adding
+		if(self.active && self.active.youtubeId === videoId) {
+			userSocket.emit('be_alerted', 'This song is currently playing.');
+			return;
+		}
+
+		// check if song already exists in queue, prevent adding
+		var queueItems = self.getItems();
+		for(var index in queueItems) {
+			if(queueItems[index].youtubeId === videoId) {
+				userSocket.emit('be_alerted', 'This song is already in the queue. Try voting for it instead.');
+				return;
+			}
+		}
 
 		youTubeApi.getVideo(videoId, function(data) {
 			if(data.pageInfo.totalResults > 0) {
