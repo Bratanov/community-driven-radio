@@ -46,6 +46,6 @@ A DevLabs Project
 
 Any contributions are welcome, you can open new issues with bug reports/feature requests/questions or you can make pull requests with your work. Try to follow our code organization and naming conventions.
 
-If you want to get started with a task you can check out the active issues (here)[issues], fork the project, work on it and when ready, open a pull request here. 
+If you want to get started with a task you can check out the active issues [here](issues), fork the project, work on it and when ready, open a pull request [here](pulls). 
 
 Good luck and happy coding!
