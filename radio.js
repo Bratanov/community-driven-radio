@@ -16,8 +16,6 @@ var io = socketio.listen(server);
 
 // Start our song queue
 var queue = new Queue(io.sockets);
-queue.run();
-
 var chat = new Chat();
 var usersCount = 0;
 

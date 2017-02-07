@@ -267,6 +267,8 @@ var Queue = function(ioUsers) {
 	this.triggerOnQueueChanged = function() {
 		onQueueChanged();
 	}
+
+	this.run();
 }
 
 module.exports = Queue;
