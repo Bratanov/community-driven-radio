@@ -1,6 +1,7 @@
 var express = require('express');
 var socketio = require('socket.io');
 var Queue = require('./server/core/queue.js');
+var Chat = require('./server/core/chat.js');
 
 // App is the express server that serves the static files in public
 var app = express();
@@ -17,14 +18,16 @@ var io = socketio.listen(server);
 var queue = new Queue(io.sockets);
 queue.run();
 
+var chat = new Chat();
 var usersCount = 0;
-var lastMessages = [];
 
 //Event user connected
 io.on('connection', function(socket){
 	var isAdmin = false; // TODO: Implement admin functionalities
 	usersCount++;
 	io.emit('usersCount', usersCount);
+
+	chat.attachUser(socket);
 
 	// Send current song and current queue to user
 	if(queue.active && ! queue.active.isOver()) {
@@ -33,21 +36,6 @@ io.on('connection', function(socket){
 		socket.emit('queue_info', queue.getInfo());
 		socket.emit('related_info', queue.active.relatedVideos);
 	}
-
-	// Send history to user
-	for(var i = 0; i < lastMessages.length; i++) {
-		socket.emit('chat_msg', lastMessages[i]);
-	}
-
-	//Bind events to this user:
-	socket.on('chat_msg', function(data){
-		socket.broadcast.emit('chat_msg', data);
-
-		lastMessages.push(data);
-		if(lastMessages.length > 50) {
-			lastMessages.shift();
-		}
-	});
 
 	socket.on('new_song', function(data){
 		// Add to queue
