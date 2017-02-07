@@ -1,19 +1,10 @@
-var express = require('express');
-var socketio = require('socket.io');
 var Queue = require('./server/core/queue.js');
 var QueueManager = require('./server/core/queue-manager.js');
 var Chat = require('./server/core/chat.js');
 
-// App is the express server that serves the static files in public
-var app = express();
-app.use(express.static(__dirname + '/public'));
-
-// Server is used both by express and by socket.io
-var server = require('http').createServer(app);
-server.listen(4000);
-
-// Start socket.io
-var io = socketio.listen(server);
+var io = require('./server/core/socketio-express-initializer')({
+	port: 4000
+});
 
 // Start our song queue
 var queue = new Queue(io.sockets);
