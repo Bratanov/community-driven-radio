@@ -1,3 +1,5 @@
+var youTubeApi = require('./youtube-api.js');
+
 var Song = function(youtubeId, title, duration, addedBy) {
 	var self = this;
 	/**
@@ -97,6 +99,27 @@ var Song = function(youtubeId, title, duration, addedBy) {
 	 */
 	this.setVotes = function(votesCount) {
 		self.votes = votesCount;
+	}
+
+	this.loadRelatedVideos = function(callback) {
+		var self = this;
+
+		// Load and add related videos in the self.relatedVideos array
+		youTubeApi.getRelatedVideos(self.youtubeId, function(data) {
+			if(data.pageInfo.totalResults > 0 && data.items.length) {
+				for(var itemId in data.items) {
+					// The data we need from the YouTube response
+					var relatedVideoInfo = {
+						youtubeId: data.items[itemId].id.videoId,
+						title: data.items[itemId].snippet.title
+					}
+
+					self.relatedVideos.push(relatedVideoInfo);
+				}
+
+				return callback();
+			}
+		});
 	}
 }
 module.exports = Song;

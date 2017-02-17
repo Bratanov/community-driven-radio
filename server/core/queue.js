@@ -26,25 +26,6 @@ var Queue = function(ioUsers) {
 		ioUsers.emit('related_info', song.relatedVideos);
 	}
 
-	var loadRelatedVideos = function(song) {
-		// Load and add related videos in the self.relatedVideos array
-		youTubeApi.getRelatedVideos(song.youtubeId, function(data) {
-			if(data.pageInfo.totalResults > 0 && data.items.length) {
-				for(var itemId in data.items) {
-					// The data we need from the YouTube response
-					var relatedVideoInfo = {
-						youtubeId: data.items[itemId].id.videoId,
-						title: data.items[itemId].snippet.title
-					}
-
-					song.relatedVideos.push(relatedVideoInfo);
-				}
-
-				onRelatedChanged(song);
-			}
-		});
-	}
-
 	/**
 	 * Returns the items in the queue
 	 * sorted by the priority based
@@ -175,7 +156,9 @@ var Queue = function(ioUsers) {
 			self.active = newSong;
 
 			// Load related videos for newly played active song
-			loadRelatedVideos(self.active);
+			self.active.loadRelatedVideos(function() {
+				onRelatedChanged(self.active);
+			});
 
 			// Emit to all users:
 			var info = {url_params: self.active.getVideoUrlParams(), info: self.active.getInfo()};
