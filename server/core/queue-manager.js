@@ -11,7 +11,7 @@ var QueueManager = function(_queue) {
 			socket.emit('related_info', queue.active.relatedVideos);
 		}
 
-		socket.on('disconnect', function() {			
+		socket.on('disconnect', function() {
 			/**
 			 * A user has left which would cause the
 			 * sorting of the queue to potentially
