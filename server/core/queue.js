@@ -26,25 +26,6 @@ var Queue = function(ioUsers) {
 		ioUsers.emit('related_info', song.relatedVideos);
 	}
 
-	var getVotesCount = function(song) {
-		var votesCount = 0;
-
-		// Loop through the currently connected users
-		for(var userId in ioUsers.connected) {
-			var userSocket = ioUsers.connected[userId];
-
-			// Get the votes array from this users Socket object
-			var votes = userSocket.votes || [];
-
-			// Check if the song id is contained inside
-			if(votes.indexOf(song.id) !== -1) {
-				votesCount++;
-			}
-		}
-
-		return votesCount;
-	}
-
 	var loadRelatedVideos = function(song) {
 		// Load and add related videos in the self.relatedVideos array
 		youTubeApi.getRelatedVideos(song.youtubeId, function(data) {
@@ -64,20 +45,6 @@ var Queue = function(ioUsers) {
 		});
 	}
 
-	this.addVote = function(userSocket, songId) {
-		var currentVotes = userSocket.votes || [];
-
-		if(currentVotes.indexOf(songId) === -1) {
-			currentVotes.push(songId);
-			// Put the votes back in the socket object
-			userSocket.votes = currentVotes;
-
-			onQueueChanged();
-		} else {
-			userSocket.emit('be_alerted', 'You\'ve already voted for this song');
-		}
-	}
-
 	/**
 	 * Returns the items in the queue
 	 * sorted by the priority based
@@ -86,15 +53,10 @@ var Queue = function(ioUsers) {
 	 * @return {array} Array of song items, sorted by votes/pos
 	 */
 	this.getItems = function() {
-		// Make a fresh copy of the original items with votes included
-		var copyItems = [];
-		for(var itemIndex in this.items) {
-			var item = this.items[itemIndex];
-			item.votes = getVotesCount(item);
+		// Make a fresh copy of the original items
+		var copyItems = this.items.slice();
 
-			copyItems.push(item);
-		}
-
+		// sort by votes
 		copyItems.sort(function(item1, item2) {
 			if(item1.votes > item2.votes) {
 				return -1;
@@ -118,9 +80,6 @@ var Queue = function(ioUsers) {
 			var item = queueSortedItems[itemIndex];
 			// Get info for the song
 			var songInfo = item.getInfo();
-
-			// Attach votes (stored in the queue, not on the song)
-			songInfo.votes = getVotesCount(item);
 
 			queueInfo.push(songInfo);
 		}
@@ -225,7 +184,6 @@ var Queue = function(ioUsers) {
 
 		// Send current song info:
 		var newSongInfo = self.active.getInfo();
-		newSongInfo.votes = getVotesCount(self.active);
 		ioUsers.emit('song_info', newSongInfo);
 	}
 

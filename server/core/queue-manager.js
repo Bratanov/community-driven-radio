@@ -31,10 +31,6 @@ var QueueManager = function(_queue) {
 			// Remove from queue
 			queue.delete(socket, data);
 		});
-		socket.on('vote', function(songId) {
-			// Upvote this song
-			queue.addVote(socket, songId);
-		});
 	}
 }
 

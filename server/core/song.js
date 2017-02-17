@@ -11,6 +11,7 @@ var Song = function(youtubeId, title, duration, addedBy) {
 	this.title = title;
 	this.relatedVideos = [];
 	this.addedBy = addedBy;
+	this.votes = 0;
 
 	// Limit duration of a song to 5min
 	this.duration = Math.min(this.duration, 5 * 60 * 1000);
@@ -82,8 +83,20 @@ var Song = function(youtubeId, title, duration, addedBy) {
 			playingAt: this.getCurrentSeekPosition(),
 			duration: this.getDurationInSec(),
 			playTime: ( ! this.isOver()) ? (this.getCurrentSeekPosition() + '/' + this.getDurationInSec()) : false,
-			addedBy: this.addedBy.id
+			addedBy: this.addedBy.id,
+			votes: this.votes
 		}
+	}
+
+	/**
+	 * Sets the total number of votes this song
+	 * currently has, meant to be used by the
+	 * votes manager, not directly anywhere
+	 *
+	 * @param {integer} votesCount
+	 */
+	this.setVotes = function(votesCount) {
+		self.votes = votesCount;
 	}
 }
 module.exports = Song;
