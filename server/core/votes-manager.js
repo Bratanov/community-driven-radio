@@ -1,33 +1,36 @@
-var VotesManager = function(_queue) {
-	var self = this;
-	var queue = _queue;
-	var voters = [];
+module.exports = class VotesManager {
 
-	this.attachUser = function(socket) {
-		voters.push(socket);
+	/**
+	 * @param {Queue} queue
+	 */
+	constructor(queue) {
+		this.queue = queue;
+		this.voters = [];
+	}
 
-		socket.on('disconnect', function() {
+	attachUser(socket) {
+		this.voters.push(socket);
+
+		socket.on('disconnect', () => {
 			// remove user from voters array
-			voters = voters.filter(function(user) {
+			this.voters = this.voters.filter(user => {
 				return user !== socket;
 			});
-			self.recalculateVotes();
+			this.recalculateVotes();
 		});
-		socket.on('vote', function(songId) {
-			self.addVote(socket, songId);
-			self.recalculateVotes();
+		socket.on('vote', songId => {
+			this.addVote(socket, songId);
+			this.recalculateVotes();
 		});
 	}
 
-	var getVotesCount = function(song) {
-		var votesCount = 0;
+	getVotesCount(song) {
+		let votesCount = 0;
 
 		// Loop through the currently connected users
-		for(var voterIndex in voters) {
-			var userSocket = voters[voterIndex];
-
+		for(let voterSocket of this.voters) {
 			// Get the votes array from this users Socket object
-			var votes = userSocket.votes || [];
+			let votes = voterSocket.votes || [];
 
 			// Check if the song id is contained inside
 			if(votes.indexOf(song.id) !== -1) {
@@ -43,25 +46,25 @@ var VotesManager = function(_queue) {
 	 * the queue (including the active song) to the
 	 * proper value according to @getVotesCount
 	 */
-	this.recalculateVotes = function() {
+	recalculateVotes() {
 		// calculate votes for queue items
-		queue.getItems().forEach(function(song) {
-			var newVotesCount = getVotesCount(song);
+		this.queue.getItems().forEach(song => {
+			let newVotesCount = this.getVotesCount(song);
 			song.setVotes(newVotesCount);
 		});
 
 		// calculate votes for the active 
 		// queue song (if there is any)
-		if(queue.active) {
-			var activeSongVotesCount = getVotesCount(queue.active);
-			queue.active.setVotes(activeSongVotesCount);
+		if(this.queue.active) {
+			let activeSongVotesCount = this.getVotesCount(this.queue.active);
+			this.queue.active.setVotes(activeSongVotesCount);
 		}
 
-		queue.triggerOnQueueChanged();
+		this.queue.triggerOnQueueChanged();
 	}
 
-	this.addVote = function(userSocket, songId) {
-		var currentVotes = userSocket.votes || [];
+	addVote(userSocket, songId) {
+		let currentVotes = userSocket.votes || [];
 
 		if(currentVotes.indexOf(songId) === -1) {
 			currentVotes.push(songId);
@@ -71,6 +74,4 @@ var VotesManager = function(_queue) {
 			userSocket.emit('be_alerted', 'You\'ve already voted for this song');
 		}
 	}
-}
-
-module.exports = VotesManager;
+};
