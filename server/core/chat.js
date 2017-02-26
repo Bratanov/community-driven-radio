@@ -1,24 +1,22 @@
-var Chat = function() {
-	var self = this;
+module.exports = class Chat {
+	constructor() {
+		this.lastMessages = [];
+	}
 
-	var lastMessages = [];
-
-	this.attachUser = function(socket) {
+	attachUser(socket) {
 		// Send history to user
-		for(var i = 0; i < lastMessages.length; i++) {
-			socket.emit('chat_msg', lastMessages[i]);
+		for(let i = 0; i < this.lastMessages.length; i++) {
+			socket.emit('chat_msg', this.lastMessages[i]);
 		}
 
 		//Bind events to this user:
-		socket.on('chat_msg', function(data){
+		socket.on('chat_msg', data => {
 			socket.broadcast.emit('chat_msg', data);
 
-			lastMessages.push(data);
-			if(lastMessages.length > 50) {
-				lastMessages.shift();
+			this.lastMessages.push(data);
+			if(this.lastMessages.length > 50) {
+				this.lastMessages.shift();
 			}
 		});
 	}
-}
-
-module.exports = Chat;
+};

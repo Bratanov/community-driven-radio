@@ -4,6 +4,10 @@ A DevLabs Project
 
 <img src="https://avatars0.githubusercontent.com/u/10864739?v=3&amp;s=200" alt="DevLabs" width="100" style="max-width:100%;">
 
+## Dependencies
+
+- NodeJS Version 6.10.0+ (ES6 Compatible)
+
 ## How to install
 
 `npm install`
