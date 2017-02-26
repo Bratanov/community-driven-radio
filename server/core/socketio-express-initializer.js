@@ -1,21 +1,21 @@
-var express = require('express');
-var socketio = require('socket.io');
+const express = require('express');
+const socketIo = require('socket.io');
 
-module.exports = function(config) {
+module.exports = config => {
 	if(typeof config === 'undefined') {
-		config = {}
+		config = {};
 	}
 
 	// App is the express server that serves the static files in public
-	var app = express();
+	let app = express();
 	app.use(express.static('./public'));
 
 	// Server is used both by express and by socket.io
-	var server = require('http').createServer(app);
+	let server = require('http').createServer(app);
 	server.listen(config.port || 4000);
 
 	// Start socket.io
-	var io = socketio.listen(server);
+	let io = socketIo.listen(server);
 
 	return io;
-}
+};
