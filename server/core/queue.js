@@ -1,29 +1,49 @@
-var moment = require('moment');
-var Song = require('./song.js');
-var youTubeApi = require('./youtube-api.js');
+const moment = require('moment');
+const Song = require('./song.js');
+const youTubeApi = require('./youtube-api.js');
 
-var Queue = function(ioUsers) {
-	var self = this;
+module.exports = class Queue {
 
-	this.items = [];
-	this.active = null;
+	constructor(ioUsers) {
+        this.items = [];
+        this.active = null;
+        this.relatedVideoIsLoading = false;
 
-	var queueInterval = null;
-	var relatedVideoIsLoading = false;
+        let queueInterval = null;
 
-	/**
-	 * When the queue changes we want to
-	 * broadcast the new queue to all
-	 * users so they're up-to-date
-	 */
-	var onQueueChanged = function() {
-		// Send queue info:
-		ioUsers.emit('queue_info', self.getInfo());
-	}
+        /**
+         * When the queue changes we want to
+         * broadcast the new queue to all
+         * users so they're up-to-date
+         */
+        let onQueueChanged = () => {
+            // Send queue info:
+            ioUsers.emit('queue_info', this.getInfo());
+        };
 
-	var onRelatedChanged = function(song) {
-		// Send queue info:
-		ioUsers.emit('related_info', song.relatedVideos);
+        let onRelatedChanged = song => {
+            // Send queue info:
+            ioUsers.emit('related_info', song.relatedVideos);
+        };
+
+        this.emitToAll = (event, data) => {
+            ioUsers.emit(event, data);
+        };
+
+        /**
+         * Use this to manually trigger an update to the queue/positions
+         * and display it to all users. Can be used for example when a
+         * user disconnects and we want to update visually the queue
+         */
+        this.triggerOnQueueChanged = () => {
+            onQueueChanged();
+        };
+
+        this.triggerOnRelatedChanged = song => {
+            onRelatedChanged(song);
+        };
+
+        this.run();
 	}
 
 	/**
@@ -31,14 +51,14 @@ var Queue = function(ioUsers) {
 	 * sorted by the priority based
 	 * on the votes of the users
 	 *
-	 * @return {array} Array of song items, sorted by votes/pos
+	 * @return {Array} Array of song items, sorted by votes/pos
 	 */
-	this.getItems = function() {
+	getItems() {
 		// Make a fresh copy of the original items
-		var copyItems = this.items.slice();
+		let copyItems = this.items.slice();
 
 		// sort by votes
-		copyItems.sort(function(item1, item2) {
+		copyItems.sort((item1, item2) => {
 			if(item1.votes > item2.votes) {
 				return -1;
 			}
@@ -53,14 +73,13 @@ var Queue = function(ioUsers) {
 		return copyItems;
 	}
 
-	this.getInfo = function() {
-		var queueInfo = [];
-		var queueSortedItems = this.getItems();
+	getInfo() {
+		let queueInfo = [];
+		let queueSortedItems = this.getItems();
 
-		for(var itemIndex in queueSortedItems) {
-			var item = queueSortedItems[itemIndex];
+		for(let item of queueSortedItems) {
 			// Get info for the song
-			var songInfo = item.getInfo();
+			let songInfo = item.getInfo();
 
 			queueInfo.push(songInfo);
 		}
@@ -68,133 +87,126 @@ var Queue = function(ioUsers) {
 		return queueInfo;
 	}
 
-	this.add = function(userSocket, videoId) {
-		var self = this;
-
+	add(userSocket, videoId) {
 		// check if song is already playing, prevent adding
-		if(self.active && self.active.youtubeId === videoId) {
+		if(this.active && this.active.youtubeId === videoId) {
 			userSocket.emit('be_alerted', 'This song is currently playing.');
+
 			return;
 		}
 
 		// check if song already exists in queue, prevent adding
-		var queueItems = self.getItems();
-		for(var index in queueItems) {
-			if(queueItems[index].youtubeId === videoId) {
+		for(let queueItem of this.getItems()) {
+			if(queueItem.youtubeId === videoId) {
 				userSocket.emit('be_alerted', 'This song is already in the queue. Try voting for it instead.');
+
 				return;
 			}
 		}
 
-		youTubeApi.getVideo(videoId, function(data) {
+		youTubeApi.getVideo(videoId, data => {
 			if(data.pageInfo.totalResults > 0) {
 				if( ! data.items[0].status.embeddable) {
-					return; // Show error?
+                    // TODO: Show nice error to user (https://github.com/Bratanov/community-driven-radio/issues/26)
+					return;
 				}
 
-				var title = data.items[0].snippet.title;
-				var resultDuration = data.items[0].contentDetails.duration;
+				let title = data.items[0].snippet.title;
+				let resultDuration = data.items[0].contentDetails.duration;
 
-				var durationInMs = moment.duration(resultDuration).asMilliseconds();
+				let durationInMs = moment.duration(resultDuration).asMilliseconds();
 
-				self.items.push(new Song(videoId, title, durationInMs, userSocket));
+				this.items.push(new Song(videoId, title, durationInMs, userSocket));
 
-				onQueueChanged();
+				this.triggerOnQueueChanged();
 			}
-		}, function(error) {
-			console.log('Error adding a song: ', error);
+		}, error => {
+			console.error('Queue-add error:', error);
 		});
 	}
 
-	this.delete = function(userSocket, videoId) {
-		var song = self.items.filter(function (o) {
-			return o.id == videoId;
+	deleteItem(userSocket, videoId) {
+		let song = this.items.filter((item) => {
+			return item.id === videoId;
 		});
 		if (! song.length) {
 			return;
 		}
+
 		song = song[0];
-		if (song.addedBy.id == userSocket.id) {
-			var idx = self.items.indexOf(song);
-			self.items.splice(idx, 1);
-			onQueueChanged();
+		if (song.addedBy.id === userSocket.id) {
+			let index = this.items.indexOf(song);
+			this.items.splice(index, 1);
+
+			this.triggerOnQueueChanged();
 		}
 	}
 
-	this.work = function() {
-		if(self.active === null || self.active.isOver()) {
+	work() {
+		if(this.active === null || this.active.isOver()) {
 			// When nothing is in the queue
-			if(self.items.length === 0) {
-				if(relatedVideoIsLoading) {
+			if(this.items.length === 0) {
+				if(this.relatedVideoIsLoading) {
 					// Wait for the related video to load
 					return;
 				}
 
 				// Add the first related video to queue (asynchronous!)
-				if(self.active !== null && self.active.relatedVideos.length) {
-					self.add({}, self.active.relatedVideos[0].youtubeId);
-					relatedVideoIsLoading = true;
+				if(this.active !== null && this.active.relatedVideos.length) {
+					this.add({}, this.active.relatedVideos[0].youtubeId);
+                    this.relatedVideoIsLoading = true;
 				}
 
 				// Nothing active or no related videos found
 				return;
 			}
 			// Reset the value of the flag, used when loading related videos on empty queue
-			relatedVideoIsLoading = false;
+            this.relatedVideoIsLoading = false;
 
 			// The next song would be the first one from the sorted queue
-			var newSong = self.getItems().shift();
+			let newSong = this.getItems().shift();
 
 			// Remove the song we just took - from the original items array
-			var newSongIndexInQueue = self.items.indexOf(newSong);
-			self.items.splice(newSongIndexInQueue, 1);
+			let newSongIndexInQueue = this.items.indexOf(newSong);
+			this.items.splice(newSongIndexInQueue, 1);
 
-			onQueueChanged();
+			this.triggerOnQueueChanged();
 
 			newSong.play();
 
-			self.active = newSong;
+			this.active = newSong;
 
 			// Load related videos for newly played active song
-			self.active.loadRelatedVideos(function() {
-				onRelatedChanged(self.active);
+			this.active.loadRelatedVideos(() => {
+				this.triggerOnRelatedChanged(this.active);
 			});
 
 			// Emit to all users:
-			var info = {url_params: self.active.getVideoUrlParams(), info: self.active.getInfo()};
-			ioUsers.emit('new_song', info);
+			let info = {
+				url_params: this.active.getVideoUrlParams(),
+				info: this.active.getInfo()
+			};
+
+			this.emitToAll('new_song', info);
 		}
 
 		// Send current song info:
-		var newSongInfo = self.active.getInfo();
-		ioUsers.emit('song_info', newSongInfo);
+		let newSongInfo = this.active.getInfo();
+		this.emitToAll('song_info', newSongInfo);
 	}
 
-	this.run = function() {
+	run() {
 		/**
 		 * Schedule work every second
 		 * the queue will check its
 		 * items and do its magic
 		 */
-		this.queueInterval = setInterval(function() {
-			self.work();
-		}, 1000)
+		this.queueInterval = setInterval(() => {
+			this.work();
+		}, 1000);
 	}
 
-	this.stop = function() {
+	stop() {
 		clearInterval(this.queueInterval);
 	}
-
-	/**
-	 * Use this to manually trigger an update to the queue/positions
-	 * and display it to all users. Can be used for example when a
-	 * user disconnects and we want to update visually the queue
-	 */
-	this.triggerOnQueueChanged = function() {
-		onQueueChanged();
-	}
-
-	this.run();
-}
-
-module.exports = Queue;
+};

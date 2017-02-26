@@ -29,7 +29,7 @@ var QueueManager = function(_queue) {
 		});
 		socket.on('delete_queued', function(data){
 			// Remove from queue
-			queue.delete(socket, data);
+			queue.deleteItem(socket, data);
 		});
 	}
 }
