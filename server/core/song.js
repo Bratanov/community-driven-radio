@@ -15,12 +15,12 @@ module.exports = class Song {
 		this.addedBy = addedBy;
 		this.votes = 0;
 
-        // Limit duration of a song to 5min
-        this.duration = Math.min(this.duration, 5 * 60 * 1000);
+		// Limit duration of a song to 5min
+		this.duration = Math.min(this.duration, 5 * 60 * 1000);
 
-        // Internally used (private-ish)
-        this.startedPlayingAt = null;
-        this.shouldStopPlayingAt = null;
+		// Internally used (private-ish)
+		this.startedPlayingAt = null;
+		this.shouldStopPlayingAt = null;
 	}
 
 	/**
