@@ -1,37 +1,39 @@
-var QueueManager = function(_queue) {
-	var self = this;
-	var queue = _queue;
+module.exports = class QueueManager {
+	constructor(queue) {
+		this.queue = queue;
+	}
 
-	this.attachUser = function(socket) {
+	attachUser(socket) {
 		// Send current song and current queue to user
-		if(queue.active && ! queue.active.isOver()) {
-			var info = {url_params: queue.active.getVideoUrlParams(), info: queue.active.getInfo()};
+		if(this.queue.active && ! this.queue.active.isOver()) {
+			let info = {
+				url_params: this.queue.active.getVideoUrlParams(),
+				info: this.queue.active.getInfo()
+			};
 			socket.emit('new_song', info);
-			socket.emit('queue_info', queue.getInfo());
-			socket.emit('related_info', queue.active.relatedVideos);
+			socket.emit('queue_info', this.queue.getInfo());
+			socket.emit('related_info', this.queue.active.relatedVideos);
 		}
 
-		socket.on('disconnect', function() {
+		socket.on('disconnect', () => {
 			/**
 			 * A user has left which would cause the
 			 * sorting of the queue to potentially
 			 * change, we need to let users know
 			 */
-			queue.triggerOnQueueChanged();
-		})
+			this.queue.triggerOnQueueChanged();
+		});
 
 		/**
 		 * Attach user initiated events
 		 */
-		socket.on('new_song', function(data){
+		socket.on('new_song', data => {
 			// Add to queue
-			queue.add(socket, data);
+			this.queue.add(socket, data);
 		});
-		socket.on('delete_queued', function(data){
+		socket.on('delete_queued', data => {
 			// Remove from queue
-			queue.deleteItem(socket, data);
+			this.queue.deleteItem(socket, data);
 		});
 	}
-}
-
-module.exports = QueueManager;
+};
