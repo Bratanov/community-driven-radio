@@ -6,45 +6,45 @@ const youTubeApi = new YoutubeApi(process.env.YOUTUBE_API_KEY);
 module.exports = class Queue {
 
 	constructor(ioUsers) {
-        this.items = [];
-        this.active = null;
-        this.relatedVideoIsLoading = false;
+		this.items = [];
+		this.active = null;
+		this.relatedVideoIsLoading = false;
 
-        let queueInterval = null;
+		let queueInterval = null;
 
-        /**
-         * When the queue changes we want to
-         * broadcast the new queue to all
-         * users so they're up-to-date
-         */
-        let onQueueChanged = () => {
-            // Send queue info:
-            ioUsers.emit('queue_info', this.getInfo());
-        };
+		/**
+		 * When the queue changes we want to
+		 * broadcast the new queue to all
+		 * users so they're up-to-date
+		 */
+		let onQueueChanged = () => {
+			// Send queue info:
+			ioUsers.emit('queue_info', this.getInfo());
+		};
 
-        let onRelatedChanged = song => {
-            // Send queue info:
-            ioUsers.emit('related_info', song.relatedVideos);
-        };
+		let onRelatedChanged = song => {
+			// Send queue info:
+			ioUsers.emit('related_info', song.relatedVideos);
+		};
 
-        this.emitToAll = (event, data) => {
-            ioUsers.emit(event, data);
-        };
+		this.emitToAll = (event, data) => {
+			ioUsers.emit(event, data);
+		};
 
-        /**
-         * Use this to manually trigger an update to the queue/positions
-         * and display it to all users. Can be used for example when a
-         * user disconnects and we want to update visually the queue
-         */
-        this.triggerOnQueueChanged = () => {
-            onQueueChanged();
-        };
+		/**
+		 * Use this to manually trigger an update to the queue/positions
+		 * and display it to all users. Can be used for example when a
+		 * user disconnects and we want to update visually the queue
+		 */
+		this.triggerOnQueueChanged = () => {
+			onQueueChanged();
+		};
 
-        this.triggerOnRelatedChanged = song => {
-            onRelatedChanged(song);
-        };
+		this.triggerOnRelatedChanged = song => {
+			onRelatedChanged(song);
+		};
 
-        this.run();
+		this.run();
 	}
 
 	/**
@@ -106,24 +106,24 @@ module.exports = class Queue {
 		}
 
 		youTubeApi.getVideo(videoId).then(data => {
-            if(data.pageInfo.totalResults > 0) {
-                if( ! data.items[0].status.embeddable) {
-                    // TODO: Show nice error to user (https://github.com/Bratanov/community-driven-radio/issues/26)
-                    return;
-                }
+			if(data.pageInfo.totalResults > 0) {
+				if( ! data.items[0].status.embeddable) {
+					// TODO: Show nice error to user (https://github.com/Bratanov/community-driven-radio/issues/26)
+					return;
+				}
 
-                let title = data.items[0].snippet.title;
-                let resultDuration = data.items[0].contentDetails.duration;
+				let title = data.items[0].snippet.title;
+				let resultDuration = data.items[0].contentDetails.duration;
 
-                let durationInMs = moment.duration(resultDuration).asMilliseconds();
+				let durationInMs = moment.duration(resultDuration).asMilliseconds();
 
-                this.items.push(new Song(videoId, title, durationInMs, userSocket));
+				this.items.push(new Song(videoId, title, durationInMs, userSocket));
 
-                this.triggerOnQueueChanged();
-            }
-        }).catch(error => {
-            console.error('Queue-add error', error);
-        });
+				this.triggerOnQueueChanged();
+			}
+		}).catch(error => {
+			console.error('Queue-add error', error);
+		});
 	}
 
 	deleteItem(userSocket, videoId) {
@@ -155,14 +155,14 @@ module.exports = class Queue {
 				// Add the first related video to queue (asynchronous!)
 				if(this.active !== null && this.active.relatedVideos.length) {
 					this.add({}, this.active.relatedVideos[0].youtubeId);
-                    this.relatedVideoIsLoading = true;
+					this.relatedVideoIsLoading = true;
 				}
 
 				// Nothing active or no related videos found
 				return;
 			}
 			// Reset the value of the flag, used when loading related videos on empty queue
-            this.relatedVideoIsLoading = false;
+			this.relatedVideoIsLoading = false;
 
 			// The next song would be the first one from the sorted queue
 			let newSong = this.getItems().shift();

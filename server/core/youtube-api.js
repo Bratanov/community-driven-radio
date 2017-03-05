@@ -10,40 +10,40 @@ module.exports = class YoutubeApi {
 		this.apiKey = apiKey;
 	}
 
-    /**
-     * @param youTubeApiRequestUrl
+	/**
+	 * @param youTubeApiRequestUrl
 	 * @returns {Promise}
-     */
+	 */
 	simpleGetRequest(youTubeApiRequestUrl) {
 		return new Promise((resolve, reject) => {
-            request(youTubeApiRequestUrl, (error, response, body) => {
-                if (!error && response.statusCode === 200) {
-                    let data = JSON.parse(body); // Parse response from YouTube
+			request(youTubeApiRequestUrl, (error, response, body) => {
+				if (!error && response.statusCode === 200) {
+					let data = JSON.parse(body); // Parse response from YouTube
 
-                    resolve(data);
-                } else {
-                	reject(error || response.statusCode);
-                }
-            });
+					resolve(data);
+				} else {
+					reject(error || response.statusCode);
+				}
+			});
 		});
 	}
 
-    /**
+	/**
 	 *
-     * @param youtubeId
+	 * @param youtubeId
 	 * @returns {Promise}
-     */
+	 */
 	getVideo(youtubeId) {
 		let youTubeApiRequestUrl = `${URL_BASE}videos?id=${youtubeId}&part=contentDetails,status,snippet&key=${this.apiKey}`;
 		return this.simpleGetRequest(youTubeApiRequestUrl);
 	}
 
-    /**
-     * @param youtubeId
-     * @returns {Promise}
-     */
+	/**
+	 * @param youtubeId
+	 * @returns {Promise}
+	 */
 	getRelatedVideos(youtubeId) {
-        let youTubeApiRequestUrl = `${URL_BASE}search?type=video&relatedToVideoId=${youtubeId}&part=snippet&key=${this.apiKey}`;
-        return this.simpleGetRequest(youTubeApiRequestUrl);
-    }
+		let youTubeApiRequestUrl = `${URL_BASE}search?type=video&relatedToVideoId=${youtubeId}&part=snippet&key=${this.apiKey}`;
+		return this.simpleGetRequest(youTubeApiRequestUrl);
+	}
 };
