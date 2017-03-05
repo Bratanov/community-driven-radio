@@ -104,7 +104,7 @@ module.exports = class Song {
 	}
 
 	loadRelatedVideos(callback) {
-		// Load and add related videos in the self.relatedVideos array
+		// Load and add related videos in the this.relatedVideos array
 		youTubeApi.getRelatedVideos(this.youtubeId).then(data => {
 			if(data.pageInfo.totalResults > 0 && data.items.length) {
 				for(let item of data.items) {
