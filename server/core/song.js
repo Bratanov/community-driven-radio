@@ -1,3 +1,4 @@
+const Logger = require('./logger.js');
 const YoutubeApi = require('./youtube-api.js');
 const youTubeApi = new YoutubeApi(process.env.YOUTUBE_API_KEY);
 
@@ -119,7 +120,7 @@ module.exports = class Song {
 				return callback();
 			}
 		}).catch(err => {
-			console.error("Song-loadRelatedVideos error", err);
+            Logger.error("Song-loadRelatedVideos error", err);
 		});
 	}
 };

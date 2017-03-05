@@ -1,5 +1,6 @@
 const moment = require('moment');
 const Song = require('./song.js');
+const Logger = require('./logger.js');
 const YoutubeApi = require('./youtube-api.js');
 const youTubeApi = new YoutubeApi(process.env.YOUTUBE_API_KEY);
 
@@ -122,7 +123,7 @@ module.exports = class Queue {
 				this.triggerOnQueueChanged();
 			}
 		}).catch(error => {
-			console.error('Queue-add error', error);
+            Logger.error('Queue-add error', error);
 		});
 	}
 
