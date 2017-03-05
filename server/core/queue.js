@@ -1,6 +1,7 @@
 const moment = require('moment');
 const Song = require('./song.js');
-const youTubeApi = require('./youtube-api.js');
+const YoutubeApi = require('./youtube-api.js');
+const youTubeApi = new YoutubeApi(process.env.YOUTUBE_API_KEY);
 
 module.exports = class Queue {
 
@@ -104,25 +105,25 @@ module.exports = class Queue {
 			}
 		}
 
-		youTubeApi.getVideo(videoId, data => {
-			if(data.pageInfo.totalResults > 0) {
-				if( ! data.items[0].status.embeddable) {
+		youTubeApi.getVideo(videoId).then(data => {
+            if(data.pageInfo.totalResults > 0) {
+                if( ! data.items[0].status.embeddable) {
                     // TODO: Show nice error to user (https://github.com/Bratanov/community-driven-radio/issues/26)
-					return;
-				}
+                    return;
+                }
 
-				let title = data.items[0].snippet.title;
-				let resultDuration = data.items[0].contentDetails.duration;
+                let title = data.items[0].snippet.title;
+                let resultDuration = data.items[0].contentDetails.duration;
 
-				let durationInMs = moment.duration(resultDuration).asMilliseconds();
+                let durationInMs = moment.duration(resultDuration).asMilliseconds();
 
-				this.items.push(new Song(videoId, title, durationInMs, userSocket));
+                this.items.push(new Song(videoId, title, durationInMs, userSocket));
 
-				this.triggerOnQueueChanged();
-			}
-		}, error => {
-			console.error('Queue-add error:', error);
-		});
+                this.triggerOnQueueChanged();
+            }
+        }).catch(error => {
+            console.error('Queue-add error', error);
+        });
 	}
 
 	deleteItem(userSocket, videoId) {

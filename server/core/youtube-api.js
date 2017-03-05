@@ -1,30 +1,49 @@
-var request = require('request');
-var youTubeApi = {
-	YOUTUBE_API_KEY: process.env.YOUTUBE_API_KEY || console.error('Please set a YOUTUBE_API_KEY environment variable'),
-	URL_BASE: 'https://www.googleapis.com/youtube/v3/',
-	simpleGetRequest: function(youTubeApiRequestUrl, callbackSuccess, callbackError) {
-		request(youTubeApiRequestUrl, function (error, response, body) {
-		    if ( ! error && response.statusCode == 200) {
-		        var data = JSON.parse(body); // Parse response from YouTube
+const request = require('request');
+const URL_BASE = 'https://www.googleapis.com/youtube/v3/';
 
-		        if(typeof callbackSuccess === 'function') {
-					callbackSuccess(data);
-		        }
-			} else {
-				if(typeof callbackError === 'function') {
-					callbackError(error);
-				}
-			}
-		});
-	},
-	getVideo: function(youtubeId, callbackSuccess, callbackError) {
-		var youTubeApiRequestUrl = this.URL_BASE + 'videos?id=' + youtubeId + '&part=contentDetails,status,snippet&key=' + this.YOUTUBE_API_KEY;
-		this.simpleGetRequest(youTubeApiRequestUrl, callbackSuccess, callbackError);
-	},
-	getRelatedVideos: function(youtubeId, callbackSuccess, callbackError) {
-		var youTubeApiRequestUrl = this.URL_BASE + 'search?type=video&relatedToVideoId=' + youtubeId + '&part=snippet&key=' + this.YOUTUBE_API_KEY;
-		this.simpleGetRequest(youTubeApiRequestUrl, callbackSuccess, callbackError);
+module.exports = class YoutubeApi {
+	constructor(apiKey) {
+		if(!apiKey) {
+			throw new Error("Please specify your Youtube API key");
+		}
+
+		this.apiKey = apiKey;
 	}
-};
 
-module.exports = youTubeApi;
+    /**
+     * @param youTubeApiRequestUrl
+	 * @returns {Promise}
+     */
+	simpleGetRequest(youTubeApiRequestUrl) {
+		return new Promise((resolve, reject) => {
+            request(youTubeApiRequestUrl, (error, response, body) => {
+                if (!error && response.statusCode === 200) {
+                    let data = JSON.parse(body); // Parse response from YouTube
+
+                    resolve(data);
+                } else {
+                	reject(error || response.statusCode);
+                }
+            });
+		});
+	}
+
+    /**
+	 *
+     * @param youtubeId
+	 * @returns {Promise}
+     */
+	getVideo(youtubeId) {
+		let youTubeApiRequestUrl = `${URL_BASE}videos?id=${youtubeId}&part=contentDetails,status,snippet&key=${this.apiKey}`;
+		return this.simpleGetRequest(youTubeApiRequestUrl);
+	}
+
+    /**
+     * @param youtubeId
+     * @returns {Promise}
+     */
+	getRelatedVideos(youtubeId) {
+        let youTubeApiRequestUrl = `${URL_BASE}search?type=video&relatedToVideoId=${youtubeId}&part=snippet&key=${this.apiKey}`;
+        return this.simpleGetRequest(youTubeApiRequestUrl);
+    }
+};

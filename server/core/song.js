@@ -1,4 +1,5 @@
-const youTubeApi = require('./youtube-api.js');
+const YoutubeApi = require('./youtube-api.js');
+const youTubeApi = new YoutubeApi(process.env.YOUTUBE_API_KEY);
 
 module.exports = class Song {
 	constructor(youtubeId, title, duration, addedBy) {
@@ -103,7 +104,7 @@ module.exports = class Song {
 
 	loadRelatedVideos(callback) {
 		// Load and add related videos in the self.relatedVideos array
-		youTubeApi.getRelatedVideos(this.youtubeId, data => {
+		youTubeApi.getRelatedVideos(this.youtubeId).then(data => {
 			if(data.pageInfo.totalResults > 0 && data.items.length) {
 				for(let item of data.items) {
 					// The data we need from the YouTube response
@@ -117,6 +118,8 @@ module.exports = class Song {
 
 				return callback();
 			}
+		}).catch(err => {
+			console.error("Song-loadRelatedVideos error", err);
 		});
 	}
 };
