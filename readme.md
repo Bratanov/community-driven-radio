@@ -14,12 +14,42 @@ A DevLabs Project
 
 ## How to run
 
-`node radio` or `npm start`
+0. This project requires a YouTube API key to work.
 
-Note: You have to set an environment variable called `YOUTUBE_API_KEY` with a valid API key from YouTube for this to work. (For windows you can do something like: `SET YOUTUBE_API_KEY=mykeyhere && node radio`) Get teh API key here: https://console.developers.google.com/apis/credentials Read the docs here: https://developers.google.com/youtube/
+    Get one from: https://console.developers.google.com/apis/credentials 
+
+    (Read their docs here: https://developers.google.com/youtube/)
+
+0. Set the YouTube API key as an environment variable:
+
+	- For Windows:
+
+		`SET YOUTUBE_API_KEY=mykeyhere`
+
+	- For Linux/MacOS:
+
+        `export YOUTUBE_API_KEY=mykeyhere`
+   
+0. Run the project:
+
+    `node radio` or `npm start`
+
+0. _Alternatively_, you can combine the previous steps with:
+
+    `SET YOUTUBE_API_KEY=mykeyhere && node radio`
+   
+    or use the provided shell script:
+   
+    - `cp start.sh.sample start.sh` - copy the example script
+
+    - `vi start.sh` - update with your API key
+   
+    - `./start.sh` - sets API key and runs project
 
 ## Contributions
 
-You can contribute anything. 
+Any contributions are welcome, you can open new issues with bug reports/feature requests/questions or you can make pull requests with your work. Try to follow our code organization and naming conventions.
 
-Issues? Sure! Pull requests with whatever? Sure! Go for it.
+If you want to get started with a task you can check out the active issues [here](../../issues), fork the project, work on it and when ready, open a pull request [here](../../pulls). 
+
+Good luck and happy coding!
