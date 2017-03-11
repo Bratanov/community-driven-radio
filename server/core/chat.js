@@ -3,20 +3,20 @@ module.exports = class Chat {
 		this.lastMessages = [];
 	}
 
-	attachUser(socket) {
+	attachClient(client) {
 		// Send history to user
 		for(let lastMessage of this.lastMessages) {
-			socket.emit('chat_msg', lastMessage);
+			client.emit('chat_msg', lastMessage);
 		}
 
 		//Bind events to this user:
-		socket.on('chat_msg', data => {
-			this.newMessage(socket, data);
+		client.on('chat_msg', data => {
+			this.newMessage(client, data);
 		});
 	}
 
-	newMessage(socket, data) {
-        socket.broadcast.emit('chat_msg', data);
+	newMessage(client, data) {
+        client.broadcast('chat_msg', data);
 
         this.lastMessages.push(data);
         if(this.lastMessages.length > 50) {

@@ -3,19 +3,19 @@ module.exports = class QueueManager {
 		this.queue = queue;
 	}
 
-	attachUser(socket) {
+	attachClient(client) {
 		// Send current song and current queue to user
 		if(this.queue.active && ! this.queue.active.isOver()) {
 			let info = {
 				url_params: this.queue.active.getVideoUrlParams(),
 				info: this.queue.active.getInfo()
 			};
-			socket.emit('new_song', info);
-			socket.emit('queue_info', this.queue.getInfo());
-			socket.emit('related_info', this.queue.active.relatedVideos);
+			client.emit('new_song', info);
+			client.emit('queue_info', this.queue.getInfo());
+			client.emit('related_info', this.queue.active.relatedVideos);
 		}
 
-		socket.on('disconnect', () => {
+		client.on('disconnect', () => {
 			/**
 			 * A user has left which would cause the
 			 * sorting of the queue to potentially
@@ -27,13 +27,13 @@ module.exports = class QueueManager {
 		/**
 		 * Attach user initiated events
 		 */
-		socket.on('new_song', data => {
+		client.on('new_song', data => {
 			// Add to queue
-			this.queue.add(socket, data);
+			this.queue.add(client, data);
 		});
-		socket.on('delete_queued', data => {
+		client.on('delete_queued', data => {
 			// Remove from queue
-			this.queue.deleteItem(socket, data);
+			this.queue.deleteItem(client, data);
 		});
 	}
 };

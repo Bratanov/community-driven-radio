@@ -3,45 +3,42 @@ const QueueManager = require('./server/core/queue-manager.js');
 const VotesManager = require('./server/core/votes-manager.js');
 const Chat = require('./server/core/chat.js');
 const Logger = require('./server/core/logger.js');
+const ClientManager = require('./server/core/client-manager.js');
 
 const SERVER_PORT = 4000;
 const io = require('./server/core/socketio-express-initializer')({
 	port: SERVER_PORT
 });
-Logger.info("Server started successfully on port", SERVER_PORT);
+Logger.info('Server started successfully on port', SERVER_PORT);
 
-// Start our song queue
-const queue = new Queue(io.sockets);
+// start the server components
+const clientManager = new ClientManager(io);
+const queue = new Queue(clientManager);
 const votesManager = new VotesManager(queue);
 const queueManager = new QueueManager(queue);
 const chat = new Chat();
 
-let usersCount = 0;
+clientManager.on('new-client', client => {
+	// attach client to our components
+	chat.attachClient(client);
+	queueManager.attachClient(client);
+	votesManager.attachClient(client);
 
-//Event user connected
-io.on('connection', socket => {
-	chat.attachUser(socket);
-	queueManager.attachUser(socket);
-	votesManager.attachUser(socket);
+	clientManager.emitToAll('usersCount', clientManager.getClientsCount());
+	client.on('disconnect', () => {
+		clientManager.emitToAll('usersCount', clientManager.getClientsCount());
 
-    usersCount++;
-    io.emit('usersCount', usersCount);
-	socket.on('disconnect', () => {
-		usersCount--;
-
-		io.emit('usersCount', usersCount);
-
-        Logger.info("User", socket.id, "disconnected");
+        Logger.info('Client', client.id, 'disconnected');
 	});
 
     let isAdmin = false; // TODO: Implement admin functionality
 	if(isAdmin) {
-		socket.on('refresh-them', () => {
-			io.emit('getRefreshed', true);
+		client.on('refresh-them', () => {
+			clientManager.emitToAll('getRefreshed', true);
 		});
 	}
 
-    Logger.info("User", socket.id, "connected");
+    Logger.info('Client', client.id, 'connected');
 });
 
-Logger.info("Radio components initialized and waiting");
+Logger.info('Radio components initialized and waiting');

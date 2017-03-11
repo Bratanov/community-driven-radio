@@ -120,7 +120,7 @@ module.exports = class Song {
 				return callback();
 			}
 		}).catch(err => {
-            Logger.error("Song-loadRelatedVideos error", err);
+            Logger.error('Song-loadRelatedVideos error', err);
 		});
 	}
 };

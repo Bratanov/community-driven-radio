@@ -4,7 +4,7 @@ const URL_BASE = 'https://www.googleapis.com/youtube/v3/';
 module.exports = class YoutubeApi {
 	constructor(apiKey) {
 		if(!apiKey) {
-			throw new Error("Please specify your Youtube API key");
+			throw new Error('Please specify your Youtube API key');
 		}
 
 		this.apiKey = apiKey;

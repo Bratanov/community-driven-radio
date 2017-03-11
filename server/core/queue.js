@@ -6,7 +6,7 @@ const youTubeApi = new YoutubeApi(process.env.YOUTUBE_API_KEY);
 
 module.exports = class Queue {
 
-	constructor(ioUsers) {
+	constructor(clientManager) {
 		this.items = [];
 		this.active = null;
 		this.relatedVideoIsLoading = false;
@@ -20,16 +20,16 @@ module.exports = class Queue {
 		 */
 		let onQueueChanged = () => {
 			// Send queue info:
-			ioUsers.emit('queue_info', this.getInfo());
+			clientManager.emitToAll('queue_info', this.getInfo());
 		};
 
 		let onRelatedChanged = song => {
 			// Send queue info:
-			ioUsers.emit('related_info', song.relatedVideos);
+			clientManager.emitToAll('related_info', song.relatedVideos);
 		};
 
 		this.emitToAll = (event, data) => {
-			ioUsers.emit(event, data);
+			clientManager.emitToAll(event, data);
 		};
 
 		/**

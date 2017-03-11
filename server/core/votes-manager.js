@@ -8,32 +8,33 @@ module.exports = class VotesManager {
 		this.voters = [];
 	}
 
-	attachUser(socket) {
-		this.voters.push(socket);
+	attachClient(client) {
+		this.voters.push(client);
 
-		socket.on('disconnect', () => {
+		client.on('disconnect', () => {
 			// remove user from voters array
 			this.voters = this.voters.filter(user => {
-				return user !== socket;
+				return user !== client;
 			});
 			this.recalculateVotes();
 		});
-		socket.on('vote', songId => {
-			this.addVote(socket, songId);
+		client.on('vote', songId => {
+			this.addVote(client, songId);
 			this.recalculateVotes();
 		});
+	}
+
+	hasVotedFor(client, songId) {
+		return client.getVotes().indexOf(songId) !== -1;
 	}
 
 	getVotesCount(song) {
 		let votesCount = 0;
 
 		// Loop through the currently connected users
-		for(let voterSocket of this.voters) {
-			// Get the votes array from this users Socket object
-			let votes = voterSocket.votes || [];
-
+		for(let voterClient of this.voters) {
 			// Check if the song id is contained inside
-			if(votes.indexOf(song.id) !== -1) {
+			if(this.hasVotedFor(voterClient, song.id)) {
 				votesCount++;
 			}
 		}
@@ -63,15 +64,11 @@ module.exports = class VotesManager {
 		this.queue.triggerOnQueueChanged();
 	}
 
-	addVote(userSocket, songId) {
-		let currentVotes = userSocket.votes || [];
-
-		if(currentVotes.indexOf(songId) === -1) {
-			currentVotes.push(songId);
-			// Put the votes back in the socket object
-			userSocket.votes = currentVotes;
+	addVote(client, songId) {
+		if(this.hasVotedFor(client, songId)) {
+			client.emit('be_alerted', 'You\'ve already voted for this song');
 		} else {
-			userSocket.emit('be_alerted', 'You\'ve already voted for this song');
+			client.addVote(songId);
 		}
 	}
 };
