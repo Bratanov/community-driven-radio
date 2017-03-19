@@ -1,7 +1,10 @@
 const request = require('request');
 const URL_BASE = 'https://www.googleapis.com/youtube/v3/';
 
-module.exports = class YoutubeApi {
+/**
+ * TODO: docs
+ */
+class YoutubeApi {
 	constructor(apiKey) {
 		if(!apiKey) {
 			throw new Error('Please specify your Youtube API key');
@@ -46,4 +49,6 @@ module.exports = class YoutubeApi {
 		let youTubeApiRequestUrl = `${URL_BASE}search?type=video&relatedToVideoId=${youtubeId}&part=snippet&key=${this.apiKey}`;
 		return this.simpleGetRequest(youTubeApiRequestUrl);
 	}
-};
+}
+
+module.exports = YoutubeApi;

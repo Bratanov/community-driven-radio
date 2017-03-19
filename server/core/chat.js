@@ -1,4 +1,7 @@
-module.exports = class Chat {
+/**
+ * TODO: Docs
+ */
+class Chat {
 	constructor() {
 		this.lastMessages = [];
 	}
@@ -23,4 +26,6 @@ module.exports = class Chat {
             this.lastMessages.shift();
         }
 	}
-};
+}
+
+module.exports = Chat;

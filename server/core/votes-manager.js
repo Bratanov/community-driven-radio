@@ -1,4 +1,7 @@
-module.exports = class VotesManager {
+/**
+ * TODO: Docs
+ */
+class VotesManager {
 
 	/**
 	 * @param {Queue} queue
@@ -71,4 +74,6 @@ module.exports = class VotesManager {
 			client.addVote(songId);
 		}
 	}
-};
+}
+
+module.exports = VotesManager;
