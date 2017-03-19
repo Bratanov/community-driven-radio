@@ -109,13 +109,12 @@ module.exports = class Queue {
 		youTubeApi.getVideo(videoId).then(data => {
 			if(data.pageInfo.totalResults > 0) {
 				if( ! data.items[0].status.embeddable) {
-					// TODO: Show nice error to user (https://github.com/Bratanov/community-driven-radio/issues/26)
+					this.emitToAll('be_alerted', `Sorry, the video with ID: ${videoId} is not embeddable. Try adding a different one.`);
 					return;
 				}
 
 				let title = data.items[0].snippet.title;
 				let resultDuration = data.items[0].contentDetails.duration;
-
 				let durationInMs = moment.duration(resultDuration).asMilliseconds();
 
 				this.items.push(new Song(videoId, title, durationInMs, userSocket));
