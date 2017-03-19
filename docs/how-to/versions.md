@@ -8,8 +8,7 @@ on different versions, or if we publish it as a package.
 
 ## What to do?
 
-After a PR is merged, which includes significant changes, 
-you can bump the version number like this:
+After a PR is merged, you can bump the version number like this:
 
 ```
     npm version patch -m "Version %s"
@@ -18,4 +17,4 @@ you can bump the version number like this:
 ```
 _@ref:_ https://gist.github.com/mdb/4206372
 
-Use `major` for a big release, `minor` for feature changes, `patch` for a quick fix. (Version `major`.`minor`.`patch`)
+Use `major` for a big release, `minor` for separate feature changes, `patch` for fixes. (Version `major`.`minor`.`patch`)

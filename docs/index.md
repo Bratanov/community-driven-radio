@@ -30,5 +30,5 @@ A DevLabs project
     'https://media.giphy.com/media/XEeASREtdxeSc/giphy.gif',
     'https://media.giphy.com/media/ER9ew0BbQGCDC/giphy.gif'
   ];
-  document.getElementById('radio-gif').innerHtml('<img src="' + radioGifs[Math.random() * radioGifs.length] + '" />');
+  document.getElementById('radio-gif').innerHTML('<img src="' + radioGifs[Math.random() * radioGifs.length] + '" />');
 </script>
