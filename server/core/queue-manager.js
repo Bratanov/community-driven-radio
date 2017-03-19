@@ -1,4 +1,7 @@
-module.exports = class QueueManager {
+/**
+ * TODO: Docs
+ */
+class QueueManager {
 	constructor(queue) {
 		this.queue = queue;
 	}
@@ -36,4 +39,6 @@ module.exports = class QueueManager {
 			this.queue.deleteItem(client, data);
 		});
 	}
-};
+}
+
+module.exports = QueueManager;

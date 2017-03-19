@@ -2,7 +2,10 @@ const Logger = require('./logger.js');
 const YoutubeApi = require('./youtube-api.js');
 const youTubeApi = new YoutubeApi(process.env.YOUTUBE_API_KEY);
 
-module.exports = class Song {
+/**
+ * Contains information about a song in the queue, or an active song
+ */
+class Song {
 	constructor(youtubeId, title, duration, addedBy) {
 		/**
 		 * Generate a unique id for the song
@@ -123,4 +126,6 @@ module.exports = class Song {
             Logger.error('Song-loadRelatedVideos error', err);
 		});
 	}
-};
+}
+
+module.exports = Song;

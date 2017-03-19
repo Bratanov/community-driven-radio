@@ -1,4 +1,7 @@
-module.exports = class Client {
+/**
+ * TODO: Docs
+ */
+class Client {
 	constructor(socket) {
 		this.socket = socket;
 		this.id = Date.now() + "-" + Math.random() * Math.pow(10, 20);
@@ -24,4 +27,6 @@ module.exports = class Client {
 	getVotes() {
 		return this.votes;
 	}
-};
+}
+
+module.exports = Client;
