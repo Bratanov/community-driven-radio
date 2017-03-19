@@ -10,6 +10,9 @@ npm-debug.log*
 # Vim config
 .vimrc
 
+# IntelliJ
+.idea
+
 # Startup script
 start.sh
 
