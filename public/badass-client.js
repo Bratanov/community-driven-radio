@@ -15,7 +15,7 @@ $('#message').on('keyup', function(e){
 });
 
 $('#newSong').on('keyup', function(e){
-	if(e.keyCode == 13){
+	if (e.keyCode == 13){
 		var id = getIdFromYoutubeUrl($(this).val());
 
 		//Send msg
@@ -24,6 +24,15 @@ $('#newSong').on('keyup', function(e){
 		//Clear text in input
 		$(this).val('');
 	}
+});
+
+$('#badassSearch').on('keyup', function(e) {
+	if (e.keyCode === 13) {
+		// submit url to #newSong?
+		console.log('youtube url here');
+	}
+
+	socket.emit('youtube_search', $(this).val());
 });
 
 $('body').on('click', '.btn-vote', function() {
@@ -111,6 +120,11 @@ socket.on('related_info', function(data) {
 	var relatedView = renderRelatedSongs(data);
 
 	$('#related-songs').html(relatedView);
+});
+
+socket.on('youtube_search', function(results) {
+	// TODO: fill up autocomplete options
+	console.log(results);
 });
 
 function renderRelatedSongs(songs) {

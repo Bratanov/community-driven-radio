@@ -43,7 +43,18 @@ module.exports = class YoutubeApi {
 	 * @returns {Promise}
 	 */
 	getRelatedVideos(youtubeId) {
-		let youTubeApiRequestUrl = `${URL_BASE}search?type=video&relatedToVideoId=${youtubeId}&part=snippet&key=${this.apiKey}`;
+		let youTubeApiRequestUrl = `${URL_BASE}search?type=video&relatedToVideoId=${youtubeId}&part=snippet&videoEmbeddable=true&key=${this.apiKey}`;
+		return this.simpleGetRequest(youTubeApiRequestUrl);
+	}
+
+	/**
+	 * Performs youtube search.
+	 * ref: https://developers.google.com/youtube/v3/docs/search/list
+	 * @param  {String} qs Query string
+	 * @return {Promise}
+	 */
+	search(qs) {
+		const youTubeApiRequestUrl = `${URL_BASE}search?part=snippet&q=${qs}&type=video&videoEmbeddable=true&key=${this.apiKey}`;
 		return this.simpleGetRequest(youTubeApiRequestUrl);
 	}
 };
