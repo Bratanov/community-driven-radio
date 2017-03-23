@@ -68,7 +68,7 @@ const commands = [
 	let currentCommand = commands.shift();
 	childProcess.exec(currentCommand, (error, stdOut, stdErr) => {
 		if(stdErr) {
-			logger.info(`Command: "${currentCommand}" failed with error:\n${stdOut}`);
+			logger.error(`Command: "${currentCommand}" failed with error:\n${stdOut}`);
 		}
 
 		// print output
