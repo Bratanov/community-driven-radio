@@ -46,7 +46,7 @@ const commands = [
 	 * Step7:
 	 *  - Copy contents of `docs/` folder in the temp dir into root directory
 	 */
-	`cp ${jsdocPath} ./`,
+	`cp ${docsTempDir}/* ./*`,
 	/**
 	 * Step8:
 	 *  - Commit, push to `gh-pages` branch
@@ -74,10 +74,9 @@ const commands = [
 	childProcess.exec(currentCommand, (error, stdOut, stdErr) => {
 		if(stdErr) {
 			logger.error(`Command: "${currentCommand}" failed with error:\n${stdOut}`);
+		} else {
+			logger.info(`Current command: "${currentCommand}" executed without errors.\nOutput:\n${stdOut}`);
 		}
-
-		// print output
-		logger.info(`Current command: "${currentCommand}" executed without errors.\nOutput:\n${stdOut}`);
 
 		// keep going
 		return executeAsyncronously(arrayOfCommands);
