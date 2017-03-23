@@ -9,9 +9,13 @@
     "request": "^2.69.0",
     "socket.io": "^1.4.5"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "docdash": "^0.4.0",
+    "jsdoc": "^3.4.3"
+  },
   "scripts": {
     "start": "node radio.js",
+    "generate-docs": "",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

@@ -1,7 +1,10 @@
 const express = require('express');
 const socketIo = require('socket.io');
 
-module.exports = config => {
+/**
+ * TODO: Docs
+ */
+const socketIoExpressInitializer = config => {
 	if(typeof config === 'undefined') {
 		config = {};
 	}
@@ -19,3 +22,5 @@ module.exports = config => {
 
 	return io;
 };
+
+module.exports = socketIoExpressInitializer;

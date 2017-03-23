@@ -4,7 +4,10 @@ const Logger = require('./logger.js');
 const YoutubeApi = require('./youtube-api.js');
 const youTubeApi = new YoutubeApi(process.env.YOUTUBE_API_KEY);
 
-module.exports = class Queue {
+/**
+ * TODO: Docs
+ */
+class Queue {
 
 	constructor(clientManager) {
 		this.items = [];
@@ -210,4 +213,6 @@ module.exports = class Queue {
 	stop() {
 		clearInterval(this.queueInterval);
 	}
-};
+}
+
+module.exports = Queue;

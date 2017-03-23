@@ -1,7 +1,10 @@
 const EventEmitter = require('events');
 const Client = require('./client');
 
-module.exports = class ClientManager extends EventEmitter {
+/**
+ * TODO: Docs
+ */
+class ClientManager extends EventEmitter {
 
 	constructor(socketIo) {
 		super();
@@ -29,4 +32,6 @@ module.exports = class ClientManager extends EventEmitter {
 	getClientsCount() {
 		return this.clients.length;
 	}
-};
+}
+
+module.exports = ClientManager;
