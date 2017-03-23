@@ -26,7 +26,7 @@ const commands = [
 	 * Step3:
 	 *  - Copy project .gitignore to temp folder (so it's transferred to gh-pages branch)
 	 */
-	`cp -rf .gitignore ${docsTempDir}/.gitignore`,
+	`cp -rf .gitignore ${docsTempDir}.gitignore`,
 	/**
 	 * Step4:
 	 *  - Remove generated jsdocs from `docs/jsdocs/`
@@ -46,7 +46,7 @@ const commands = [
 	 * Step7:
 	 *  - Copy contents of `docs/` folder in the temp dir into root directory
 	 */
-	`cp ${docsTempDir}/* ./*`,
+	`cp ${docsTempDir}* ./*`,
 	/**
 	 * Step8:
 	 *  - Commit, push to `gh-pages` branch
@@ -73,7 +73,7 @@ const commands = [
 	let currentCommand = commands.shift();
 	childProcess.exec(currentCommand, (error, stdOut, stdErr) => {
 		if(stdErr) {
-			logger.error(`Command: "${currentCommand}" failed with error:\n${stdOut}`);
+			logger.error(`Command: "${currentCommand}" failed with error:\n${stdErr}`);
 		} else {
 			logger.info(`Current command: "${currentCommand}" executed without errors.\nOutput:\n${stdOut}`);
 		}
