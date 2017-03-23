@@ -23,6 +23,11 @@ const commands = [
 	 */
 	`cp -rf docs/ ${docsTempDir}`,
 	/**
+	 * Step3:
+	 *  - Copy project .gitignore to temp folder (so it's transferred to gh-pages branch)
+	 */
+	`cp -rf .gitignore ${docsTempDir}/.gitignore`,
+	/**
 	 * Step4:
 	 *  - Remove generated jsdocs from `docs/jsdocs/`
 	 */
