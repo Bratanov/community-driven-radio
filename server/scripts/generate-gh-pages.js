@@ -46,7 +46,7 @@ const commands = [
 	 * Step7:
 	 *  - Copy contents of `docs/` folder in the temp dir into root directory
 	 */
-	`cp ${docsTempDir}* ./*`,
+	`cp -rf ${docsTempDir}* ./*`,
 	/**
 	 * Step8:
 	 *  - Commit, push to `gh-pages` branch
