@@ -28,40 +28,40 @@ let changesStashed = false;
 
 const commands = [
 	/**
-	 * Step1:
+	 * Step 1:
 	 * 	- Generate jsdocs in `docs/jsdocs/`
 	 */
 	`${jsdocPath} server/core/ --destination ${JSDOCS_DIR} -t node_modules/docdash`,
 	/**
-	 * Step2:
+	 * Step 2:
 	 *  - Cleanup temp folder (if any) from previous operations
 	 */
 	function cleanTempDir(next) {
 		fsExtra.emptyDir(DOCS_TEMP_DIR, next)
 	},
 	/**
-	 * Step3:
+	 * Step 3:
 	 *  - Copy `docs/` to a temp folder
 	 */
 	function copyDocsToTemp(next) {
 		fsExtra.copy(DOCS_DIR, DOCS_TEMP_DIR, COPY_OPTIONS, next)
 	},
 	/**
-	 * Step3:
+	 * Step 4:
 	 *  - Copy project .gitignore to temp folder (so it's transferred to gh-pages branch)
 	 */
 	function copyGitignoreFile(next) {
 		fsExtra.copy('.gitignore', DOCS_TEMP_DIR + '.gitignore', COPY_OPTIONS, next);
 	},
 	/**
-	 * Step4:
+	 * Step 5:
 	 *  - Remove generated jsdocs from `docs/jsdocs/`
 	 */
 	function cleanGeneratedDocs(next) {
 		fsExtra.emptyDir(JSDOCS_DIR, next);
 	},
 	/**
-	 * Step4.1:
+	 * Step 6:
 	 *  - Stash current changes, note if anything got staged
 	 */
 	`git add --all`,
@@ -75,7 +75,7 @@ const commands = [
 		})
 	},
 	/**
-	 * Step 4.2:
+	 * Step 7:
 	 *  - Save the name of the current branch, so we can go back to it
 	 *  Requires Git 1.6.3+, source: http://stackoverflow.com/questions/1417957/show-just-the-current-branch-in-git
 	 */
@@ -88,38 +88,38 @@ const commands = [
 		})
 	},
 	/**
-	 * Step5:
+	 * Step 8:
 	 *  - Switch to gh-pages branch
 	 */
 	`git checkout gh-pages`,
 	/**
-	 * Step6:
+	 * Step 9:
 	 *  - cleanup all files (sirech - old documentation)
 	 */
 	`git rm -rf .`, // delete everything in the gh-pages branch
 	/**
-	 * Step7:
+	 * Step 10:
 	 *  - Copy contents of `docs/` folder in the temp dir into root directory
 	 */
 	function copyTempToCurrent(next) {
 		fsExtra.copy(DOCS_TEMP_DIR, '.', COPY_OPTIONS, next);
 	},
 	/**
-	 * Step8:
+	 * Step 11:
 	 *  - Commit, push to `gh-pages` branch
 	 */
 	`git add --all`,
 	`git commit -m 'Updated docs for Version ${packageJson.version}'`,
 	`git push origin gh-pages`,
 	/**
-	 * Step9:
+	 * Step 12:
 	 *  - Cleanup temp dir
 	 */
 	function cleanTempDir(next) {
 		fsExtra.remove(DOCS_TEMP_DIR, next);
 	},
 	/**
-	 * Step10:
+	 * Step 13:
 	 *  - Go back to the branch you were on initially
 	 */
 	`git checkout ${branchName}`,
@@ -130,6 +130,10 @@ const commands = [
 			next();
 		}
 	},
+	/**
+	 * Step 14:
+	 *  - For the superstitious
+	 */
 	function printSuccess(next) {
 		console.log('SUCCESS! :)');
 		return next();
