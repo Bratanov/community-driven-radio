@@ -122,7 +122,9 @@ const commands = [
 	 * Step 13:
 	 *  - Go back to the branch you were on initially
 	 */
-	`git checkout ${branchName}`,
+	function gitCheckoutInitialBranch(next) {
+		executeSingleItem(`git checkout ${branchName}`, next);
+	},
 	function unstashIfNeeded(next) {
 		if(changesStashed) {
 			executeSingleItem('git stash pop', next);
