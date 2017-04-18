@@ -13,6 +13,18 @@ const JSDOCS_DIR = path.normalize('docs/jsdocs/');
 const COPY_OPTIONS = {
 	preserveTimestamps: true
 };
+/**
+ * The name of the branch you're on will be
+ * saved here, so it can be switched back
+ * @type {string}
+ */
+let branchName = "";
+/**
+ * Indicates that changes were stashed prior to
+ * switching branches that need to be unstashed
+ * @type {boolean}
+ */
+let changesStashed = false;
 
 const commands = [
 	/**
@@ -50,10 +62,31 @@ const commands = [
 	},
 	/**
 	 * Step4.1:
-	 *  - Stash current changes
+	 *  - Stash current changes, note if anything got staged
 	 */
 	`git add --all`,
-	`git stash`,
+	function gitStash(next) {
+		executeSingleItem('git stash', (err, out) => {
+			// TODO: That's pretty ugly, any git versions it won't work on, should we do a git diff, or git status?
+			if(out.indexOf('No local changes to save') === -1) {
+				changesStashed = true;
+			}
+			return next(err, out);
+		})
+	},
+	/**
+	 * Step 4.2:
+	 *  - Save the name of the current branch, so we can go back to it
+	 *  Requires Git 1.6.3+, source: http://stackoverflow.com/questions/1417957/show-just-the-current-branch-in-git
+	 */
+	function saveBranchName(next) {
+		executeSingleItem('git rev-parse --abbrev-ref HEAD', (err, out) => {
+			// default to master
+			branchName = out.trim() || 'master';
+
+			return next(err, out);
+		})
+	},
 	/**
 	 * Step5:
 	 *  - Switch to gh-pages branch
@@ -76,7 +109,7 @@ const commands = [
 	 *  - Commit, push to `gh-pages` branch
 	 */
 	`git add --all`,
-	`git commit -m "Updated docs for Version ${packageJson.version}"`,
+	`git commit -m 'Updated docs for Version ${packageJson.version}'`,
 	`git push origin gh-pages`,
 	/**
 	 * Step9:
@@ -85,19 +118,46 @@ const commands = [
 	function cleanTempDir(next) {
 		fsExtra.remove(DOCS_TEMP_DIR, next);
 	},
-	`rm -rf ${docsTempDir}`,
 	/**
 	 * Step10:
-	 *  - Go back to where you were?
+	 *  - Go back to the branch you were on initially
 	 */
-	`git checkout feature/documentation-second-attempt`, // TODO properly
-	`git stash pop`,
+	`git checkout ${branchName}`,
+	function unstashIfNeeded(next) {
+		if(changesStashed) {
+			executeSingleItem('git stash pop', next);
+		} else {
+			next();
+		}
+	},
 	function printSuccess(next) {
-		console.log("SUCCESS! :)");
+		console.log('SUCCESS! :)');
 		return next();
 	}
 ];
 
+/**
+ * Takes in an item (string command or function) and executes it
+ * Errors or stdErrors get piped to first argument in next()
+ *
+ * @param item
+ * @param next
+ */
+function executeSingleItem(item, next) {
+	if(typeof item === 'function') {
+		logger.info('Executing function', item.name);
+
+		return item(next);
+	} else if(typeof item === 'string') {
+		logger.info('Executing command', item);
+
+		return childProcess.exec(item, (err, stdOut, stdErr) => {
+			if(err || stdErr) return next(err || stdErr);
+
+			return next(null, stdOut)
+		});
+	}
+}
 
 /**
  * Receives an array of commands and
@@ -105,29 +165,15 @@ const commands = [
  */
 (function executeAsyncronously(arrayOfCommands) {
 	if(commands.length === 0) {
-		logger.info("DONE!");
+		logger.info('DONE!');
 		return;
-	}
-
-	function executeSingleItem(item, next) {
-		logger.info("Executing", item);
-
-		if(typeof item === "function") {
-			return item(next);
-		} else if(typeof item === "string") {
-			return childProcess.exec(item, (err, stdOut, stdErr) => {
-				if(err || stdErr) return next(err || stdErr);
-
-				return next(null, stdOut)
-			});
-		}
 	}
 	let currentCommand = commands.shift();
 	executeSingleItem(currentCommand, (err, response) => {
 		if(err) {
-			logger.error(`Command: "${currentCommand}" failed with error:\n${err}`);
+			logger.error(`Command: '${currentCommand}' failed with error:\n${err}`);
 		} else {
-			logger.info(`Current command: "${currentCommand}" executed without errors.\nOutput:\n${response}`);
+			logger.info(`Current command: '${currentCommand}' executed without errors.\nOutput:\n${response}`);
 		}
 		// keep going
 		return executeAsyncronously(arrayOfCommands);
