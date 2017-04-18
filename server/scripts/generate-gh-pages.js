@@ -49,6 +49,12 @@ const commands = [
 		fsExtra.emptyDir(JSDOCS_DIR, next);
 	},
 	/**
+	 * Step4.1:
+	 *  - Stash current changes
+	 */
+	`git add --all`,
+	`git stash`,
+	/**
 	 * Step5:
 	 *  - Switch to gh-pages branch
 	 */
@@ -64,7 +70,7 @@ const commands = [
 	 */
 	function copyTempToCurrent(next) {
 		fsExtra.copy(DOCS_TEMP_DIR, '.', COPY_OPTIONS, next);
-	}
+	},
 	/**
 	 * Step8:
 	 *  - Commit, push to `gh-pages` branch
@@ -78,12 +84,14 @@ const commands = [
 	 */
 	function cleanTempDir(next) {
 		fsExtra.remove(DOCS_TEMP_DIR, next);
-	}
+	},
 	`rm -rf ${docsTempDir}`,
 	/**
 	 * Step10:
 	 *  - Go back to where you were?
 	 */
+	`git checkout feature/documentation-second-attempt`, // TODO properly
+	`git stash pop`,
 	function printSuccess(next) {
 		console.log("SUCCESS! :)");
 		return next();
@@ -102,11 +110,13 @@ const commands = [
 	}
 
 	function executeSingleItem(item, next) {
+		logger.info("Executing", item);
+
 		if(typeof item === "function") {
 			return item(next);
 		} else if(typeof item === "string") {
 			return childProcess.exec(item, (err, stdOut, stdErr) => {
-				if(err || stdErr) return next(error || stdErr);
+				if(err || stdErr) return next(err || stdErr);
 
 				return next(null, stdOut)
 			});
