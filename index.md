@@ -18,7 +18,7 @@ A DevLabs project
   - [How song adding works](usage/adding-songs.md)
   - [How voting works](usage/voting.md)
 
-## Radio gif
+## Here's a gif
 
 <div id="radio-gif"></div>
 
@@ -30,5 +30,5 @@ A DevLabs project
     'https://media.giphy.com/media/XEeASREtdxeSc/giphy.gif',
     'https://media.giphy.com/media/ER9ew0BbQGCDC/giphy.gif'
   ];
-  document.getElementById('radio-gif').innerHTML('<img src="' + radioGifs[Math.random() * radioGifs.length] + '" />');
+  document.getElementById('radio-gif').innerHTML = '<img src="' + radioGifs[Math.random() * radioGifs.length] + '" />';
 </script>
