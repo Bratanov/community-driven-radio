@@ -109,7 +109,7 @@ const commands = [
 	 *  - Commit, push to `gh-pages` branch
 	 */
 	`git add --all`,
-	`git commit -m 'Updated docs for Version ${packageJson.version}'`,
+	`git commit -m "Updated docs for Version ${packageJson.version}"`,
 	`git push origin gh-pages`,
 	/**
 	 * Step 12:
