@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>song.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Chat.html">Chat</a></li><li><a href="Client.html">Client</a></li><li><a href="ClientManager.html">ClientManager</a></li><li><a href="Logger.html">Logger</a></li><li><a href="Queue.html">Queue</a><ul class='methods'><li data-type='method'><a href="Queue.html#getItems">getItems</a></li><li data-type='method'><a href="Queue.html#triggerOnQueueChanged">triggerOnQueueChanged</a></li></ul></li><li><a href="QueueManager.html">QueueManager</a></li><li><a href="Song.html">Song</a><ul class='methods'><li data-type='method'><a href="Song.html#getCurrentSeekPosition">getCurrentSeekPosition</a></li><li data-type='method'><a href="Song.html#getInfo">getInfo</a></li><li data-type='method'><a href="Song.html#getVideoUrlParams">getVideoUrlParams</a></li><li data-type='method'><a href="Song.html#isOver">isOver</a></li><li data-type='method'><a href="Song.html#play">play</a></li><li data-type='method'><a href="Song.html#setVotes">setVotes</a></li></ul></li><li><a href="VotesManager.html">VotesManager</a><ul class='methods'><li data-type='method'><a href="VotesManager.html#recalculateVotes">recalculateVotes</a></li></ul></li><li><a href="YoutubeApi.html">YoutubeApi</a><ul class='methods'><li data-type='method'><a href="YoutubeApi.html#getRelatedVideos">getRelatedVideos</a></li><li data-type='method'><a href="YoutubeApi.html#getVideo">getVideo</a></li><li data-type='method'><a href="YoutubeApi.html#simpleGetRequest">simpleGetRequest</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#socketIoExpressInitializer">socketIoExpressInitializer</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">song.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const Logger = require('./logger.js');
+const YoutubeApi = require('./youtube-api.js');
+const youTubeApi = new YoutubeApi(process.env.YOUTUBE_API_KEY);
+
+/**
+ * Contains information about a song in the queue, or an active song
+ */
+class Song {
+	constructor(youtubeId, title, duration, addedBy) {
+		/**
+		 * Generate a unique id for the song
+		 * Doesn't have to be very random
+		 * @type {string}
+		 */
+		this.id = Date.now().toString() + parseInt(Math.random() * 100000000000).toString();
+		this.youtubeId = youtubeId;
+		this.duration = duration;
+		this.title = title;
+		this.relatedVideos = [];
+		this.addedBy = addedBy;
+		this.votes = 0;
+
+		// Limit duration of a song to 5min
+		this.duration = Math.min(this.duration, 5 * 60 * 1000);
+
+		// Internally used (private-ish)
+		this.startedPlayingAt = null;
+		this.shouldStopPlayingAt = null;
+	}
+
+	/**
+	 * Marks this song as currently playing
+	 */
+	play() {
+		this.startedPlayingAt = Date.now();
+		this.shouldStopPlayingAt = this.startedPlayingAt + this.duration;
+	}
+
+	/**
+	 * @return {Boolean} If the song should have stopped playing by now
+	 */
+	isOver() {
+		// Not started yet
+		if( ! this.startedPlayingAt) {
+			return true;
+		}
+
+		return this.getEndsInMs() &lt;= 0;
+	}
+
+	getEndsInMs() {
+		return this.shouldStopPlayingAt - Date.now();
+	}
+
+	getDurationInSec() {
+		return parseInt(this.duration / 1000);
+	}
+
+	/**
+	 * Get the current seek time in seconds
+	 *
+	 * @return {int} Seconds after this song should have started
+	 */
+	getCurrentSeekPosition() {
+		return Math.max(0, parseInt((Date.now() - this.startedPlayingAt) / 1000));
+	}
+
+	/**
+	 * Those params can be inserted after youtube.com/embed/
+	 * and are sent to the end users to play the video with
+	 *
+	 * @return {string} Include video id, autoplay and time (if needed)
+	 */
+	getVideoUrlParams() {
+		return `${this.youtubeId}?autoplay=1&amp;controls=0&amp;start=$(this.getCurrentSeekPosition()}`;
+	}
+
+	/**
+	 * Returns a summary of a song for display to
+	 * users. When playing it includes the time
+	 * played and when over the total duration
+	 *
+	 * @return {Object}
+	 */
+	getInfo() {
+		return {
+			id: this.id,
+			title: this.title,
+			youtubeId: this.youtubeId,
+			playingAt: this.getCurrentSeekPosition(),
+			duration: this.getDurationInSec(),
+			playTime: ( ! this.isOver()) ? (`${this.getCurrentSeekPosition()}/${this.getDurationInSec()}`) : false,
+			addedBy: this.addedBy.id,
+			votes: this.votes
+		};
+	}
+
+	/**
+	 * Sets the total number of votes this song
+	 * currently has, meant to be used by the
+	 * votes manager, not directly anywhere
+	 *
+	 * @param {int} votesCount
+	 */
+	setVotes(votesCount) {
+		this.votes = votesCount;
+	}
+
+	loadRelatedVideos(callback) {
+		// Load and add related videos in the this.relatedVideos array
+		youTubeApi.getRelatedVideos(this.youtubeId).then(data => {
+			if(data.pageInfo.totalResults > 0 &amp;&amp; data.items.length) {
+				for(let item of data.items) {
+					// The data we need from the YouTube response
+					let relatedVideoInfo = {
+						youtubeId: item.id.videoId,
+						title: item.snippet.title
+					};
+
+					this.relatedVideos.push(relatedVideoInfo);
+				}
+
+				return callback();
+			}
+		}).catch(err => {
+            Logger.error('Song-loadRelatedVideos error', err);
+		});
+	}
+}
+
+module.exports = Song;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Apr 20 2017 22:38:39 GMT+0300 (FLE Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
