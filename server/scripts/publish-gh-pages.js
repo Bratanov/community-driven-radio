@@ -2,14 +2,15 @@ const childProcess = require('child_process');
 const path = require('path');
 const os = require('os');
 const logger = require('../core/logger');
-const jsdocPath = path.normalize('./node_modules/.bin/jsdoc');
 const packageJson = require('../../package.json');
 const fsExtra = require('fs-extra');
 
 // File locations
 const DOCS_TEMP_DIR = path.normalize(os.tmpdir() + '/community-driven-radio-gh-pages-temp/');
+const JSDOC_PATH = path.normalize('./node_modules/.bin/jsdoc');
 const DOCS_DIR = path.normalize('docs/');
 const JSDOCS_DIR = path.normalize('docs/jsdocs/');
+const README_FILE = path.normalize('docs/jsdocs-readme.md');
 const COPY_OPTIONS = {
 	preserveTimestamps: true
 };
@@ -31,7 +32,7 @@ const commands = [
 	 * Step 1:
 	 * 	- Generate jsdocs in `docs/jsdocs/`
 	 */
-	`${jsdocPath} server/core/ --destination ${JSDOCS_DIR} -t node_modules/docdash`,
+	`${JSDOC_PATH} server/core/ --destination ${JSDOCS_DIR} -t node_modules/docdash --readme ${README_FILE}`,
 	/**
 	 * Step 2:
 	 *  - Cleanup temp folder (if any) from previous operations
@@ -62,7 +63,7 @@ const commands = [
 	},
 	/**
 	 * Step 6:
-	 *  - Stash current changes, note if anything got staged
+	 *  - Stash current changes, note if anything got stashed
 	 */
 	`git add --all`,
 	function gitStash(next) {
@@ -91,7 +92,9 @@ const commands = [
 	 * Step 8:
 	 *  - Switch to gh-pages branch
 	 */
+	`git fetch`,
 	`git checkout gh-pages`,
+	`git pull origin gh-pages`,
 	/**
 	 * Step 9:
 	 *  - cleanup all files (sirech - old documentation)

@@ -12,6 +12,12 @@ For the [Documentation files](../):
 - Update the appropriate `.md` files in the `docs/` folder
 - Run `npm run publish-docs` to publish your changes to github pages
 
+Warning: _GitHub pages uses Jekyll, which, for some reason, doesn't like the use of the double `<` symbols.
+It would not throw errors, but build will fail because of it. 
+A few hours later you'll find yourself deep inside the rabbit hole, installing various Ruby gems and dependencies,
+dealing with SSL certificate issues and running a vagrant environment just for it.
+Please spare this to yourself and don't put anything weird in your md files._
+
 Note: _Always include documentation changes with your pull requests when it's needed_
 
 Note: _Run the `npm run publish-docs` script after the PR has been merged to master, there's no staging_
