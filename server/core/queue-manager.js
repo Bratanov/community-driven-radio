@@ -1,11 +1,24 @@
 /**
- * TODO: Docs
+ * Handles events from users that are intended to the
+ * {@link Queue} and sends initial {@link Queue} info to each {@link Client}.
+ *
+ * @type {QueueManager}
  */
 class QueueManager {
+	/**
+	 * @param {Queue} queue The Queue that is handled by this manager
+	 */
 	constructor(queue) {
 		this.queue = queue;
 	}
 
+	/**
+	 * Adds a client to the Queue. Note that
+	 * clients are not added to the Queue
+	 * directly, but to the QueueManager
+	 *
+	 * @param {Client} client
+	 */
 	attachClient(client) {
 		// Send current song and current queue to user
 		if(this.queue.active && ! this.queue.active.isOver()) {

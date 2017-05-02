@@ -2,9 +2,15 @@ const request = require('request');
 const URL_BASE = 'https://www.googleapis.com/youtube/v3/';
 
 /**
- * TODO: docs
+ * Handles communication with the YoutubeAPI
+ * Read their docs here: {@link https://developers.google.com/youtube/}
+ *
+ * @type {YoutubeApi}
  */
 class YoutubeApi {
+	/**
+	 * @param {String} apiKey from Youtube - get one here {@link https://console.developers.google.com/apis/credentials}
+	 */
 	constructor(apiKey) {
 		if(!apiKey) {
 			throw new Error('Please specify your Youtube API key');
@@ -14,8 +20,10 @@ class YoutubeApi {
 	}
 
 	/**
-	 * @param youTubeApiRequestUrl
-	 * @returns {Promise}
+	 * Executes a GET request
+	 *
+	 * @param {String} youTubeApiRequestUrl
+	 * @returns {Promise} With the JSON data from the body on resolve, error message or statusCode on reject
 	 */
 	simpleGetRequest(youTubeApiRequestUrl) {
 		return new Promise((resolve, reject) => {
@@ -32,8 +40,10 @@ class YoutubeApi {
 	}
 
 	/**
+	 * Gets YouTube API information about a video
+	 * {@link https://developers.google.com/youtube/v3/docs/videos/list}
 	 *
-	 * @param youtubeId
+	 * @param {String} youtubeId
 	 * @returns {Promise}
 	 */
 	getVideo(youtubeId) {
@@ -42,7 +52,10 @@ class YoutubeApi {
 	}
 
 	/**
-	 * @param youtubeId
+	 * Gets YouTube API information related videos to our video with youtubeId
+	 * {@link https://developers.google.com/youtube/v3/docs/search/list}
+	 *
+	 * @param {String} youtubeId
 	 * @returns {Promise}
 	 */
 	getRelatedVideos(youtubeId) {

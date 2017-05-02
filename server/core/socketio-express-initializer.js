@@ -2,7 +2,12 @@ const express = require('express');
 const socketIo = require('socket.io');
 
 /**
- * TODO: Docs
+ * Used to create a socket.io server on the provided `config.port`
+ * port and an express server on the same port serving
+ * static files from the `/public` folder.
+ *
+ * @param {Object} config
+ * @param {Object} config.port
  */
 const socketIoExpressInitializer = config => {
 	if(typeof config === 'undefined') {

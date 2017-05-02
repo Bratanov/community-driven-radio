@@ -16,7 +16,7 @@ class Chat {
 	 * Subscribes a new client to the chat events
 	 * Will send the current history to the user
 	 *
-	 * @param client
+	 * @param {Client} client
 	 */
 	attachClient(client) {
 		// Send history to user
