@@ -26,14 +26,85 @@ $('#newSong').on('keyup', function(e){
 	}
 });
 
-$('#badassSearch').on('keyup', function(e) {
-	if (e.keyCode === 13) {
-		// submit url to #newSong?
-		console.log('youtube url here');
-	}
+/**
+ * Callback for when badassSearch autocomplete options needs to be refreshed.
+ * Passes result array into the latest badassSearch suggestion callback 
+ * so they can be processed by the plugin.
+ * @param  {Object} results
+ */
+function fillAutocompleteOptions(results) {
+	// extract array of titles only
+	var titles = results.items.map(function(item) {
+		return {
+			videoId: item.id.videoId,
+			title: item.snippet.title,
+			thumbnail: item.snippet.thumbnails.default.url
+		};
+	});
 
-	socket.emit('youtube_search', $(this).val());
+	return suggestCb(titles);
+}
+
+/**
+ * badassSearch suggestion callback that will trigger rerendering when called with new data.
+ * Refreshed on every new search term.
+ * @type {Function}
+ */
+var suggestCb = new Function();
+
+/**
+ * Initialize search autocompelte input.
+ */
+var badassSearch = new autoComplete({
+	selector: '#badassSearch',
+	minChars: 2,
+	source: function(term, suggest) {
+		// normalize term
+		term = term.toLowerCase();
+		// search and refresh results callback
+		debounce(function() {
+			socket.emit('youtube_search', term);
+			suggestCb = suggest;
+		}, 1000);
+	},
+	renderItem: function(item, search) {
+		// Autocomplete item html. "data-val" is what we see in input when item is selected.
+		return '<div class="autocomplete-suggestion" data-id="'+item.videoId+'" data-title="'+item.title+'" data-val="'+item.title+'">' +
+			'<img src="'+item.thumbnail+'" height="16px"> ' +
+			item.title +
+		'</div>';
+	},
+	onSelect: function(e, term, item) {
+		// add to queue by id
+		var videoId = item.getAttribute('data-id');
+		socket.emit('new_song', videoId);
+		// clear input
+		$(this.selector).val('');
+	}
 });
+
+/**
+ * Initialize debounce function to be used as "action overflow defence" on inputs.
+ */
+var debounce = (function() {
+	// reference to funtion being debounced
+	var original
+	// reference to the timeout function
+	var debounced = 0;
+	/**
+	 * @param  {Function} fn      Action to debounce
+	 * @param  {Number}   timeout Timeout in milliseconds
+	 */
+	return function(fn, timeout) {
+		if (typeof original === 'function' && original.toString() !== fn.toString()) {
+			throw new Error('Debounce can only work with single callback at a time!');
+		}
+		original = fn;
+
+		clearTimeout(debounced);
+		debounced = setTimeout(fn, timeout);
+	};
+})();
 
 $('body').on('click', '.btn-vote', function() {
 	socket.emit('vote', $(this).data('song-id'));
@@ -122,10 +193,7 @@ socket.on('related_info', function(data) {
 	$('#related-songs').html(relatedView);
 });
 
-socket.on('youtube_search', function(results) {
-	// TODO: fill up autocomplete options
-	console.log(results);
-});
+socket.on('youtube_search', fillAutocompleteOptions);
 
 function renderRelatedSongs(songs) {
 	var view = '<ul>Related <i>(First one will play if nothing in queue)</i>:';
