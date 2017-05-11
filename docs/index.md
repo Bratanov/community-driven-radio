@@ -11,7 +11,7 @@ A DevLabs project
 - [Classes - quick reference](classes-quick-reference/)
 - [Classes and Methods - JSDocs](jsdocs/)
 - How to's
-  - [How to setup and run the radio](http://bratanov.github.com/community-driven-radio#how-to-run)
+  - [How to setup and run the radio](https://github.com/Bratanov/community-driven-radio#how-to-run)
   - [How to generate docs](how-to/documentation.md)
   - [How to bump version number](how-to/versions.md)
 - Usage (Client use cases)
