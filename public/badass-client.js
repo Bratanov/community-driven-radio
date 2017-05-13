@@ -88,31 +88,6 @@ var badassSearch = new autoComplete({
 	}
 });
 
-/**
- * DEPRECATED? :/
- * Initialize debounce function to be used as "action overflow defence" on inputs.
- */
-var debounce = (function() {
-	// reference to funtion being debounced
-	var original
-	// reference to the timeout function
-	var debounced = 0;
-	/**
-	 * @param  {Function} fn      Action to debounce
-	 * @param  {Number}   timeout Timeout in milliseconds
-	 */
-	return function(fn, timeout) {
-		if (typeof original === 'function' && original.toString() !== fn.toString()) {
-			// we already used debounce, but with a different fn parameter
-			throw new Error('Debounce can only work with single callback at a time!');
-		}
-		original = fn;
-
-		clearTimeout(debounced);
-		debounced = setTimeout(fn, timeout);
-	};
-})();
-
 $('body').on('click', '.btn-vote', function() {
 	socket.emit('vote', $(this).data('song-id'));
 });

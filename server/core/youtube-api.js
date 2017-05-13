@@ -48,13 +48,15 @@ module.exports = class YoutubeApi {
 	}
 
 	/**
-	 * Performs youtube search.
-	 * ref: https://developers.google.com/youtube/v3/docs/search/list
-	 * @param  {String} qs Query string
-	 * @return {Promise}
+	 * Returns video results that match the query string
+	 * {@link https://developers.google.com/youtube/v3/docs/search/list}
+	 *
+	 * @param {String} queryString
+	 * @param {Number} [Optional] maxResults
+	 * @returns {Promise}
 	 */
-	search(qs) {
-		const youTubeApiRequestUrl = `${URL_BASE}search?part=snippet&q=${qs}&type=video&videoEmbeddable=true&key=${this.apiKey}`;
+	search(queryString, maxResults = 10) {
+		const youTubeApiRequestUrl = `${URL_BASE}search?part=snippet&q=${queryString}&type=video&videoEmbeddable=true&maxResults=${maxResults}&key=${this.apiKey}`;
 		return this.simpleGetRequest(youTubeApiRequestUrl);
 	}
 };
