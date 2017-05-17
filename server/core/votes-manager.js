@@ -3,9 +3,22 @@ module.exports = class VotesManager {
 	/**
 	 * @param {Queue} queue
 	 */
-	constructor(queue) {
+	constructor(queue, partyMode) {
 		this.queue = queue;
 		this.voters = [];
+		this.partyMode = partyMode;
+
+		if(this.partyMode) {
+			this.partyShuffle();
+		}
+	}
+
+	partyShuffle() {
+		let partyShuffleMaxTime = 30000;
+		this.recalculateVotes();
+		setTimeout(() => {
+			this.partyShuffle();
+		}, parseInt(Math.random() * partyShuffleMaxTime));
 	}
 
 	attachClient(client) {
@@ -16,9 +29,14 @@ module.exports = class VotesManager {
 			this.voters = this.voters.filter(user => {
 				return user !== client;
 			});
-			this.recalculateVotes();
+
+			if(!this.partyMode) {
+				this.recalculateVotes();
+			}
 		});
 		client.on('vote', songId => {
+			if(this.partyMode) return client.emit('be_alerted', 'Party mode, no voting allowed! Random votes are assigned and shuffled every so often.');
+
 			this.addVote(client, songId);
 			this.recalculateVotes();
 		});
@@ -29,6 +47,10 @@ module.exports = class VotesManager {
 	}
 
 	getVotesCount(song) {
+		if(this.partyMode) {
+			return parseInt(Math.random() * 100);
+		}
+
 		let votesCount = 0;
 
 		// Loop through the currently connected users

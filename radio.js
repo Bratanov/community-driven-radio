@@ -14,7 +14,7 @@ Logger.info('Server started successfully on port', SERVER_PORT);
 // start the server components
 const clientManager = new ClientManager(io);
 const queue = new Queue(clientManager);
-const votesManager = new VotesManager(queue);
+const votesManager = new VotesManager(queue, true);
 const queueManager = new QueueManager(queue);
 const chat = new Chat();
 

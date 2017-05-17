@@ -162,6 +162,8 @@ socket.on('queue_info', function(data) {
 		}
 		$queue_info.append('<li>' + renderSong(o) + deleteButton + '</li>');
 	}
+
+	$('#party-mode').css({ background: "#"+((1<<24)*Math.random()|0).toString(16) });
 });
 
 socket.on('be_alerted', function(message) {
