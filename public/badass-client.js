@@ -14,15 +14,77 @@ $('#message').on('keyup', function(e){
 	}
 });
 
-$('#newSong').on('keyup', function(e){
-	if(e.keyCode == 13){
+// search input, handle direct entering of URL or Youtube id
+$('#badassSearch').on('keyup', function(e) {
+	if (e.keyCode == 13) {
 		var id = getIdFromYoutubeUrl($(this).val());
 
-		//Send msg
+		// Send msg
 		socket.emit('new_song', id);
 
-		//Clear text in input
+		// Clear text in input
 		$(this).val('');
+
+		// Hide autocomplete suggestions, if any
+		// ref: https://github.com/Pixabay/JavaScript-autoComplete/blob/master/auto-complete.js#L57
+		$('.autocomplete-suggestions').css('display', 'none');
+	}
+});
+
+/**
+ * Callback for when badassSearch autocomplete options needs to be refreshed.
+ * Passes result array into the latest badassSearch suggestion callback 
+ * so they can be processed by the plugin.
+ * @param  {Object} results
+ */
+function fillAutocompleteOptions(results) {
+	// extract array of titles only
+	var titles = results.items.map(function(item) {
+		return {
+			videoId: item.id.videoId,
+			title: item.snippet.title,
+			thumbnail: item.snippet.thumbnails.default.url
+		};
+	});
+
+	return suggestCb(titles);
+}
+
+/**
+ * badassSearch suggestion callback that will trigger rerendering when called with new data.
+ * Refreshed on every new search term.
+ * @type {Function}
+ */
+var suggestCb = new Function();
+
+/**
+ * Initialize search autocompelte input.
+ */
+var badassSearch = new autoComplete({
+	selector: '#badassSearch',
+	minChars: 2,
+	delay: 500,
+	source: function(term, suggest) {
+		// normalize term
+		term = term.toLowerCase();
+		// search and refresh results callback
+		socket.emit('youtube_search', term);
+		suggestCb = suggest;
+	},
+	renderItem: function(item, search) {
+		// Autocomplete item html. 
+		// "data-val" is what we see in input when item is selected.
+		return '<div class="autocomplete-suggestion" data-id="'+item.videoId+'" data-title="'+item.title+'" data-val="'+item.title+'">' +
+			'<img src="'+item.thumbnail+'" height="16px"> ' +
+			item.title +
+		'</div>';
+	},
+	onSelect: function(e, term, item) {
+		// add to queue by id
+		var videoId = item.getAttribute('data-id');
+		socket.emit('new_song', videoId);
+		// clear input
+		$(this.selector).val('');
 	}
 });
 
@@ -112,6 +174,8 @@ socket.on('related_info', function(data) {
 
 	$('#related-songs').html(relatedView);
 });
+
+socket.on('youtube_search', fillAutocompleteOptions);
 
 function renderRelatedSongs(songs) {
 	var view = '<ul>Related <i>(First one will play if nothing in queue)</i>:';
@@ -258,13 +322,16 @@ function isURL(str) {
 }
 
 function getIdFromYoutubeUrl(url) {
-	var id = "";
-	if (! isURL(url) && url.length == 11) {
-		return url;
+	if (! isURL(url)) {
+		// Youtube ids have length of 11. We assume that is the case here and return it as it is.
+		if (url.length === 11) return url;
+		return '';
 	}
+
 	var r = new RegExp('^.*(?:youtu.be\/|v\/|e\/|u\/\w+\/|embed\/|v=)([^#\&\?]*).*');
 	var m = url.match(r);
-	return m[1];
+
+	return (m.length > 1) ? m[1] : '';
 }
 
 function queryStringToObj(q) {

@@ -107,9 +107,18 @@ module.exports = class Queue {
 		}
 
 		youTubeApi.getVideo(videoId).then(data => {
-			if(data.pageInfo.totalResults > 0) {
+			if (data.pageInfo.totalResults > 0) {
 				if( ! data.items[0].status.embeddable) {
-					this.emitToAll('be_alerted', `Sorry, the video with ID: ${videoId} is not embeddable. Try adding a different one.`);
+					userSocket.emit('be_alerted', `Sorry, the video with ID: ${videoId} is not embeddable. Try adding a different one.`);
+					return;
+				}
+
+				var regionRestriction = data.items[0].contentDetails.regionRestriction;
+				if (
+					regionRestriction && 
+					regionRestriction.blocked &&
+					regionRestriction.blocked.includes('BG')) {
+					userSocket.emit('be_alerted', `Sorry, the video is blocked for watching in Bulgaria. Try a different one.`);
 					return;
 				}
 
