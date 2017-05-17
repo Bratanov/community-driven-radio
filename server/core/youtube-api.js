@@ -56,7 +56,7 @@ module.exports = class YoutubeApi {
 	 * @returns {Promise}
 	 */
 	search(queryString, maxResults = 10) {
-		const youTubeApiRequestUrl = `${URL_BASE}search?part=snippet&q=${queryString}&type=video&videoEmbeddable=true&maxResults=${maxResults}&key=${this.apiKey}`;
+		const youTubeApiRequestUrl = `${URL_BASE}search?part=snippet&q=${encodeURI(queryString)}&type=video&videoEmbeddable=true&maxResults=${maxResults}&key=${this.apiKey}`;
 		return this.simpleGetRequest(youTubeApiRequestUrl);
 	}
 };
