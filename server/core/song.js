@@ -2,12 +2,29 @@ const Logger = require('./logger.js');
 const YoutubeApi = require('./youtube-api.js');
 const youTubeApi = new YoutubeApi(process.env.YOUTUBE_API_KEY);
 
-module.exports = class Song {
+/**
+ * Contains information about a song in the queue, or an active song
+ *
+ * @property {String} id A unique identification for this song
+ * @property {String} youtubeId
+ * @property {Number} duration In milliseconds, limited to 5min
+ * @property {String} title
+ * @property {Array} relatedVideos Info about related videos, populated after {@link this.loadRelatedVideos} is called
+ * @property {Client} addedBy
+ * @property {Number} votes The amount of Clients voted for this song, set by {@link VotesManager.recalculateVotes}
+ * @type {Song}
+ */
+class Song {
+	/**
+	 * @param {String} youtubeId
+	 * @param {String} title
+	 * @param {Number} duration in milliseconds, parsed from Youtube response in {@link Queue.add}
+	 * @param {Client} addedBy
+	 */
 	constructor(youtubeId, title, duration, addedBy) {
 		/**
 		 * Generate a unique id for the song
-		 * Doesn't have to be very random
-		 * @type {string}
+		 * It doesn't have to be very random
 		 */
 		this.id = Date.now().toString() + parseInt(Math.random() * 100000000000).toString();
 		this.youtubeId = youtubeId;
@@ -45,10 +62,16 @@ module.exports = class Song {
 		return this.getEndsInMs() <= 0;
 	}
 
+	/**
+	 * @returns {Number} The time it would take for the song to end in milliseconds
+	 */
 	getEndsInMs() {
 		return this.shouldStopPlayingAt - Date.now();
 	}
 
+	/**
+	 * @returns {Number} The total time this song would run, if played, in seconds
+	 */
 	getDurationInSec() {
 		return parseInt(this.duration / 1000);
 	}
@@ -56,7 +79,7 @@ module.exports = class Song {
 	/**
 	 * Get the current seek time in seconds
 	 *
-	 * @return {int} Seconds after this song should have started
+	 * @return {Number} Seconds after this song should have started
 	 */
 	getCurrentSeekPosition() {
 		return Math.max(0, parseInt((Date.now() - this.startedPlayingAt) / 1000));
@@ -66,7 +89,7 @@ module.exports = class Song {
 	 * Those params can be inserted after youtube.com/embed/
 	 * and are sent to the end users to play the video with
 	 *
-	 * @return {string} Include video id, autoplay and time (if needed)
+	 * @return {String} Includes video id, autoplay, disabled controls and start time (if needed)
 	 */
 	getVideoUrlParams() {
 		return `${this.youtubeId}?autoplay=1&controls=0&start=$(this.getCurrentSeekPosition()}`;
@@ -97,12 +120,18 @@ module.exports = class Song {
 	 * currently has, meant to be used by the
 	 * votes manager, not directly anywhere
 	 *
-	 * @param {int} votesCount
+	 * @param {Number} votesCount
 	 */
 	setVotes(votesCount) {
 		this.votes = votesCount;
 	}
 
+	/**
+	 * Loads the {@link this.relatedVideos} info for this song.
+	 * Every related video info includes: { youtubeId: String, title: String }
+	 *
+	 * @param {Function} callback Called after loading is done, no parameters
+	 */
 	loadRelatedVideos(callback) {
 		// Load and add related videos in the this.relatedVideos array
 		youTubeApi.getRelatedVideos(this.youtubeId).then(data => {
@@ -123,4 +152,6 @@ module.exports = class Song {
             Logger.error('Song-loadRelatedVideos error', err);
 		});
 	}
-};
+}
+
+module.exports = Song;

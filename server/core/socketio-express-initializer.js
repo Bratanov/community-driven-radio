@@ -1,7 +1,15 @@
 const express = require('express');
 const socketIo = require('socket.io');
 
-module.exports = config => {
+/**
+ * Used to create a socket.io server on the provided `config.port`
+ * port and an express server on the same port serving
+ * static files from the `/public` folder.
+ *
+ * @param {Object} config
+ * @param {Object} config.port
+ */
+const socketIoExpressInitializer = config => {
 	if(typeof config === 'undefined') {
 		config = {};
 	}
@@ -19,3 +27,5 @@ module.exports = config => {
 
 	return io;
 };
+
+module.exports = socketIoExpressInitializer;

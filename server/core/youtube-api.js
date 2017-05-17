@@ -1,7 +1,16 @@
 const request = require('request');
 const URL_BASE = 'https://www.googleapis.com/youtube/v3/';
 
-module.exports = class YoutubeApi {
+/**
+ * Handles communication with the YoutubeAPI
+ * Read their docs here: {@link https://developers.google.com/youtube/}
+ *
+ * @type {YoutubeApi}
+ */
+class YoutubeApi {
+	/**
+	 * @param {String} apiKey from Youtube - get one here {@link https://console.developers.google.com/apis/credentials}
+	 */
 	constructor(apiKey) {
 		if(!apiKey) {
 			throw new Error('Please specify your Youtube API key');
@@ -11,8 +20,10 @@ module.exports = class YoutubeApi {
 	}
 
 	/**
-	 * @param youTubeApiRequestUrl
-	 * @returns {Promise}
+	 * Executes a GET request
+	 *
+	 * @param {String} youTubeApiRequestUrl
+	 * @returns {Promise} With the JSON data from the body on resolve, error message or statusCode on reject
 	 */
 	simpleGetRequest(youTubeApiRequestUrl) {
 		return new Promise((resolve, reject) => {
@@ -29,8 +40,10 @@ module.exports = class YoutubeApi {
 	}
 
 	/**
+	 * Gets YouTube API information about a video
+	 * {@link https://developers.google.com/youtube/v3/docs/videos/list}
 	 *
-	 * @param youtubeId
+	 * @param {String} youtubeId
 	 * @returns {Promise}
 	 */
 	getVideo(youtubeId) {
@@ -39,7 +52,10 @@ module.exports = class YoutubeApi {
 	}
 
 	/**
-	 * @param youtubeId
+	 * Gets YouTube API information related videos to our video with youtubeId
+	 * {@link https://developers.google.com/youtube/v3/docs/search/list}
+	 *
+	 * @param {String} youtubeId
 	 * @returns {Promise}
 	 */
 	getRelatedVideos(youtubeId) {
@@ -59,4 +75,6 @@ module.exports = class YoutubeApi {
 		const youTubeApiRequestUrl = `${URL_BASE}search?part=snippet&q=${encodeURI(queryString)}&type=video&videoEmbeddable=true&maxResults=${maxResults}&key=${this.apiKey}`;
 		return this.simpleGetRequest(youTubeApiRequestUrl);
 	}
-};
+}
+
+module.exports = YoutubeApi;

@@ -4,8 +4,16 @@ const Logger = require('./logger.js');
 const YoutubeApi = require('./youtube-api.js');
 const youTubeApi = new YoutubeApi(process.env.YOUTUBE_API_KEY);
 
-module.exports = class Queue {
+/**
+ * Contains the list of songs and plays the next one at the correct time
+ *
+ * @type {Queue}
+ */
+class Queue {
 
+	/**
+	 * @param {ClientManager} clientManager For sending song and queue info to clients
+	 */
 	constructor(clientManager) {
 		this.items = [];
 		this.active = null;
@@ -53,7 +61,7 @@ module.exports = class Queue {
 	 * sorted by the priority based
 	 * on the votes of the users
 	 *
-	 * @return {Array} Array of song items, sorted by votes/pos
+	 * @return {[Song]} Array of song items, sorted by votes/position
 	 */
 	getItems() {
 		// Make a fresh copy of the original items
@@ -75,6 +83,13 @@ module.exports = class Queue {
 		return copyItems;
 	}
 
+	/**
+	 * Returns info about the queue, this includes an
+	 * array of {@link Song.getInfo} for all songs,
+	 * sorted by votes from {@link Queue.getItems}
+	 *
+	 * @returns {Array}
+	 */
 	getInfo() {
 		let queueInfo = [];
 		let queueSortedItems = this.getItems();
@@ -89,10 +104,26 @@ module.exports = class Queue {
 		return queueInfo;
 	}
 
-	add(userSocket, videoId) {
+	/**
+	 * Adds a new song to the queue,
+	 * owned by the Client provided,
+	 * video is fetched by videoId.
+	 *
+	 * Note: Can emit `be_alerted` event and not add the
+	 * song if one of the conditions below is met:
+	 * - The song is already playing
+	 * - The song is already in the queue
+	 * - The video is not embeddable
+	 *
+	 * Note: Triggers {@link this.triggerOnQueueChanged} when song is added
+	 *
+	 * @param {Client} client
+	 * @param {String} videoId
+	 */
+	add(client, videoId) {
 		// check if song is already playing, prevent adding
 		if(this.active && this.active.youtubeId === videoId) {
-			userSocket.emit('be_alerted', 'This song is currently playing.');
+			client.emit('be_alerted', 'This song is currently playing.');
 
 			return;
 		}
@@ -100,7 +131,7 @@ module.exports = class Queue {
 		// check if song already exists in queue, prevent adding
 		for(let queueItem of this.getItems()) {
 			if(queueItem.youtubeId === videoId) {
-				userSocket.emit('be_alerted', 'This song is already in the queue. Try voting for it instead.');
+				client.emit('be_alerted', 'This song is already in the queue. Try voting for it instead.');
 
 				return;
 			}
@@ -126,7 +157,7 @@ module.exports = class Queue {
 				let resultDuration = data.items[0].contentDetails.duration;
 				let durationInMs = moment.duration(resultDuration).asMilliseconds();
 
-				this.items.push(new Song(videoId, title, durationInMs, userSocket));
+				this.items.push(new Song(videoId, title, durationInMs, client));
 
 				this.triggerOnQueueChanged();
 			}
@@ -135,7 +166,17 @@ module.exports = class Queue {
 		});
 	}
 
-	deleteItem(userSocket, videoId) {
+	/**
+	 * Removes an item from the queue by videoId.
+	 * Should only work when the client provided
+	 * is the client who added the song initially
+	 *
+	 * Note: Triggers {@link this.triggerOnQueueChanged} when song is removed
+	 *
+	 * @param {Client} client
+	 * @param {String} videoId
+	 */
+	deleteItem(client, videoId) {
 		let song = this.items.filter((item) => {
 			return item.id === videoId;
 		});
@@ -144,7 +185,7 @@ module.exports = class Queue {
 		}
 
 		song = song[0];
-		if (song.addedBy.id === userSocket.id) {
+		if (song.addedBy.id === client.id) {
 			let index = this.items.indexOf(song);
 			this.items.splice(index, 1);
 
@@ -152,6 +193,14 @@ module.exports = class Queue {
 		}
 	}
 
+	/**
+	 * This is the main queue loop, it
+	 * checks if the current song is
+	 * over to start the next one.
+	 *
+	 * Note: It will emit `song_info` event to all users on each run
+	 * Note: It will send `new_song` event to all users when a song starts
+	 */
 	work() {
 		if(this.active === null || this.active.isOver()) {
 			// When nothing is in the queue
@@ -205,18 +254,24 @@ module.exports = class Queue {
 		this.emitToAll('song_info', newSongInfo);
 	}
 
+	/**
+	 * Schedules {@link this.work} to run
+	 * every second so it will check the
+	 * queue items and do it's magic
+	 */
 	run() {
-		/**
-		 * Schedule work every second
-		 * the queue will check its
-		 * items and do its magic
-		 */
 		this.queueInterval = setInterval(() => {
 			this.work();
 		}, 1000);
 	}
 
+	/**
+	 * Stops the scheduled {@link this.work},
+	 * which was started with {@link this.run}
+	 */
 	stop() {
 		clearInterval(this.queueInterval);
 	}
-};
+}
+
+module.exports = Queue;
