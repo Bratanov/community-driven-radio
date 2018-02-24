@@ -1,0 +1,43 @@
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.css" />
+<style>
+	#text{
+		height: 200px;
+		width: 99%;
+		border: 1px solid #aaa;
+		overflow: scroll;
+	}
+	#message {
+		width: 80%;
+	}
+	#song-container {
+		float: left;
+		width: 320px;
+	}
+	#song-stuff {
+		padding-left: 340px;
+	}
+</style>
+
+<div id="content">
+	<input id="my-name" style="width: 19%" value="unnamed" /><input id="message" placeholder="type a message here"/>
+	<div id="text"></div>
+	<div><span id="usersCount">-</span> users.</div>
+</div>
+
+<div>
+	<div id="song-container">
+		<div id="player"></div>
+	</div>
+	<div id="song-stuff">
+		<div>Now playing: <span id="song-info"><i>Nothing yet, add a song below</i></span></div>
+		<div id='related-songs'></div>
+		<div>Queue: <i>(Highest voted will play first)</i> <div id="queue-info">-</div></div>
+		<div>Add a song to queue: <input id="badassSearch" placeholder="Type your favorite song or paste youtube URL..." style="width: 500px;"/></div>
+	</div>
+</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/badass-client.js"></script>
+<script src="//www.youtube.com/iframe_api"></script>

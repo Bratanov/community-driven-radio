@@ -10,14 +10,25 @@
     "socket.io": "^1.4.5"
   },
   "devDependencies": {
+    "autoprefixer": "^8.0.0",
     "docdash": "^0.4.0",
     "fs-extra": "^2.1.2",
-    "jsdoc": "^3.4.3"
+    "jsdoc": "^3.4.3",
+    "node-sass": "^4.7.2",
+    "npm-run-all": "^4.1.2",
+    "postcss-cli": "^5.0.0"
   },
   "scripts": {
-    "start": "node radio.js",
+    "start": "npm-run-all --parallel start:server build:css",
+    "start:server": "node radio.js",
+    "develop": "npm-run-all --parallel start:server watch:sass",
     "publish-docs": "node server/scripts/publish-gh-pages.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch:sass": "node-sass public/redesign/sass/main.scss public/redesign/css/style.css -w",
+    "compile:sass": "node-sass public/redesign/sass/main.scss public/redesign/css/style.comp.css",
+    "prefix:css": "postcss --use autoprefixer -b \"last 10 version\" public/redesign/css/style.comp.css -o public/redesign/css/style.prefix.css",
+    "compress:css": "node-sass public/redesign/css/style.prefix.css public/redesign/css/style.css --output-style compressed",
+    "build:css": "npm-run-all compile:sass prefix:css compress:css"
   },
   "keywords": [
     "radio"
