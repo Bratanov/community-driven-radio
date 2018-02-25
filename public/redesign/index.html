@@ -1,43 +1,64 @@
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.css" />
-<style>
-	#text{
-		height: 200px;
-		width: 99%;
-		border: 1px solid #aaa;
-		overflow: scroll;
-	}
-	#message {
-		width: 80%;
-	}
-	#song-container {
-		float: left;
-		width: 320px;
-	}
-	#song-stuff {
-		padding-left: 340px;
-	}
-</style>
+<!DOCTYPE html>
+<html lang="en" class="water-color-theme">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<div id="content">
-	<input id="my-name" style="width: 19%" value="unnamed" /><input id="message" placeholder="type a message here"/>
-	<div id="text"></div>
-	<div><span id="usersCount">-</span> users.</div>
-</div>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
+    <link href="/redesign/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.css" />
+    <style>
+      #text{
+        height: 200px;
+        width: 99%;
+        border: 1px solid #aaa;
+        overflow: scroll;
+      }
+      #message {
+        width: 80%;
+      }
+      #song-container {
+        float: left;
+        width: 320px;
+      }
+      #song-stuff {
+        padding-left: 340px;
+      }
+    </style>
+    <link rel="icon" type="image/png" href="public/redesign/img/favicon.png">
+    <title>CDR &mdash; your splice of music</title>
+  </head>
+  <body>
+    
 
-<div>
-	<div id="song-container">
-		<div id="player"></div>
-	</div>
-	<div id="song-stuff">
-		<div>Now playing: <span id="song-info"><i>Nothing yet, add a song below</i></span></div>
-		<div id='related-songs'></div>
-		<div>Queue: <i>(Highest voted will play first)</i> <div id="queue-info">-</div></div>
-		<div>Add a song to queue: <input id="badassSearch" placeholder="Type your favorite song or paste youtube URL..." style="width: 500px;"/></div>
-	</div>
-</div>
+    <div id="content">
+      <input id="my-name" style="width: 19%" value="unnamed" /><input id="message" placeholder="type a message here"/>
+      <div id="text"></div>
+      <div><span id="usersCount">-</span> users.</div>
+    </div>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.js"></script>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/badass-client.js"></script>
-<script src="//www.youtube.com/iframe_api"></script>
+    <div>
+      <div id="song-container">
+        <div id="player"></div>
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 128 128" style="enable-background:new 0 0 128 128;" xml:space="preserve" width="512px" height="512px">
+          <g>
+            <path d="M122,8H6c-3.3,0-6,2.7-6,6v80c0,3.3,2.7,6,6,6h46c0,1.719-0.89,9.083-4.469,16H42v1.55c0,1.348,1.102,2.45,2.449,2.45   h39.102c1.347,0,2.449-1.102,2.449-2.45V116h-5.531C76.89,109.083,76,101.719,76,100h46c3.3,0,6-2.7,6-6V14C128,10.7,125.3,8,122,8   z M85,117v0.55c0,0.8-0.65,1.45-1.449,1.45H44.449C43.65,119,43,118.35,43,117.55V117H85z M79.343,116H48.656   C52.123,109.112,53,101.744,53,100h22C75,101.744,75.877,109.114,79.343,116z M126,94c0,2.206-1.794,4-4,4H6c-2.206,0-4-1.794-4-4   V83h124V94z M126,82H2V14c0-2.206,1.794-4,4-4h116c2.206,0,4,1.794,4,4V82z" fill="#FFFFFF"/>
+          </g>
+        </svg>
+      </div>
+
+      <div id="song-stuff">
+        <div>Now playing: <span id="song-info"><i>Nothing yet, add a song below</i></span></div>
+        <div id='related-songs'></div>
+        <div>Queue: <i>(Highest voted will play first)</i> <div id="queue-info">-</div></div>
+        <div>Add a song to queue: <input id="badassSearch" placeholder="Type your favorite song or paste youtube URL..." style="width: 500px;"/></div>
+      </div>
+      <div>Icons made by <a href="https://www.flaticon.com/authors/dale-humphries" title="Dale Humphries">Dale Humphries</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+    </div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/badass-client.js"></script>
+    <script src="//www.youtube.com/iframe_api"></script>
+  </body>
+</html>

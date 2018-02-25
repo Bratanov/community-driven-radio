@@ -1,3 +1,57 @@
-h1 {
-  color: black;
+/*
+  Colors:
+    We have 4 different color palletes that can be switched at runtime:
+    calm green, crazy orange, water color, beauty lila
+*/
+:root {
+  &.calm-green-theme {
+    --color-primary: #229621;
+  }
+
+  &.water-color-theme {
+    --color-primary: #2072C3;
+    --color-secondary: #2A829B;
+    --color-bg-start: rgba(77, 212, 227, .85);
+    --color-bg-end: rgba(75, 141, 243, .85);
+  }
+
+  &.crazy-orange-theme {
+    --color-primary: #E74B37;
+  }
+
+  &.beauty-lila-theme {
+    --color-primary: #2E3390;
+  }
+}
+
+// Reset default browser styles
+* {
+  margin: 0;
+  padding: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 62.5%; // 1rem = 10px if default browser font-size
+}
+
+body {
+  min-height: 100vh;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #fff;
+  background-image: linear-gradient(
+    to right bottom,
+    var(--color-bg-start),
+    var(--color-bg-end)
+  ), url(../img/worn_dots.png);
+  //background-size: cover;
+  //background-repeat: no-repeat;
 }
