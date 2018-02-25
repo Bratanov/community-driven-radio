@@ -7,58 +7,323 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
     <link href="/redesign/css/style.css" rel="stylesheet">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.css" />
-    <style>
-      #text{
-        height: 200px;
-        width: 99%;
-        border: 1px solid #aaa;
-        overflow: scroll;
-      }
-      #message {
-        width: 80%;
-      }
-      #song-container {
-        float: left;
-        width: 320px;
-      }
-      #song-stuff {
-        padding-left: 340px;
-      }
-    </style>
     <link rel="icon" type="image/png" href="public/redesign/img/favicon.png">
     <title>CDR &mdash; your splice of music</title>
   </head>
-  <body>
-    
+  <body class="container">
+    <header class="header">
+      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+        width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#fff">
+        <g>
+          <path d="M17.5,50C23.841,50,29,44.841,29,38.5S23.841,27,17.5,27S6,32.159,6,38.5S11.159,50,17.5,50z M9.137,43H13v3.863
+            C11.366,45.981,10.02,44.634,9.137,43z M15,47.655V43h5v4.655C19.202,47.874,18.366,48,17.5,48S15.798,47.874,15,47.655z M15,41v-5
+            h5v5H15z M22,46.863V43h3.863C24.98,44.634,23.634,45.981,22,46.863z M26.655,41H22v-5h4.655C26.873,36.798,27,37.634,27,38.5
+            S26.873,40.202,26.655,41z M25.863,34H22v-3.863C23.634,31.019,24.98,32.366,25.863,34z M20,29.345V34h-5v-4.655
+            C15.798,29.126,16.634,29,17.5,29S19.202,29.126,20,29.345z M13,30.137V34H9.137C10.02,32.366,11.366,31.019,13,30.137z M8.345,36
+            H13v5H8.345C8.127,40.202,8,39.366,8,38.5S8.127,36.798,8.345,36z"/>
+          <path d="M58,34H33v17h25V34z M56,49H35V36h21V49z"/>
+          <path d="M58,26h-7v6h7V26z M56,30h-3v-2h3V30z"/>
+          <path d="M49,26h-7v6h7V26z M47,30h-3v-2h3V30z"/>
+          <path d="M40,26h-7v6h7V26z M38,30h-3v-2h3V30z"/>
+          <path d="M60,7H4v13H0v37h64V20h-4V7z M58,9v2H6V9H58z M6,13h52v7H6V13z M62,55H2V22h60V55z"/>
+        </g>
+      </svg>
+      <h1 class="heading-1">CDRadio</h1>
+      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+        width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#fff">
+        <g>
+          <path d="M46,40c-4.962,0-9,4.038-9,9s4.038,9,9,9s9-4.038,9-9V-0.237L25,6.191v43.165C23.349,47.312,20.826,46,18,46
+            c-4.962,0-9,4.038-9,9s4.038,9,9,9s9-4.038,9-9V23.809l26-5.571v25.119C51.349,41.312,48.826,40,46,40z M18,62c-3.86,0-7-3.14-7-7
+            s3.14-7,7-7s7,3.14,7,7S21.86,62,18,62z M27,21.763V7.809l26-5.572v13.955L27,21.763z M46,56c-3.86,0-7-3.14-7-7s3.14-7,7-7
+            s7,3.14,7,7S49.86,56,46,56z"/>
+        </g>
+      </svg>
+    </header>
 
-    <div id="content">
+    <div class="content">
+      <section class="video-player">
+        <figure id="song-container">
+            <div id="player"></div>
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 128 128" style="enable-background:new 0 0 128 128;" xml:space="preserve" width="512px" height="512px">
+              <g>
+                <path d="M122,8H6c-3.3,0-6,2.7-6,6v80c0,3.3,2.7,6,6,6h46c0,1.719-0.89,9.083-4.469,16H42v1.55c0,1.348,1.102,2.45,2.449,2.45   h39.102c1.347,0,2.449-1.102,2.449-2.45V116h-5.531C76.89,109.083,76,101.719,76,100h46c3.3,0,6-2.7,6-6V14C128,10.7,125.3,8,122,8   z M85,117v0.55c0,0.8-0.65,1.45-1.449,1.45H44.449C43.65,119,43,118.35,43,117.55V117H85z M79.343,116H48.656   C52.123,109.112,53,101.744,53,100h22C75,101.744,75.877,109.114,79.343,116z M126,94c0,2.206-1.794,4-4,4H6c-2.206,0-4-1.794-4-4   V83h124V94z M126,82H2V14c0-2.206,1.794-4,4-4h116c2.206,0,4,1.794,4,4V82z" fill="#FFFFFF"/>
+              </g>
+            </svg>
+          </figure>
+      </section>
+      <section class="chat">
+        <div class="chat-history">
+          <div class="chat-history__item chat-history__item--right chat-history__item--system">
+            <span class="chat-history__author">Now Playing</span>
+            <div class="chat-history__message">Feel the Vibe Session (Tropical Mixtape) - <span class="chat-history__timer">284 sec.</span></div>
+          </div>
+          <div class="chat-history__item chat-history__item--right chat-history__item--system">
+            <span class="chat-history__author">Now Playing</span>
+            <div class="chat-history__message">Anto - Run - <span class="chat-history__timer">234 sec.</span></div>
+          </div>
+          <div class="chat-history__item chat-history__item--right chat-history__item--system">
+            <span class="chat-history__author">Now Playing</span>
+            <div class="chat-history__message">COBY - SKINITE NAM FORE (OFFICIAL VIDEO) - <span class="chat-history__timer">198 sec.</span></div>
+          </div>
+          <div class="chat-history__item">
+            <span class="chat-history__author">Hope</span>
+            <div class="chat-history__message">Check out CDRadio new design ;)</div>
+          </div>
+          <div class="chat-history__item chat-history__item--left chat-history__item--system">
+            <span class="chat-history__author">Now Playing</span>
+            <div class="chat-history__message">Kygo&and;Friends Summer 2016 Deep... - <span class="chat-history__timer">24/325 sec.</span></div>
+          </div>
+          <div class="chat-history__item">
+            <span class="chat-history__author">Hristo</span>
+            <div class="chat-history__message">Koya be6e novata na Preslava we?</div>
+          </div>
+          <div class="chat-history__item">
+            <span class="chat-history__author">Kalo</span>
+            <div class="chat-history__message">https://www.youtube.com/watch?v=ii6mAgRxCeg tazi li?</div>
+          </div>
+          <div class="chat-history__item">
+            <span class="chat-history__author">Ivo</span>
+            <div class="chat-history__message">Prodavam paladin 87 lvl, s itemi, samo za seriozni.</div>
+          </div>
+          <form action="#" class="message-form">
+            <input type="text" class="message-form__input">
+            <button class="message-form__submit">Send</button>
+          </form>
+        </div>
+      </section>
+      <section class="related">
+        <h2 class="heading-2">Related:</h2>
+        <h3 class="heading-3">(First one will play if nothing in queue)</h3>
+        <ul class="related-list">
+          <li class="related-list__item">
+            <span class="related-list__item-number">1.</span>
+            Calvin Harris - This is What You Came For 2017
+            <button class="related-list__btn-add">
+              <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+                <g>
+                <polygon points="31,50 33,50 33,33 50,33 50,31 33,31 33,14 31,14 31,31 14,31 14,33 31,33 	"/>
+                  <path d="M31.999,64C32,64,32,64,32.001,64c8.548,0,16.584-3.33,22.627-9.373c6.044-6.043,9.371-14.08,9.371-22.628
+                  s-3.328-16.584-9.371-22.627C48.584,3.329,40.549,0,32.001,0c0,0-0.001,0-0.002,0C23.451,0,15.415,3.329,9.372,9.373
+                  c-6.044,6.044-9.371,14.081-9.371,22.628s3.328,16.584,9.371,22.627C15.416,60.671,23.451,64,31.999,64z M10.786,10.787
+                  C16.452,5.121,23.986,2,32.001,2c0.001,0,0.001,0,0.002,0c8.012,0,15.546,3.121,21.211,8.786c5.666,5.666,8.785,13.2,8.785,21.213
+                  s-3.119,15.548-8.785,21.214S40.015,62,32.001,62h-0.002c-0.001,0-0.001,0-0.002,0c-8.012,0-15.546-3.121-21.211-8.786
+                  c-5.666-5.666-8.785-13.2-8.785-21.213C2.001,23.987,5.12,16.453,10.786,10.787z"/>
+                </g>
+              </svg>
+            </button>
+          </li>
+          <li class="related-list__item">
+            <span class="related-list__item-number">2.</span>
+            Feeling Happy ' Stay See Summer Mix
+            <button class="related-list__btn-add">
+              <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+                <g>
+                <polygon points="31,50 33,50 33,33 50,33 50,31 33,31 33,14 31,14 31,31 14,31 14,33 31,33 	"/>
+                  <path d="M31.999,64C32,64,32,64,32.001,64c8.548,0,16.584-3.33,22.627-9.373c6.044-6.043,9.371-14.08,9.371-22.628
+                  s-3.328-16.584-9.371-22.627C48.584,3.329,40.549,0,32.001,0c0,0-0.001,0-0.002,0C23.451,0,15.415,3.329,9.372,9.373
+                  c-6.044,6.044-9.371,14.081-9.371,22.628s3.328,16.584,9.371,22.627C15.416,60.671,23.451,64,31.999,64z M10.786,10.787
+                  C16.452,5.121,23.986,2,32.001,2c0.001,0,0.001,0,0.002,0c8.012,0,15.546,3.121,21.211,8.786c5.666,5.666,8.785,13.2,8.785,21.213
+                  s-3.119,15.548-8.785,21.214S40.015,62,32.001,62h-0.002c-0.001,0-0.001,0-0.002,0c-8.012,0-15.546-3.121-21.211-8.786
+                  c-5.666-5.666-8.785-13.2-8.785-21.213C2.001,23.987,5.12,16.453,10.786,10.787z"/>
+                </g>
+              </svg>
+            </button>
+          </li>
+          <li class="related-list__item">
+            <span class="related-list__item-number">3.</span>
+            Stay With Me - Best of Vocal Deep House, Tr ...
+            <button class="related-list__btn-add">
+              <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+                <g>
+                <polygon points="31,50 33,50 33,33 50,33 50,31 33,31 33,14 31,14 31,31 14,31 14,33 31,33 	"/>
+                  <path d="M31.999,64C32,64,32,64,32.001,64c8.548,0,16.584-3.33,22.627-9.373c6.044-6.043,9.371-14.08,9.371-22.628
+                  s-3.328-16.584-9.371-22.627C48.584,3.329,40.549,0,32.001,0c0,0-0.001,0-0.002,0C23.451,0,15.415,3.329,9.372,9.373
+                  c-6.044,6.044-9.371,14.081-9.371,22.628s3.328,16.584,9.371,22.627C15.416,60.671,23.451,64,31.999,64z M10.786,10.787
+                  C16.452,5.121,23.986,2,32.001,2c0.001,0,0.001,0,0.002,0c8.012,0,15.546,3.121,21.211,8.786c5.666,5.666,8.785,13.2,8.785,21.213
+                  s-3.119,15.548-8.785,21.214S40.015,62,32.001,62h-0.002c-0.001,0-0.001,0-0.002,0c-8.012,0-15.546-3.121-21.211-8.786
+                  c-5.666-5.666-8.785-13.2-8.785-21.213C2.001,23.987,5.12,16.453,10.786,10.787z"/>
+                </g>
+              </svg>
+            </button>
+          </li>
+          <li class="related-list__item">
+            <span class="related-list__item-number">4.</span>
+            Ed Sheeran - Shape of You
+            <button class="related-list__btn-add">
+              <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+                <g>
+                <polygon points="31,50 33,50 33,33 50,33 50,31 33,31 33,14 31,14 31,31 14,31 14,33 31,33 	"/>
+                  <path d="M31.999,64C32,64,32,64,32.001,64c8.548,0,16.584-3.33,22.627-9.373c6.044-6.043,9.371-14.08,9.371-22.628
+                  s-3.328-16.584-9.371-22.627C48.584,3.329,40.549,0,32.001,0c0,0-0.001,0-0.002,0C23.451,0,15.415,3.329,9.372,9.373
+                  c-6.044,6.044-9.371,14.081-9.371,22.628s3.328,16.584,9.371,22.627C15.416,60.671,23.451,64,31.999,64z M10.786,10.787
+                  C16.452,5.121,23.986,2,32.001,2c0.001,0,0.001,0,0.002,0c8.012,0,15.546,3.121,21.211,8.786c5.666,5.666,8.785,13.2,8.785,21.213
+                  s-3.119,15.548-8.785,21.214S40.015,62,32.001,62h-0.002c-0.001,0-0.001,0-0.002,0c-8.012,0-15.546-3.121-21.211-8.786
+                  c-5.666-5.666-8.785-13.2-8.785-21.213C2.001,23.987,5.12,16.453,10.786,10.787z"/>
+                </g>
+              </svg>
+            </button>
+          </li>
+        </ul>
+        <form action="#" class="add-form">
+          <input type="text" class="add-form__input" placeholder="Paste youtube URL or ID here">
+          <button class="related-list__btn-add">
+            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+              width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+              <g>
+              <polygon points="31,50 33,50 33,33 50,33 50,31 33,31 33,14 31,14 31,31 14,31 14,33 31,33 	"/>
+                <path d="M31.999,64C32,64,32,64,32.001,64c8.548,0,16.584-3.33,22.627-9.373c6.044-6.043,9.371-14.08,9.371-22.628
+                s-3.328-16.584-9.371-22.627C48.584,3.329,40.549,0,32.001,0c0,0-0.001,0-0.002,0C23.451,0,15.415,3.329,9.372,9.373
+                c-6.044,6.044-9.371,14.081-9.371,22.628s3.328,16.584,9.371,22.627C15.416,60.671,23.451,64,31.999,64z M10.786,10.787
+                C16.452,5.121,23.986,2,32.001,2c0.001,0,0.001,0,0.002,0c8.012,0,15.546,3.121,21.211,8.786c5.666,5.666,8.785,13.2,8.785,21.213
+                s-3.119,15.548-8.785,21.214S40.015,62,32.001,62h-0.002c-0.001,0-0.001,0-0.002,0c-8.012,0-15.546-3.121-21.211-8.786
+                c-5.666-5.666-8.785-13.2-8.785-21.213C2.001,23.987,5.12,16.453,10.786,10.787z"/>
+              </g>
+            </svg>
+          </button>
+        </form>
+      </section>
+      <section class="song-queue">
+        <h2 class="heading-2">Queue:</h2>
+        <h3 class="heading-3">(Highest voted will play first)</h3>
+        <ol class="queue-list">
+          <li class="queue-list__item">
+            <span class="queue-list__item-number">1.</span>
+            Feel the Vibe Session Mix (Tropical)
+            <span class="queue-list__item-duration">- 240 sec.</span>
+            <button class="queue-list__btn-upvote">
+              <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+                <g>
+                  <polygon points="32,24.414 48.293,40.707 49.707,39.146 32.707,22 31.293,22 14.293,39.146 15.707,40.634 	"/>
+                  <path d="M31.999,64c0,0,0.001,0,0.002,0c8.548,0,16.583-3.33,22.627-9.373S64,40.547,63.999,31.999
+                    c0-8.548-3.328-16.584-9.372-22.627C48.584,3.329,40.549,0,32.001,0C32,0,32,0,31.999,0C23.451,0,15.416,3.329,9.372,9.373
+                    C3.329,15.417,0,23.453,0.001,32.001c0,8.548,3.328,16.584,9.372,22.627C15.416,60.671,23.451,64,31.999,64z M10.787,10.787
+                    C16.452,5.121,23.986,2,32.001,2c0.001,0,0.001,0,0.002,0c8.012,0,15.545,3.121,21.211,8.786c5.666,5.666,8.786,13.2,8.785,21.213
+                    c0,8.014-3.12,15.548-8.785,21.214S40.015,62,32.001,62h-0.002c-0.001,0-0.001,0-0.002,0c-8.012,0-15.545-3.121-21.211-8.786
+                    C5.121,47.548,2,40.015,2.001,32.001C2,23.987,5.121,16.453,10.787,10.787z"/>
+                </g>
+              </svg>
+              <span class="queue-list__item-votes">10</span>
+            </button>
+          </li>
+          <li class="queue-list__item">
+            <span class="queue-list__item-number">2.</span>
+            Feeling Happy - Best Of Vocal Deep
+            <span class="queue-list__item-duration">- 270 sec.</span>
+            <button class="queue-list__btn-upvote">
+              <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+                <g>
+                  <polygon points="32,24.414 48.293,40.707 49.707,39.146 32.707,22 31.293,22 14.293,39.146 15.707,40.634 	"/>
+                  <path d="M31.999,64c0,0,0.001,0,0.002,0c8.548,0,16.583-3.33,22.627-9.373S64,40.547,63.999,31.999
+                    c0-8.548-3.328-16.584-9.372-22.627C48.584,3.329,40.549,0,32.001,0C32,0,32,0,31.999,0C23.451,0,15.416,3.329,9.372,9.373
+                    C3.329,15.417,0,23.453,0.001,32.001c0,8.548,3.328,16.584,9.372,22.627C15.416,60.671,23.451,64,31.999,64z M10.787,10.787
+                    C16.452,5.121,23.986,2,32.001,2c0.001,0,0.001,0,0.002,0c8.012,0,15.545,3.121,21.211,8.786c5.666,5.666,8.786,13.2,8.785,21.213
+                    c0,8.014-3.12,15.548-8.785,21.214S40.015,62,32.001,62h-0.002c-0.001,0-0.001,0-0.002,0c-8.012,0-15.545-3.121-21.211-8.786
+                    C5.121,47.548,2,40.015,2.001,32.001C2,23.987,5.121,16.453,10.787,10.787z"/>
+                </g>
+              </svg>
+              <span class="queue-list__item-votes">8</span>
+            </button>
+          </li>
+          <li class="queue-list__item">
+            <span class="queue-list__item-number">3.</span>
+            Hello 2017 Deep House ChillOut Mix
+            <span class="queue-list__item-duration">- 320 sec.</span>
+            <button class="queue-list__btn-upvote">
+              <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+                <g>
+                  <polygon points="32,24.414 48.293,40.707 49.707,39.146 32.707,22 31.293,22 14.293,39.146 15.707,40.634 	"/>
+                  <path d="M31.999,64c0,0,0.001,0,0.002,0c8.548,0,16.583-3.33,22.627-9.373S64,40.547,63.999,31.999
+                    c0-8.548-3.328-16.584-9.372-22.627C48.584,3.329,40.549,0,32.001,0C32,0,32,0,31.999,0C23.451,0,15.416,3.329,9.372,9.373
+                    C3.329,15.417,0,23.453,0.001,32.001c0,8.548,3.328,16.584,9.372,22.627C15.416,60.671,23.451,64,31.999,64z M10.787,10.787
+                    C16.452,5.121,23.986,2,32.001,2c0.001,0,0.001,0,0.002,0c8.012,0,15.545,3.121,21.211,8.786c5.666,5.666,8.786,13.2,8.785,21.213
+                    c0,8.014-3.12,15.548-8.785,21.214S40.015,62,32.001,62h-0.002c-0.001,0-0.001,0-0.002,0c-8.012,0-15.545-3.121-21.211-8.786
+                    C5.121,47.548,2,40.015,2.001,32.001C2,23.987,5.121,16.453,10.787,10.787z"/>
+                </g>
+              </svg>
+              <span class="queue-list__item-votes">7</span>
+            </button>
+          </li>
+          <li class="queue-list__item">
+            <span class="queue-list__item-number">4.</span>
+            Kygo &and; Friends | Summer 2016 Tro...
+            <span class="queue-list__item-duration">- 268 sec.</span>
+            <button class="queue-list__btn-upvote">
+              <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+                <g>
+                  <polygon points="32,24.414 48.293,40.707 49.707,39.146 32.707,22 31.293,22 14.293,39.146 15.707,40.634 	"/>
+                  <path d="M31.999,64c0,0,0.001,0,0.002,0c8.548,0,16.583-3.33,22.627-9.373S64,40.547,63.999,31.999
+                    c0-8.548-3.328-16.584-9.372-22.627C48.584,3.329,40.549,0,32.001,0C32,0,32,0,31.999,0C23.451,0,15.416,3.329,9.372,9.373
+                    C3.329,15.417,0,23.453,0.001,32.001c0,8.548,3.328,16.584,9.372,22.627C15.416,60.671,23.451,64,31.999,64z M10.787,10.787
+                    C16.452,5.121,23.986,2,32.001,2c0.001,0,0.001,0,0.002,0c8.012,0,15.545,3.121,21.211,8.786c5.666,5.666,8.786,13.2,8.785,21.213
+                    c0,8.014-3.12,15.548-8.785,21.214S40.015,62,32.001,62h-0.002c-0.001,0-0.001,0-0.002,0c-8.012,0-15.545-3.121-21.211-8.786
+                    C5.121,47.548,2,40.015,2.001,32.001C2,23.987,5.121,16.453,10.787,10.787z"/>
+                </g>
+              </svg>
+              <span class="queue-list__item-votes">4</span>
+            </button>
+          </li>
+        </ol>
+      </section>
+    </div>
+
+    <footer class="footer">
+      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+      width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#fff">
+        <g>
+          <path d="M0,64h64V0H0V64z M2,2h60v60H2V2z"/>
+          <polygon points="17,10 15,10 15,13 10,13 10,15 15,15 15,54 17,54 17,15 22,15 22,13 17,13"/>
+          <polygon points="49,10 47,10 47,49 42,49 42,51 47,51 47,54 49,54 49,51 54,51 54,49 49,49"/>
+          <polygon points="33,10 31,10 31,31 26,31 26,33 31,33 31,54 33,54 33,33 38,33 38,31 33,31"/>
+        </g>
+      </svg>
+      <p>&lt;/&gt; with &hearts; by DevLabs</p>
+      <div>
+        Icons made by 
+        <a href="https://www.flaticon.com/authors/dale-humphries" title="Dale Humphries">Dale Humphries</a> 
+        from 
+        <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> 
+        is licensed by 
+        <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
+      </div>
+      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+        width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#fff">
+        <g>
+          <path d="M53,32h-1v-5c0-0.17-0.229-17-20-17S12,26.83,12,27v5h-1C4.935,32,0,36.935,0,43s4.935,11,11,11h3V36v-4v-5
+            c0-0.612,0.205-15,18-15c17.739,0,17.998,14.389,18,15v5v1v21h3c6.065,0,11-4.935,11-11S59.065,32,53,32z M12,52h-1
+            c-4.963,0-9-4.038-9-9s4.037-9,9-9h1v2V52z M53,52h-1V34h1c4.963,0,9,4.038,9,9S57.963,52,53,52z"/>
+        </g>
+      </svg>
+    </footer>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/badass-client.js"></script>
+    <script src="//www.youtube.com/iframe_api"></script>
+
+
+
+    <!-- <div id="content">
       <input id="my-name" style="width: 19%" value="unnamed" /><input id="message" placeholder="type a message here"/>
       <div id="text"></div>
       <div><span id="usersCount">-</span> users.</div>
     </div>
 
     <div>
-      <div id="song-container">
-        <div id="player"></div>
-        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 128 128" style="enable-background:new 0 0 128 128;" xml:space="preserve" width="512px" height="512px">
-          <g>
-            <path d="M122,8H6c-3.3,0-6,2.7-6,6v80c0,3.3,2.7,6,6,6h46c0,1.719-0.89,9.083-4.469,16H42v1.55c0,1.348,1.102,2.45,2.449,2.45   h39.102c1.347,0,2.449-1.102,2.449-2.45V116h-5.531C76.89,109.083,76,101.719,76,100h46c3.3,0,6-2.7,6-6V14C128,10.7,125.3,8,122,8   z M85,117v0.55c0,0.8-0.65,1.45-1.449,1.45H44.449C43.65,119,43,118.35,43,117.55V117H85z M79.343,116H48.656   C52.123,109.112,53,101.744,53,100h22C75,101.744,75.877,109.114,79.343,116z M126,94c0,2.206-1.794,4-4,4H6c-2.206,0-4-1.794-4-4   V83h124V94z M126,82H2V14c0-2.206,1.794-4,4-4h116c2.206,0,4,1.794,4,4V82z" fill="#FFFFFF"/>
-          </g>
-        </svg>
-      </div>
-
       <div id="song-stuff">
         <div>Now playing: <span id="song-info"><i>Nothing yet, add a song below</i></span></div>
         <div id='related-songs'></div>
         <div>Queue: <i>(Highest voted will play first)</i> <div id="queue-info">-</div></div>
         <div>Add a song to queue: <input id="badassSearch" placeholder="Type your favorite song or paste youtube URL..." style="width: 500px;"/></div>
       </div>
-      <div>Icons made by <a href="https://www.flaticon.com/authors/dale-humphries" title="Dale Humphries">Dale Humphries</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-    </div>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/badass-client.js"></script>
-    <script src="//www.youtube.com/iframe_api"></script>
+    </div> -->
   </body>
 </html>

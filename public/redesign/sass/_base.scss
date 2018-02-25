@@ -49,9 +49,7 @@ body {
   color: #fff;
   background-image: linear-gradient(
     to right bottom,
-    var(--color-bg-start),
+    var(--color-bg-start) 25%,
     var(--color-bg-end)
   ), url(../img/worn_dots.png);
-  //background-size: cover;
-  //background-repeat: no-repeat;
 }
