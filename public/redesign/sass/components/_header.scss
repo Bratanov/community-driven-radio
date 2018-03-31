@@ -1,0 +1,14 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem;
+
+  &__logo {
+    display: flex;
+
+    img {
+      display: block;
+      object-fit: contain;
+    }
+  }
+}
