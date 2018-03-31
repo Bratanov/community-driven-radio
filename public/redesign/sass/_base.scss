@@ -13,10 +13,13 @@
     --color-secondary: #2A829B;
     --color-bg-start: rgba(77, 212, 227, .85);
     --color-bg-end: rgba(75, 141, 243, .85);
+    --color-text-primary: #FFF;
+    --color-text-secondary: #2B89B6;
   }
 
   &.crazy-orange-theme {
     --color-primary: #E74B37;
+    --color-text-secondary: #b17428;
   }
 
   &.beauty-lila-theme {
