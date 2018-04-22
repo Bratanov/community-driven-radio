@@ -14,3 +14,17 @@
   grid-template-columns: 12rem [col-start-1] minmax(min-content, 1fr) [col-end-1 col-gap-start] 12rem [gol-gap-end col-start-2] minmax(min-content, 1fr) [col-end-2] 12rem;
   grid-row-gap: 4rem;
 }
+
+.btn {
+  background-color: transparent;
+  border: none;
+  border-style: none;
+  color: #fff;
+  cursor: pointer;
+  outline: none;
+
+  &:active {
+    border: 1px solid var(--color-secondary);
+    border-radius: 50%;
+  }
+}

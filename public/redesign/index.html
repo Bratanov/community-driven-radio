@@ -44,52 +44,74 @@
 
     <div class="content">
       <section class="video-player">
-        <figure id="song-container">
-            <div id="player"></div>
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 128 128" style="enable-background:new 0 0 128 128;" xml:space="preserve" width="512px" height="512px">
-              <g>
-                <path d="M122,8H6c-3.3,0-6,2.7-6,6v80c0,3.3,2.7,6,6,6h46c0,1.719-0.89,9.083-4.469,16H42v1.55c0,1.348,1.102,2.45,2.449,2.45   h39.102c1.347,0,2.449-1.102,2.449-2.45V116h-5.531C76.89,109.083,76,101.719,76,100h46c3.3,0,6-2.7,6-6V14C128,10.7,125.3,8,122,8   z M85,117v0.55c0,0.8-0.65,1.45-1.449,1.45H44.449C43.65,119,43,118.35,43,117.55V117H85z M79.343,116H48.656   C52.123,109.112,53,101.744,53,100h22C75,101.744,75.877,109.114,79.343,116z M126,94c0,2.206-1.794,4-4,4H6c-2.206,0-4-1.794-4-4   V83h124V94z M126,82H2V14c0-2.206,1.794-4,4-4h116c2.206,0,4,1.794,4,4V82z" fill="#FFFFFF"/>
-              </g>
-            </svg>
-          </figure>
+        <figure id="song-container" class="video-player__container">
+          <div id="player" class="video-player__youtube-player"></div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            version="1.1"
+            id="Capa_1"
+            x="0px"
+            y="0px" 
+            viewBox="0 0 128 128"
+            style="enable-background:new 0 0 128 128;"
+            xml:space="preserve"
+            class="video-player__background"
+          >
+            <g>
+              <path d="M122,8H6c-3.3,0-6,2.7-6,6v80c0,3.3,2.7,6,6,6h46c0,1.719-0.89,9.083-4.469,16H42v1.55c0,1.348,1.102,2.45,2.449,2.45   h39.102c1.347,0,2.449-1.102,2.449-2.45V116h-5.531C76.89,109.083,76,101.719,76,100h46c3.3,0,6-2.7,6-6V14C128,10.7,125.3,8,122,8   z M85,117v0.55c0,0.8-0.65,1.45-1.449,1.45H44.449C43.65,119,43,118.35,43,117.55V117H85z M79.343,116H48.656   C52.123,109.112,53,101.744,53,100h22C75,101.744,75.877,109.114,79.343,116z M126,94c0,2.206-1.794,4-4,4H6c-2.206,0-4-1.794-4-4   V83h124V94z M126,82H2V14c0-2.206,1.794-4,4-4h116c2.206,0,4,1.794,4,4V82z" fill="#FFFFFF"/>
+            </g>
+          </svg>
+        </figure>
       </section>
       <section class="chat">
         <div class="chat-history">
           <div class="chat-history__item chat-history__item--right chat-history__item--system">
-            <span class="chat-history__author">Now Playing</span>
+            <span class="chat-history__author">Now Playing:</span>
             <div class="chat-history__message">Feel the Vibe Session (Tropical Mixtape) - <span class="chat-history__timer">284 sec.</span></div>
           </div>
           <div class="chat-history__item chat-history__item--right chat-history__item--system">
-            <span class="chat-history__author">Now Playing</span>
+            <span class="chat-history__author">Now Playing:</span>
             <div class="chat-history__message">Anto - Run - <span class="chat-history__timer">234 sec.</span></div>
           </div>
           <div class="chat-history__item chat-history__item--right chat-history__item--system">
-            <span class="chat-history__author">Now Playing</span>
+            <span class="chat-history__author">Now Playing:</span>
             <div class="chat-history__message">COBY - SKINITE NAM FORE (OFFICIAL VIDEO) - <span class="chat-history__timer">198 sec.</span></div>
           </div>
-          <div class="chat-history__item">
-            <span class="chat-history__author">Hope</span>
+          <div class="chat-history__item chat-history__item--left">
+            <span class="chat-history__author">Hope:</span>
             <div class="chat-history__message">Check out CDRadio new design ;)</div>
           </div>
-          <div class="chat-history__item chat-history__item--left chat-history__item--system">
-            <span class="chat-history__author">Now Playing</span>
+          <div class="chat-history__item chat-history__item--right chat-history__item--system">
+            <span class="chat-history__author">Now Playing:</span>
             <div class="chat-history__message">Kygo&and;Friends Summer 2016 Deep... - <span class="chat-history__timer">24/325 sec.</span></div>
           </div>
-          <div class="chat-history__item">
-            <span class="chat-history__author">Hristo</span>
+          <div class="chat-history__item chat-history__item--left">
+            <span class="chat-history__author">Hristo:</span>
             <div class="chat-history__message">Koya be6e novata na Preslava we?</div>
           </div>
-          <div class="chat-history__item">
-            <span class="chat-history__author">Kalo</span>
+          <div class="chat-history__item chat-history__item--left">
+            <span class="chat-history__author">Kalo:</span>
             <div class="chat-history__message">https://www.youtube.com/watch?v=ii6mAgRxCeg tazi li?</div>
           </div>
-          <div class="chat-history__item">
-            <span class="chat-history__author">Ivo</span>
+          <div class="chat-history__item chat-history__item--right chat-history__item--inverse">
+            <span class="chat-history__author">Ivo:</span>
             <div class="chat-history__message">Prodavam paladin 87 lvl, s itemi, samo za seriozni.</div>
           </div>
           <form action="#" class="message-form">
-            <input type="text" class="message-form__input">
-            <button class="message-form__submit">Send</button>
+            <input type="textarea" class="message-form__input" placeholder="Type your message here...">
+            <button class="btn message-form__submit">
+              <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve"
+              >
+                <g>
+                  <polyline fill="none" stroke="#000000" stroke-width="2" stroke-linejoin="bevel" stroke-miterlimit="10" points="13,33 25,45 49,21"/>
+                </g>
+                <g>
+                  <circle fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" cx="32" cy="32" r="30.999"/>
+                </g>
+              </svg>
+            </button>
           </form>
         </div>
       </section>

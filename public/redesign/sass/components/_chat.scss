@@ -1,3 +1,89 @@
 .chat {
   grid-column: col-start-2 / col-end-2;
 }
+
+.chat-history {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1.5rem;
+  border: 1px solid #fff;
+  border-radius: 1.5rem;
+
+  &__item {
+    display: flex;
+    width: 80%;
+    background-color: var(--color-secondary);
+    margin-bottom: 1.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 1.5rem;
+    font-size: 1.4rem;
+
+    &--right {
+      margin-left: auto;
+      border-top-right-radius: initial;
+    }
+
+    &--left {
+      margin-right: auto;
+      border-top-left-radius: initial;
+    }
+  }
+
+  &__item--inverse {
+    background-color: #fff;
+  }
+
+  &__item--inverse &__author {
+    color: var(--color-text-silver-dark);
+  }
+
+  &__item--inverse &__message {
+    color: var(--color-primary);
+  }
+
+  &__author {
+    color: var(--color-text-silver-light);
+    padding-right: 1rem;
+  }
+}
+
+.message-form {
+  position: relative;
+  width: 100%;
+  margin-top: auto;
+  align-self: flex-end;
+
+  &__input {
+    width: 100%;
+    height: auto;
+    padding: 1.2rem;
+    border-radius: 1.5rem;
+    font-size: 1.4rem;
+    color: var(--color-text-silver-dark);
+    border: 1px solid var(--color-text-silver-light);
+    outline: none;
+    opacity: 0.9;
+    transition: all .3s;
+
+    &:focus,
+    &:active {
+      opacity: 1;
+      border-color: var(--color-text-silver-dark);
+    }
+  }
+
+  &__submit {
+    position: absolute;
+    width: 3rem;
+    height: 3rem;
+    bottom: 0.6rem;
+    right: 0.6rem;
+
+    svg {
+      polyline, circle {
+        stroke: var(--color-secondary);
+      }
+    }
+  }
+}
