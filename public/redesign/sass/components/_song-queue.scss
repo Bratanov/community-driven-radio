@@ -1,3 +1,50 @@
 .song-queue {
   grid-column: col-start-1 / col-end-1;
 }
+
+.queue-list {
+  height: 30rem; // TODO: temporay
+  margin-top: 2.5rem;
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 2rem;
+    padding: 1rem 0;
+    color: var(--color-text-primary);
+
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--color-text-primary);
+    }
+  }
+
+  &__item-number {
+
+  }
+
+  &__item-duration {
+    color: var(--color-text-secondary);
+  }
+
+  &__btn-upvote {
+    position: relative;
+    width: 3rem;
+    height: 3rem;
+
+    svg {
+      polygon, path {
+        fill: var(--color-text-primary);
+      }
+    }
+  }
+
+  &__item-votes {
+    position: absolute;
+    bottom: -3px;
+    right: 0;
+    padding: 1px;
+    color: var(--color-primary);
+    background-color: var(--color-text-primary);
+    border-radius: 50%;
+  }
+}
