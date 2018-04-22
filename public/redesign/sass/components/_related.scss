@@ -1,3 +1,79 @@
 .related {
   grid-column: col-start-2 / col-end-2;
 }
+
+.add-form {
+  position: relative;
+  margin-bottom: 5rem;
+
+  &__input {
+    width: 100%;
+    border: none;
+    font-size: 1.4rem;
+    color: rgba(0, 0, 0, .5);
+    background-color: transparent;
+    outline: none;
+    border-bottom: 1px solid var(--color-text-primary);
+    padding: 1.1rem 0;
+    margin-bottom: .3rem;
+    //transition: all .3s; // TODO: this looks bad, margin and padding are animated with different speed
+
+    &:focus,
+    &:active {
+      padding-bottom: 1.4rem;
+      margin-bottom: 0;
+    }
+
+    &::placeholder {
+      color: #000;
+      opacity: .5;
+    }
+  }
+
+  &__btn-add {
+    position: absolute;
+    right: 0;
+    top: 0.5rem;
+    width: 3rem;
+    height: 3rem;
+
+    svg {
+      polygon, path {
+        fill: var(--color-text-primary);
+        stroke: var(--color-text-primary);
+      }
+    }
+  }
+}
+
+.related-list {
+
+  &__item {
+    display: flex;
+    font-size: 2rem;
+    padding: 1rem 0;
+    color: var(--color-text-primary);
+
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--color-text-primary);
+    }
+  }
+
+  &__item-number {
+    margin-right: 0.5rem;
+  }
+
+  &__btn-add {
+    width: 3rem;
+    height: 3rem;
+    margin-left: auto;
+
+    svg {
+      polygon, path {
+        fill: var(--color-text-primary);
+        stroke: var(--color-text-primary);
+      }
+    }
+  }
+
+}

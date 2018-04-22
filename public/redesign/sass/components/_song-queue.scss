@@ -3,12 +3,13 @@
 }
 
 .queue-list {
-  height: 30rem; // TODO: temporay
-  margin-top: 2.5rem;
+  max-height: 32rem;
+  overflow-y: scroll;
+  overflow-x: hidden; // TODO: ugly fix for scroll caused by absolute position of upvote svg part 1
+  margin-top: 3rem;
 
   &__item {
     display: flex;
-    justify-content: space-between;
     font-size: 2rem;
     padding: 1rem 0;
     color: var(--color-text-primary);
@@ -19,10 +20,11 @@
   }
 
   &__item-number {
-
+    margin-right: 0.5rem;
   }
 
   &__item-duration {
+    margin-left: 0.5rem;
     color: var(--color-text-secondary);
   }
 
@@ -30,6 +32,8 @@
     position: relative;
     width: 3rem;
     height: 3rem;
+    margin-left: auto;
+    margin-right: 0.5rem; // TODO: ugly fix for scroll caused by absolute position of upvote svg part 2
 
     svg {
       polygon, path {
@@ -41,8 +45,12 @@
   &__item-votes {
     position: absolute;
     bottom: -3px;
-    right: 0;
-    padding: 1px;
+    right: -3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 1.65rem;
+    height: 1.65rem;
     color: var(--color-primary);
     background-color: var(--color-text-primary);
     border-radius: 50%;
