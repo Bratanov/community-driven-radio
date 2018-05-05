@@ -25,4 +25,16 @@
       }
     }
   }
+
+  &__users {
+    display: flex;
+    align-items: center;
+  }
+
+  &__users-count {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin-right: 2rem;
+  }
 }

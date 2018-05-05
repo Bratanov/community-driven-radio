@@ -14,21 +14,35 @@ $('#message').on('keyup', function(e){
 	}
 });
 
+/**
+ * Emit a new_song event with youtube id, parsed from youtube url
+ */
+function addSongToQueue() {
+	var $input = $('#badass-search');
+	var url = $input.val();
+	var id = getIdFromYoutubeUrl(url);
+
+	// Send msg
+	socket.emit('new_song', id);
+
+	// Clear text in input
+	$input.val('');
+
+	// Hide autocomplete suggestions, if any
+	// ref: https://github.com/Pixabay/JavaScript-autoComplete/blob/master/auto-complete.js#L57
+	$('.autocomplete-suggestions').css('display', 'none');
+}
+
 // search input, handle direct entering of URL or Youtube id
-$('#badassSearch').on('keyup', function(e) {
+$('#badass-search').on('keyup', function(e) {
 	if (e.keyCode == 13) {
-		var id = getIdFromYoutubeUrl($(this).val());
-
-		// Send msg
-		socket.emit('new_song', id);
-
-		// Clear text in input
-		$(this).val('');
-
-		// Hide autocomplete suggestions, if any
-		// ref: https://github.com/Pixabay/JavaScript-autoComplete/blob/master/auto-complete.js#L57
-		$('.autocomplete-suggestions').css('display', 'none');
+		addSongToQueue();
 	}
+});
+
+$('#badaass-song-add').on('click', function(e) {
+	e.preventDefault();
+	addSongToQueue();
 });
 
 /**
@@ -61,7 +75,7 @@ var suggestCb = new Function();
  * Initialize search autocompelte input.
  */
 var badassSearch = new autoComplete({
-	selector: '#badassSearch',
+	selector: '#badass-search',
 	minChars: 2,
 	delay: 500,
 	source: function(term, suggest) {
@@ -134,7 +148,7 @@ socket.on('new_song', function(song) {
 });
 
 socket.on('usersCount', function(data){
-	$('#usersCount').text(data);
+	$('#users-count').text(data);
 });
 
 socket.on('getRefreshed', function(data){
@@ -148,20 +162,38 @@ socket.on('song_info', function(data) {
 	}
 });
 
-socket.on('queue_info', function(data) {
-	$queue_info = $('#queue-info');
-	$queue_info.html('<ol></ol>');
-	$queue_info = $queue_info.find('ol');
+function renderSongTemplate(number, songData) {
+	var $template = $('#t-queue-list-item'); 
+	var $clone = $($template.html().trim());
 
-	for(var song in data) {
-		var o = data[song];
-		var addedBy = o.addedBy.substring(2);
-		var deleteButton = '';
-		if (addedBy == socket.id) {
-			deleteButton = '<button class="btn-delete" data-song-id="' + o.id + '">Remove</button>';
-		}
-		$queue_info.append('<li>' + renderSong(o) + deleteButton + '</li>');
-	}
+	$clone.find('.queue-list__item-number').text(number + '.');
+	$clone.find('.queue-list__item-title')
+		.attr('href', 'https://youtube.com/watch?v=' + songData.youtubeId)
+		.text(songData.title);
+	var duration = (songData.playTime) ? songData.playTime : songData.duration;
+	$clone.find('.queue-list__item-duration').text('- ' + duration + ' sec.');
+
+	$clone.find('.btn-vote').attr('data-song-id', songData.id);
+	$clone.find('.queue-list__item-votes').text(songData.votes);
+
+	// TOOD: delete button in template?
+	// var addedBy = songData.addedBy.substring(2);
+	// var deleteButton = '';
+	// if (addedBy == socket.id) {
+	// 	deleteButton = '<button class="btn-delete" data-song-id="' + o.id + '">Remove</button>';
+	// }
+
+	return $clone;
+}
+
+socket.on('queue_info', function(data) {
+	$queueInfo = $('#queue-info');
+	$queueInfo.empty();
+
+	data.forEach(function(song, i) {
+		var $songTemplate = renderSongTemplate(i + 1, song);
+		$queueInfo.append($songTemplate);
+	});
 });
 
 socket.on('be_alerted', function(message) {
