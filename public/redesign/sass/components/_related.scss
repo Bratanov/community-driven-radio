@@ -46,6 +46,31 @@
   }
 }
 
+// override autocomlete plugin styles
+.autocomplete-suggestions {
+  border: none !important;
+}
+
+.autocomplete-suggestion {
+  display: flex;
+  background-color: var(--color-bg-start);
+  border: none;
+  
+  &.selected {
+    background-color: var(--color-bg-end) !important;
+    cursor: pointer;
+  }
+  
+  &__thumb {
+    height: 2.5rem;
+    margin-right: 0.5rem;
+  }
+  
+  &__title {
+    font-size: 1.5rem;
+  }
+}
+
 .related-list {
 
   &__item {

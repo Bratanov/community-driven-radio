@@ -123,8 +123,8 @@ var badassSearch = new autoComplete({
 		// Autocomplete item html. 
 		// "data-val" is what we see in input when item is selected.
 		return '<div class="autocomplete-suggestion" data-id="'+item.videoId+'" data-title="'+item.title+'" data-val="'+item.title+'">' +
-			'<img src="'+item.thumbnail+'" height="16px"> ' +
-			item.title +
+			'<img class="autocomplete-suggestion__thumb" src="'+item.thumbnail+'"> ' +
+			'<div class="autocomplete-suggestion__title">' + item.title + '</div>' +
 		'</div>';
 	},
 	onSelect: function(e, term, item) {
