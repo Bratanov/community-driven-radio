@@ -66,41 +66,12 @@
       </section>
       <section class="chat">
         <div class="chat-history">
-          <div class="chat-history__item chat-history__item--right chat-history__item--system">
-            <span class="chat-history__author">Now Playing:</span>
-            <div class="chat-history__message">Feel the Vibe Session (Tropical Mixtape) - <span class="chat-history__timer">284 sec.</span></div>
-          </div>
-          <div class="chat-history__item chat-history__item--right chat-history__item--system">
-            <span class="chat-history__author">Now Playing:</span>
-            <div class="chat-history__message">Anto - Run - <span class="chat-history__timer">234 sec.</span></div>
-          </div>
-          <div class="chat-history__item chat-history__item--right chat-history__item--system">
-            <span class="chat-history__author">Now Playing:</span>
-            <div class="chat-history__message">COBY - SKINITE NAM FORE (OFFICIAL VIDEO) - <span class="chat-history__timer">198 sec.</span></div>
-          </div>
-          <div class="chat-history__item chat-history__item--left">
-            <span class="chat-history__author">Hope:</span>
-            <div class="chat-history__message">Check out CDRadio new design ;)</div>
-          </div>
-          <div class="chat-history__item chat-history__item--right chat-history__item--system">
-            <span class="chat-history__author">Now Playing:</span>
-            <div class="chat-history__message">Kygo&and;Friends Summer 2016 Deep... - <span class="chat-history__timer">24/325 sec.</span></div>
-          </div>
-          <div class="chat-history__item chat-history__item--left">
-            <span class="chat-history__author">Hristo:</span>
-            <div class="chat-history__message">Koya be6e novata na Preslava we?</div>
-          </div>
-          <div class="chat-history__item chat-history__item--left">
-            <span class="chat-history__author">Kalo:</span>
-            <div class="chat-history__message">https://www.youtube.com/watch?v=ii6mAgRxCeg tazi li?</div>
-          </div>
-          <div class="chat-history__item chat-history__item--right chat-history__item--inverse">
-            <span class="chat-history__author">Ivo:</span>
-            <div class="chat-history__message">Prodavam paladin 87 lvl, s itemi, samo za seriozni.</div>
+          <div id="chat-history" class="chat-history__messages">
+            <!-- t-message || t-system-message -->
           </div>
           <form action="#" class="message-form">
-            <input type="textarea" class="message-form__input" placeholder="Type your message here...">
-            <button class="btn message-form__submit">
+            <input type="textarea" id="message-input" class="message-form__input" placeholder="Type your message here...">
+            <button id="message-submit" class="btn message-form__submit">
               <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                 viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve"
               >
@@ -184,6 +155,20 @@
         </svg>
       </div>
     </footer>
+
+    <template id="t-message">
+      <div class="chat-history__item">
+        <span class="chat-history__author">-</span>
+        <div class="chat-history__message">-</div>
+      </div>
+    </template>
+
+    <template id="t-system-message">
+      <div class="chat-history__item chat-history__item--right chat-history__item--system">
+        <span class="chat-history__author">Now Playing:</span>
+        <div class="chat-history__message">-<span class="chat-history__timer">-</span></div>
+      </div>
+    </template>
 
     <template id="t-queue-list-item">
       <li class="queue-list__item">

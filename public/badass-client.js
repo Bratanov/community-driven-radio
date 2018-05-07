@@ -1,18 +1,52 @@
 var socket = io.connect('/');
 
-$('#message').on('keyup', function(e){
-	if(e.keyCode == 13){
-		var message = $('#my-name').val() + ' - ' + $(this).val();
+var NAMES = [
+	'igra4a91',
+	'malkaSiNoSLatkasi',
+	'Radioactive',
+	'dqvola',
+	'MaNeKeNa',
+	'kArAmeL4e70',
+	'ivan_tigara',
+	'mn_loff_fiki',
+	'bonbonchetoy',
+	'armani-vn',
+	'|͇̿V͇̿I͇̿P͇̿| FuTbOlIst4eTo(•̪●)',
+	'666<<<®鬼ExecutoR鬼®>>>666',
+	'•̪̀●́ iskam_yaka_kaka •̪̀●́,',
+	'OtRoVnA_CeLuvKa',
+	'LOVEMACHINE',
+	'kachestvenia',
+	'bi4e70',
+	'SliderMan',
+	'sasho_kvadrata',
+	'gucciBang'
+];
 
-		//Send msg
-		socket.emit('chat_msg', message);
+var userName = NAMES[Math.floor(Math.random()*NAMES.length)];
 
-		addMessage(message);
-
-		//Clear text in input
-		$(this).val('');
-	}
+$('#message-submit').on('click', function(e) {
+	e.preventDefault();
+	onMessageSubmit($('#message-input'));
 });
+
+function onMessageSubmit($input) {
+	var value = $input.val();
+	if (!value) return;
+
+	var message = {
+		author: userName,
+		value: value
+	};
+
+	// Send msg
+	socket.emit('chat_msg', message);
+
+	addMessage(message);
+
+	// Clear text in input
+	$input.val('');
+}
 
 /**
  * Emit a new_song event with youtube id, parsed from youtube url
@@ -114,18 +148,19 @@ $('body').on('click', '.js-btn-add', function() {
 	socket.emit('new_song', $(this).data('youtube-id'));
 });
 
-socket.on('chat_msg', function(data){
+socket.on('chat_msg', function(data) {
 	addMessage(data);
 });
 
 socket.on('new_song', function(song) {
-	var recv = song;
-	var song = queryStringToObj(song.url_params);
+	var songUrlParams = queryStringToObj(song.url_params);
 
-	$('#text').append('<p>Now playing: ' + recv.info.title + '</p>');
-	$('#text').scrollTop(999999999);
+	$message = renderer.getChatSystemMessage(song.info.title, song.info.duration);
+	$('#chat-history').append($message);
+	$('#chat-history').scrollTop(999999999);
 
-	player.play(song.url, song);
+	player.play(songUrlParams.url, songUrlParams);
+
 	var sendNotification = function(song) {
 		var options = {
 			body: song.info.title,
@@ -134,13 +169,14 @@ socket.on('new_song', function(song) {
 		var n = new Notification('Now playing:', options);
 		setTimeout(function() { n.close(); }, 5000);
 	}
+
 	if (Notification.permission !== 'denied') {
 		if (Notification.permisson === 'granted') {
-			sendNotification(recv);
+			sendNotification(song);
 		} else {
 			Notification.requestPermission(function (permission) {
 				if (permission === 'granted') {
-					sendNotification(recv);
+					sendNotification(song);
 				}
 			});
 		}
@@ -155,6 +191,7 @@ socket.on('getRefreshed', function(data){
 	window.location.reload();
 });
 
+// TODO;
 socket.on('song_info', function(data) {
 	if (data.playTime) {
 		$('#song-info').html(renderSong(data));
@@ -162,41 +199,12 @@ socket.on('song_info', function(data) {
 	}
 });
 
-function renderQueueItem(number, songData) {
-	var $template = $('#t-queue-list-item'); 
-	var $clone = $($template.html().trim());
 
-	$clone.find('.queue-list__item-number').text(number + '.');
-	$clone.find('.queue-list__item-title')
-		.attr('href', 'https://youtube.com/watch?v=' + songData.youtubeId)
-		.text(songData.title);
-	var duration = (songData.playTime) ? songData.playTime : songData.duration;
-	$clone.find('.queue-list__item-duration').text('- ' + duration + ' sec.');
-
-	$clone.find('.js-btn-vote').attr('data-song-id', songData.id);
-	$clone.find('.queue-list__item-votes').text(songData.votes);
-
-	// TOOD: delete button in template? There's a (backend?) bug here.
-	// var addedBy = songData.addedBy.substring(2);
-	// var deleteButton = '';
-	// if (addedBy == socket.id) {
-	// 	deleteButton = '<button class="btn-delete" data-song-id="' + o.id + '">Remove</button>';
-	// }
-
-	return $clone;
-}
-
-function renderRelatedItem(number, songData) {
-	var $template = $('#t-related-list-item');
-	var $clone = $($template.html().trim());
-
-	$clone.find('.related-list__item-number').text(number + '.');
-	$clone.find('.related-list__item-title')
-		.attr('href', 'https://youtube.com/watch?v=' + songData.youtubeId)
-		.text(songData.title);
-	$clone.find('.js-btn-add').attr('data-youtube-id', songData.youtubeId);
-
-	return $clone;
+function addMessage(message) {
+	var $chatHistory = $('#chat-history');
+	var $message = renderer.getChatMessage(userName, message);
+	$chatHistory.append($message);
+	$chatHistory.scrollTop(999999999);
 }
 
 socket.on('queue_info', function(data) {
@@ -204,7 +212,7 @@ socket.on('queue_info', function(data) {
 	$queue.empty();
 
 	data.forEach(function(song, i) {
-		var $songTemplate = renderQueueItem(i + 1, song);
+		var $songTemplate = renderer.getQueueItem(i + 1, song);
 		$queue.append($songTemplate);
 	});
 });
@@ -214,7 +222,7 @@ socket.on('related_info', function(data) {
 	$list.empty();
 
 	data.forEach(function(song, i) {
-		var $songTemplate = renderRelatedItem(i + 1, song);
+		var $songTemplate = renderer.getRelatedItem(i + 1, song);
 		$list.append($songTemplate);
 	});
 });
@@ -255,11 +263,81 @@ function renderSong(song) {
 	$('iframe').attr('src', 'https://www.youtube.com/embed/' + thingie);
 }*/
 
-function addMessage(message) {
-	$('#text').append('<p>Message: '+ $('<div/>').text(message).html() +'</p>');
+var renderer = {
 
-	$('#text').scrollTop(999999999);
-}
+	_cloneTemplate: function(templateId) {
+		return $($('#' + templateId).html().trim());
+	},
+
+	getQueueItem: function(number, songData) {
+		var $clone = this._cloneTemplate('t-queue-list-item'); 
+	
+		$clone.find('.queue-list__item-number').text(number + '.');
+		$clone.find('.queue-list__item-title')
+			.attr('href', 'https://youtube.com/watch?v=' + songData.youtubeId)
+			.text(songData.title);
+		var duration = (songData.playTime) ? songData.playTime : songData.duration;
+		$clone.find('.queue-list__item-duration').text('- ' + duration + ' sec.');
+	
+		$clone.find('.js-btn-vote').attr('data-song-id', songData.id);
+		$clone.find('.queue-list__item-votes').text(songData.votes);
+	
+		// TOOD: delete button in template? There's a (backend?) bug here.
+		// var addedBy = songData.addedBy.substring(2);
+		// var deleteButton = '';
+		// if (addedBy == socket.id) {
+		// 	deleteButton = '<button class="btn-delete" data-song-id="' + o.id + '">Remove</button>';
+		// }
+	
+		return $clone;
+	},
+
+	getRelatedItem: function(number, songData) {
+		var $clone = this._cloneTemplate('t-related-list-item');
+	
+		$clone.find('.related-list__item-number').text(number + '.');
+		$clone.find('.related-list__item-title')
+			.attr('href', 'https://youtube.com/watch?v=' + songData.youtubeId)
+			.text(songData.title);
+		$clone.find('.js-btn-add').attr('data-youtube-id', songData.youtubeId);
+	
+		return $clone;
+	},
+
+	/**
+	 * Render chat message.
+	 * @param {Object} message 
+	 * {
+	 * 	author: String,
+	 * 	value: String
+	 * }
+	 */
+	getChatMessage: function(currentUserName, message) {
+		var $clone = this._cloneTemplate('t-message');
+
+		if (currentUserName === message.author) {
+			// logged user's message
+			$clone.addClass('chat-history__item--right chat-history__item--inverse');
+		} else {
+			// another user's message
+			$clone.addClass('chat-history__item--left');
+		}
+
+		$clone.find('.chat-history__author').text(message.author);
+		$clone.find('.chat-history__message').text(message.value);
+
+		return $clone;
+	},
+
+	getChatSystemMessage: function(title, duration) {
+		var $clone = this._cloneTemplate('t-system-message');
+
+		$clone.find('.chat-history__message').text(title + ' - ');
+		$clone.find('.chat-history__timer').text(duration + 'sec.');
+
+		return $clone;
+	}
+};
 
 /**
  * A player object
@@ -362,7 +440,7 @@ var player = {
 			self._queuedActionsAfterInit.push(self.play.bind(self, videoId, params));
 		}
 	}
-}
+};
 
 player.init($('#player'));
 
