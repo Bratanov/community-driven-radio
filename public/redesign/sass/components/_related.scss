@@ -31,6 +31,7 @@
   }
 
   &__btn-add {
+    flex: 0 0 auto;
     position: absolute;
     right: 0;
     top: 0.5rem;
@@ -49,6 +50,7 @@
 // override autocomlete plugin styles
 .autocomplete-suggestions {
   border: none !important;
+  opacity: 0.95;
 }
 
 .autocomplete-suggestion {
@@ -94,6 +96,7 @@
   }
 
   &__btn-add {
+    flex: 0 0 auto;
     width: 3rem;
     height: 3rem;
     margin-left: auto;
