@@ -1,6 +1,10 @@
 .video-player {
   grid-column: col-start-1 / col-end-1;
 
+  @media only screen and (max-width: $bp-medium) {
+    grid-column: col-start-1 / col-end-2;
+  }
+
   &__container {
     position: relative;
     display: flex;

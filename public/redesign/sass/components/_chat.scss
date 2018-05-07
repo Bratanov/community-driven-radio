@@ -1,5 +1,9 @@
 .chat {
   grid-column: col-start-2 / col-end-2;
+
+  @media only screen and (max-width: $bp-medium) {
+    grid-column: col-start-1 / col-end-2;
+  }
 }
 
 .chat-history {

@@ -36,5 +36,9 @@
     font-weight: 600;
     color: var(--color-text-secondary);
     margin-right: 2rem;
+
+    @media only screen and (max-width: $bp-small) {
+      margin-right: 0.5rem;
+    }
   }
 }

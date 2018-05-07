@@ -29,6 +29,11 @@
   }
 }
 
+// RESPONSIVE BREAKPOINTS
+$bp-large: 75em; // 1200px
+$bp-medium: 62.5em; // 1000px
+$bp-small: 43.75em; // 700px
+
 // Reset default browser styles
 * {
   margin: 0;
@@ -44,6 +49,10 @@
 html {
   box-sizing: border-box;
   font-size: 62.5%; // 1rem = 10px if default browser font-size
+
+  @media only screen and (max-width: $bp-large) {
+    font-size: 50%; // 8px/16px = 50%
+  }
 }
 
 body {

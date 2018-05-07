@@ -1,5 +1,9 @@
 .song-queue {
   grid-column: col-start-1 / col-end-1;
+
+  @media only screen and (max-width: $bp-small) {
+    grid-column: col-start-1 / col-end-2;
+  }
 }
 
 .queue-list {
