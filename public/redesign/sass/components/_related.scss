@@ -59,6 +59,11 @@
     }
   }
 
+  &__item-title {
+    text-decoration: none;
+    color: var(--color-text-primary);
+  }
+
   &__item-number {
     margin-right: 0.5rem;
   }

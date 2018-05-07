@@ -102,7 +102,7 @@ var badassSearch = new autoComplete({
 	}
 });
 
-$('body').on('click', '.btn-vote', function() {
+$('body').on('click', '.js-btn-vote', function() {
 	socket.emit('vote', $(this).data('song-id'));
 });
 
@@ -110,7 +110,7 @@ $('body').on('click', '.btn-delete', function() {
 	socket.emit('delete_queued', $(this).data('song-id'));
 });
 
-$('body').on('click', '.add-song', function() {
+$('body').on('click', '.js-btn-add', function() {
 	socket.emit('new_song', $(this).data('youtube-id'));
 });
 
@@ -162,7 +162,7 @@ socket.on('song_info', function(data) {
 	}
 });
 
-function renderSongTemplate(number, songData) {
+function renderQueueItem(number, songData) {
 	var $template = $('#t-queue-list-item'); 
 	var $clone = $($template.html().trim());
 
@@ -173,10 +173,10 @@ function renderSongTemplate(number, songData) {
 	var duration = (songData.playTime) ? songData.playTime : songData.duration;
 	$clone.find('.queue-list__item-duration').text('- ' + duration + ' sec.');
 
-	$clone.find('.btn-vote').attr('data-song-id', songData.id);
+	$clone.find('.js-btn-vote').attr('data-song-id', songData.id);
 	$clone.find('.queue-list__item-votes').text(songData.votes);
 
-	// TOOD: delete button in template?
+	// TOOD: delete button in template? There's a (backend?) bug here.
 	// var addedBy = songData.addedBy.substring(2);
 	// var deleteButton = '';
 	// if (addedBy == socket.id) {
@@ -186,25 +186,42 @@ function renderSongTemplate(number, songData) {
 	return $clone;
 }
 
+function renderRelatedItem(number, songData) {
+	var $template = $('#t-related-list-item');
+	var $clone = $($template.html().trim());
+
+	$clone.find('.related-list__item-number').text(number + '.');
+	$clone.find('.related-list__item-title')
+		.attr('href', 'https://youtube.com/watch?v=' + songData.youtubeId)
+		.text(songData.title);
+	$clone.find('.js-btn-add').attr('data-youtube-id', songData.youtubeId);
+
+	return $clone;
+}
+
 socket.on('queue_info', function(data) {
-	$queueInfo = $('#queue-info');
-	$queueInfo.empty();
+	var $queue = $('#queue-list');
+	$queue.empty();
 
 	data.forEach(function(song, i) {
-		var $songTemplate = renderSongTemplate(i + 1, song);
-		$queueInfo.append($songTemplate);
+		var $songTemplate = renderQueueItem(i + 1, song);
+		$queue.append($songTemplate);
+	});
+});
+
+socket.on('related_info', function(data) {
+	var $list = $('#related-list');
+	$list.empty();
+
+	data.forEach(function(song, i) {
+		var $songTemplate = renderRelatedItem(i + 1, song);
+		$list.append($songTemplate);
 	});
 });
 
 socket.on('be_alerted', function(message) {
 	// alert lolzorz
 	alert(message);
-});
-
-socket.on('related_info', function(data) {
-	var relatedView = renderRelatedSongs(data);
-
-	$('#related-songs').html(relatedView);
 });
 
 socket.on('youtube_search', fillAutocompleteOptions);
@@ -230,7 +247,7 @@ function renderSong(song) {
 		+ song.title
 		+ '</a> - '
 		+ ((song.playTime) ? song.playTime : song.duration) + 'sec. '
-		+ '<button class="btn-vote" data-song-id="' + song.id + '">Vote up (' + song.votes + ')</button>'
+		+ '<button class="js-btn-vote" data-song-id="' + song.id + '">Vote up (' + song.votes + ')</button>'
 	;
 }
 
