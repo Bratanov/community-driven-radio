@@ -121,15 +121,48 @@
     </div>
 
     <footer class="footer">
-      <svg class="action-icon" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-      width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#fff">
-        <g>
-          <path d="M0,64h64V0H0V64z M2,2h60v60H2V2z"/>
-          <polygon points="17,10 15,10 15,13 10,13 10,15 15,15 15,54 17,54 17,15 22,15 22,13 17,13"/>
-          <polygon points="49,10 47,10 47,49 42,49 42,51 47,51 47,54 49,54 49,51 54,51 54,49 49,49"/>
-          <polygon points="33,10 31,10 31,31 26,31 26,33 31,33 31,54 33,54 33,33 38,33 38,31 33,31"/>
-        </g>
-      </svg>
+      <div class="controls-container">
+        <div class="theme-controls js-theme-controls">
+          <p>Themes</p>
+          <div class="theme-controls__toggle">
+            <div>
+              <input class="tgl tgl-light" id="calm-green" type="checkbox"/>
+              <label class="tgl-btn" for="calm-green"></label>
+            </div>
+            <span>Calm green</span>
+          </div>
+          <div class="theme-controls__toggle">
+            <div>
+              <input class="tgl tgl-light" id="crazy-orange" type="checkbox"/>
+              <label class="tgl-btn" for="crazy-orange"></label>
+            </div>
+            <span>Crazy orange</span>
+          </div>
+          <div class="theme-controls__toggle">
+            <div>
+              <input class="tgl tgl-light" id="water-color" type="checkbox"/>
+              <label class="tgl-btn" for="water-color"></label>
+            </div>
+            <span>Water color</span>
+          </div>
+          <div class="theme-controls__toggle">
+            <div>
+              <input class="tgl tgl-light" id="beauty-lila" type="checkbox"/>
+              <label class="tgl-btn" for="beauty-lila"></label>
+            </div>
+            <span>Beauty lila</span>
+          </div>
+        </div>
+        <svg id="theme-controls-toggle" class="action-icon" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+        width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#fff">
+          <g>
+            <path d="M0,64h64V0H0V64z M2,2h60v60H2V2z"/>
+            <polygon points="17,10 15,10 15,13 10,13 10,15 15,15 15,54 17,54 17,15 22,15 22,13 17,13"/>
+            <polygon points="49,10 47,10 47,49 42,49 42,51 47,51 47,54 49,54 49,51 54,51 54,49 49,49"/>
+            <polygon points="33,10 31,10 31,31 26,31 26,33 31,33 31,54 33,54 33,33 38,33 38,31 33,31"/>
+          </g>
+        </svg>
+      </div>
       <div class="footer__content">
         <p class="footer__text">
           &lt;/&gt; with &hearts; by <a href="https://devlabs.bg">DevLabs</a>

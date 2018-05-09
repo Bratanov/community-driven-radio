@@ -42,3 +42,40 @@
     }
   }
 }
+
+.controls-container {
+  position: relative;
+}
+
+.theme-controls {
+  display: none;
+  position: absolute;
+  top: -14rem;
+  left: -1rem;
+  width: 10rem;
+  padding: 0.8rem 0.5rem;
+  background-color: var(--color-text-primary);
+  color: var(--color-text-secondary);
+  border-radius: 1rem;
+  line-height: 1; // sets height = font-size to fix translate of tgl button
+
+  &--active {
+    display: block;
+  }
+
+  p {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  &__toggle {
+    display: flex;
+    padding: 0.8rem 0;
+    font-size: 1rem;
+
+    span {
+      margin-left: 0.6rem;
+    }
+  }
+}

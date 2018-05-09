@@ -471,3 +471,7 @@ function queryStringToObj(q) {
 	}
 	return query;
 }
+
+$('#theme-controls-toggle').on('click', function(e) {
+	$('.js-theme-controls').toggleClass('theme-controls--active');
+});
