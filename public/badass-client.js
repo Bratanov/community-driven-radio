@@ -472,6 +472,47 @@ function queryStringToObj(q) {
 	return query;
 }
 
+
+/* Theme controls */
+var THEME_CLASS_SUFFIX = '-theme';
+var LOCAL_STORAGE_THEME_KEY = 'theme';
+
+/**
+ * Set theme button checked, according to default theme.
+ * If theme previosly set in local storage, use that,
+ * if not use the one set in html.
+ */
+var setDefaultTheme = function() {
+	var theme = $('html').attr('class');
+	var lastSetTheme = localStorage.getItem(LOCAL_STORAGE_THEME_KEY);
+	if (lastSetTheme) {
+		theme = lastSetTheme;
+		$('html').removeClass().addClass(theme);
+	}
+	$('#' + theme.substring(0, theme.indexOf(THEME_CLASS_SUFFIX))).prop('checked', true);
+}
+
+/**
+ * Change page theme, by modifying root class.
+ * Store chosen theme into localStorage.
+ * @param {Object} e HTML DOM Event
+ */
+var changeTheme = function(e) {
+	// reset all inputs
+	$('.js-theme-toggle').prop('checked', false);
+	var chosenInput = $(e.target);
+	// set theme
+	var theme = chosenInput.attr('id') + THEME_CLASS_SUFFIX;
+	$('html').removeClass().addClass(theme);
+	localStorage.setItem(LOCAL_STORAGE_THEME_KEY, theme);
+	// set target
+	chosenInput.prop('checked', true);
+}
+
+setDefaultTheme();
+
 $('#theme-controls-toggle').on('click', function(e) {
 	$('.js-theme-controls').toggleClass('theme-controls--active');
 });
+
+$('.js-theme-toggle').on('click', changeTheme);

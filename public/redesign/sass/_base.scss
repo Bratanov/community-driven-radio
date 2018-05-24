@@ -6,6 +6,13 @@
 :root {
   &.calm-green-theme {
     --color-primary: #229621;
+    --color-secondary: #009433;
+    --color-bg-start: rgba(0, 194, 77, .85);
+    --color-bg-end: rgba(0, 211, 130, .85);
+    --color-text-primary: #FFF;
+    --color-text-secondary: #009941;
+    --color-text-silver-light: #cccccc;
+    --color-text-silver-dark: #999999;
   }
 
   &.water-color-theme {
@@ -21,11 +28,24 @@
 
   &.crazy-orange-theme {
     --color-primary: #E74B37;
+    --color-secondary: #F8463C;
+    --color-bg-start: rgba(244, 82, 41, .85);
+    --color-bg-end: rgba(245, 176, 85, .85);
+    --color-text-primary: #FFF;
     --color-text-secondary: #b17428;
+    --color-text-silver-light: #cccccc;
+    --color-text-silver-dark: #999999;
   }
 
   &.beauty-lila-theme {
     --color-primary: #2E3390;
+    --color-secondary: #273A8C;
+    --color-bg-start: rgba(45, 100, 222, .85);
+    --color-bg-end: rgba(132, 84, 235, .85);
+    --color-text-primary: #FFF;
+    --color-text-secondary: #2839AE;
+    --color-text-silver-light: #cccccc;
+    --color-text-silver-dark: #999999;
   }
 }
 

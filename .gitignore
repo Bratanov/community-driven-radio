@@ -13,6 +13,9 @@ npm-debug.log*
 # IntelliJ
 .idea
 
+# Visual Studio Code
+.vscode
+
 # Startup script
 start.sh
 
