@@ -155,7 +155,7 @@ socket.on('chat_msg', function(data) {
 socket.on('new_song', function(song) {
 	var songUrlParams = queryStringToObj(song.url_params);
 
-	$message = renderer.getChatSystemMessage(song.info.id, song.info.title, song.info.duration);
+	$message = renderer.getChatSystemMessage(song.info.youtubeId, song.info.title, song.info.duration);
 	$('#chat-history').append($message);
 	$('#chat-history').scrollTop(999999999);
 
@@ -196,20 +196,87 @@ socket.on('song_info', function(data) {
 
 	// sync song time diplayed in chat
 	// find song in chat by song id attr and update template
-	$timer = $('.chat-history__item[data-id=' + data.id + ']')
-		.find('.chat-history__timer');
+	$timer = findSongSystemMessage(data.youtubeId).find('.chat-history__timer');
 	if (data.duration - data.playingAt > 1) {
 		// more than 1 second is remaining until song ends
 		$timer.text(data.playTime + ' sec.');
 	} else {
 		// update with duration
-		$timer.text(duration + ' sec.');
+		$timer.text(data.duration + ' sec.');
 	}
 
 	// sync player play time with server
 	player.streamPlayingAt(data.playingAt);
 });
 
+// set currently playing song postion on top of mesage container
+// when it's not visible
+// TODO: Soooo many corner cases. What if song persist more than once in the same list?
+(function() {
+
+	var stickyMessageOriginalTopCoords = false;
+	var previouslyPlayingSongId = false;
+
+	function resetStickyMessages() {
+		$('.chat-history__item').removeClass('chat-history__item--sticky');
+		$('.chat-history').removeClass('chat-history--with-sticky-item');
+	}
+
+	function setStickyMessage($message) {
+		$message.addClass('chat-history__item--sticky');
+		$('.chat-history').addClass('chat-history--with-sticky-item');
+	}
+
+	function setStickyMessagePosition(e) {
+		// song not loaded yet, do nothing
+		if (!player.instance) return;
+		if (typeof player.instance.getVideoData !== 'function') return;
+		if (!player.instance.getVideoData()) return;
+
+		var currentlyPlayingSongId = player.instance.getVideoData().video_id;
+		if (currentlyPlayingSongId !== previouslyPlayingSongId) {
+			// song changed, reset and invalidate cached coords
+			resetStickyMessages();
+			stickyMessageOriginalTopCoords = false;
+			previouslyPlayingSongId = currentlyPlayingSongId;
+		}
+		// find song in chat messages
+		var $songMessage = findSongSystemMessage(currentlyPlayingSongId);
+	
+		var $chatHistory = $('#chat-history');
+		var visibleVerticalCoords = {
+			top: $chatHistory.scrollTop(),
+			bottom: $chatHistory.scrollTop() + $chatHistory.height()
+		};
+	
+		// get original position relative to parent ($chatHistory)
+		var messagePosition = 0;
+		// position will be incorrect if element is already sticky
+		// Note: another way to check this would be to seek for .chat-history--with-sticky-item in container
+		if (stickyMessageOriginalTopCoords !== false) {
+			messagePosition = stickyMessageOriginalTopCoords;
+		} else {
+			messagePosition = stickyMessageOriginalTopCoords = $songMessage.get(0).offsetTop;
+		}
+
+		// determine if message is placed (originally) in visible portion of the chat
+		var belowTop = messagePosition > visibleVerticalCoords.top;
+		var aboveBottom = messagePosition < visibleVerticalCoords.bottom;
+		if (belowTop && aboveBottom) {
+			// mesage should be placed at its original place
+			resetStickyMessages();
+		} else {
+			// message should be on top of container
+			setStickyMessage($songMessage);
+		}
+	}
+
+	$('#chat-history').on('scroll', setStickyMessagePosition);
+})()
+
+function findSongSystemMessage (youtubeId) {
+	return $('.chat-history__item[data-id=' + youtubeId + ']');
+}
 
 function addMessage(message) {
 	var $chatHistory = $('#chat-history');
