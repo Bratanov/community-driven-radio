@@ -155,7 +155,7 @@ socket.on('chat_msg', function(data) {
 socket.on('new_song', function(song) {
 	var songUrlParams = queryStringToObj(song.url_params);
 
-	$message = renderer.getChatSystemMessage(song.info.title, song.info.duration);
+	$message = renderer.getChatSystemMessage(song.info.id, song.info.title, song.info.duration);
 	$('#chat-history').append($message);
 	$('#chat-history').scrollTop(999999999);
 
@@ -191,12 +191,23 @@ socket.on('getRefreshed', function(data){
 	window.location.reload();
 });
 
-// TODO;
 socket.on('song_info', function(data) {
-	if (data.playTime) {
-		$('#song-info').html(renderSong(data));
-		player.streamPlayingAt(data.playingAt);
+	if (!data.playTime) return;
+
+	// sync song time diplayed in chat
+	// find song in chat by song id attr and update template
+	$timer = $('.chat-history__item[data-id=' + data.id + ']')
+		.find('.chat-history__timer');
+	if (data.duration - data.playingAt > 1) {
+		// more than 1 second is remaining until song ends
+		$timer.text(data.playTime + ' sec.');
+	} else {
+		// update with duration
+		$timer.text(duration + ' sec.');
 	}
+
+	// sync player play time with server
+	player.streamPlayingAt(data.playingAt);
 });
 
 
@@ -245,18 +256,6 @@ function renderRelatedSongs(songs) {
 	view += '</ul>';
 
 	return view;
-}
-
-function renderSong(song) {
-	// Default votes to 0
-	song.votes = song.votes || 0;
-
-	return '<a href="https://youtube.com/watch?v=' + song.youtubeId + '" target="_blank">'
-		+ song.title
-		+ '</a> - '
-		+ ((song.playTime) ? song.playTime : song.duration) + 'sec. '
-		+ '<button class="js-btn-vote" data-song-id="' + song.id + '">Vote up (' + song.votes + ')</button>'
-	;
 }
 
 /*function play(thingie) {
@@ -329,11 +328,12 @@ var renderer = {
 		return $clone;
 	},
 
-	getChatSystemMessage: function(title, duration) {
+	getChatSystemMessage: function(id, title, duration) {
 		var $clone = this._cloneTemplate('t-system-message');
 
-		$clone.find('.chat-history__message').text(title + ' - ');
-		$clone.find('.chat-history__timer').text(duration + 'sec.');
+		$clone.attr('data-id', id);
+		$clone.find('.chat-history__text').text(title);
+		$clone.find('.chat-history__timer').text(duration + ' sec.');
 
 		return $clone;
 	}
