@@ -87,3 +87,30 @@ body {
     var(--color-bg-end)
   ), url(../img/worn_dots.png);
 }
+
+
+// Scrollbars
+::-webkit-scrollbar {
+  width: .6rem;
+
+  &-track {
+    background: var(--color-text-silver-dark);
+    border-radius: 0.5rem;
+  }
+  
+  &-thumb {
+    background: var(--color-text-primary);
+    border-radius: 0.5rem;
+    
+    &:hover {
+      background: var(--color-text-secondary);
+    }
+  }
+}
+// page scroll track cannot be transparent
+body {
+  ::-webkit-scrollbar-track {
+    background: transparent;
+    border: 1px solid var(--color-text-primary);
+  }
+}
