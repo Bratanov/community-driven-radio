@@ -7,6 +7,7 @@ A DevLabs Project
 ## Dependencies
 
 - NodeJS Version 6.10.0+ (ES6 Compatible)
+- npm v6.0.1
 
 ## How to install
 
