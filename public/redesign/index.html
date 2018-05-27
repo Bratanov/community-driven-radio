@@ -189,6 +189,42 @@
       </div>
     </footer>
 
+    <dialog id="username-dialog" class="dialog">
+      <div class="dialog-container">
+        <form method="dialog" class="username-form">
+          <h1 class="heading-1 username-form__heading">Community Driven Radio</h1>
+          <section class="username-form__content">
+            <div>
+              <label for="username-input">
+                <h2 class="heading-2">Please ener your (nick) name</h2>
+                <h3 class="heading-3 heading-secondary mb-3">(It will be visible for all CDRadio users)</h3>
+              </label>
+              <input type="text" id="username-input" class="" placeholder="Your (nick) name"> 
+            </div>
+            <div>- or -</div>
+            <div>
+              <label for="special-username-input">
+                <h2 class="heading-2">Select from specials</h2>
+                <h3 class="heading-3 heading-secondary mb-3">(Special selection for you)</h3>
+              </label>
+              <select id="special-username-input" placeholder="Your (nick) name">
+                <option value="-">-</option>
+              </select>
+            </div>
+          </section>
+          <menu class="username-form__actions">
+            <button type="submit">></button>
+          </menu>
+        </form>
+      </div>
+    </dialog>
+
+    <script>
+      // TODO: remove
+      // keep modal window open, nigga yousa window shopper.
+      document.getElementById('username-dialog').showModal()
+    </script>
+
     <template id="t-message">
       <div class="chat-history__item">
         <span class="chat-history__author">-</span>

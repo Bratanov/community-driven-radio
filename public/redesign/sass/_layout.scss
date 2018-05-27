@@ -1,5 +1,10 @@
 // Typography
 .heading {
+  &-1 {
+    font-size: 4rem;
+    letter-spacing: 1px;
+  }
+
   &-2 {
     font-size: 3rem;
     letter-spacing: 1px;
