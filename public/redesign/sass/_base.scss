@@ -114,3 +114,7 @@ body {
     border: 1px solid var(--color-text-primary);
   }
 }
+
+::selection {
+  background: var(--color-primary);
+}

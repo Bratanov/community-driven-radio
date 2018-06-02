@@ -20,10 +20,47 @@ var NAMES = [
 	'bi4e70',
 	'SliderMan',
 	'sasho_kvadrata',
-	'gucciBang'
+	'gucciBang',
+	'bobisgolfa',
+	'goran-patron',
+	'geri-moderen',
+	'zucc'
 ];
 
-var userName = NAMES[Math.floor(Math.random()*NAMES.length)];
+// TODO: persist in local storage?
+var userName = null;
+var usernameDialog = $('#username-dialog').get(0);
+
+if (!userName) {
+	// TODO: scroll lock?
+	usernameDialog.showModal();
+}
+
+$('.js-name-change').on('click', function(e) {
+	usernameDialog.showModal();
+});
+
+// username dialog
+var $badassUsernames = $('#badass-usernames');
+var $usernameInput = $('#username-input');
+// render options
+NAMES.forEach(function(name) {
+	var $option = $('<option>');
+	$option.attr('value', name);
+	$option.text(name);
+	$badassUsernames.append($option);
+});
+// username select handler
+$badassUsernames.on('change', function(e) {
+	$usernameInput.val(e.target.value);
+});
+$('#username-form').on('submit', function(e) {
+	e.preventDefault();
+
+	if (!$usernameInput.val()) return;
+	userName = $usernameInput.val();
+	usernameDialog.close();
+});
 
 $('#message-submit').on('click', function(e) {
 	e.preventDefault();

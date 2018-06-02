@@ -12,7 +12,7 @@
   </head>
   <body class="container">
     <header class="header">
-      <svg class="action-icon" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+      <svg class="action-icon js-name-change" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
         width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#fff">
         <g>
           <path d="M17.5,50C23.841,50,29,44.841,29,38.5S23.841,27,17.5,27S6,32.159,6,38.5S11.159,50,17.5,50z M9.137,43H13v3.863
@@ -191,39 +191,49 @@
 
     <dialog id="username-dialog" class="dialog">
       <div class="dialog-container">
-        <form method="dialog" class="username-form">
+        <form method="dialog" id="username-form" class="username-form">
           <h1 class="heading-1 username-form__heading">Community Driven Radio</h1>
           <section class="username-form__content">
-            <div>
-              <label for="username-input">
+            <div class="username-form__content-item--primary">
+              <label for="username-input" class="u-center">
                 <h2 class="heading-2">Please ener your (nick) name</h2>
                 <h3 class="heading-3 heading-secondary mb-3">(It will be visible for all CDRadio users)</h3>
               </label>
-              <input type="text" id="username-input" class="" placeholder="Your (nick) name"> 
+              <input type="text" id="username-input" class="username-form__input" placeholder="Your (nick) name"> 
             </div>
-            <div>- or -</div>
-            <div>
-              <label for="special-username-input">
+            <div class="username-form__content-item--secondary">
+              <div class="heading-3 heading-secondary u-center">- or -</div>
+            </div>
+            <div class="username-form__content-item--primary">
+              <label for="special-username-input" class="u-center">
                 <h2 class="heading-2">Select from specials</h2>
                 <h3 class="heading-3 heading-secondary mb-3">(Special selection for you)</h3>
               </label>
-              <select id="special-username-input" placeholder="Your (nick) name">
-                <option value="-">-</option>
-              </select>
+              <div class="username-form__select-wrapper">
+                <select id="badass-usernames" class="input-oval username-form__select">
+                  <option value="" disabled selected>Your (nick) name</option>
+                </select>
+                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                    width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+                  <g>
+                    <polygon points="32,24.414 48.293,40.707 49.707,39.146 32.707,22 31.293,22 14.293,39.146 15.707,40.634 	"/>
+                    <path d="M31.999,64c0,0,0.001,0,0.002,0c8.548,0,16.583-3.33,22.627-9.373S64,40.547,63.999,31.999
+                      c0-8.548-3.328-16.584-9.372-22.627C48.584,3.329,40.549,0,32.001,0C32,0,32,0,31.999,0C23.451,0,15.416,3.329,9.372,9.373
+                      C3.329,15.417,0,23.453,0.001,32.001c0,8.548,3.328,16.584,9.372,22.627C15.416,60.671,23.451,64,31.999,64z M10.787,10.787
+                      C16.452,5.121,23.986,2,32.001,2c0.001,0,0.001,0,0.002,0c8.012,0,15.545,3.121,21.211,8.786c5.666,5.666,8.786,13.2,8.785,21.213
+                      c0,8.014-3.12,15.548-8.785,21.214S40.015,62,32.001,62h-0.002c-0.001,0-0.001,0-0.002,0c-8.012,0-15.545-3.121-21.211-8.786
+                      C5.121,47.548,2,40.015,2.001,32.001C2,23.987,5.121,16.453,10.787,10.787z"/>
+                  </g>
+                </svg>
+              </div>
             </div>
           </section>
           <menu class="username-form__actions">
-            <button type="submit">></button>
+            <button class="btn btn--enter" type="submit"></button>
           </menu>
         </form>
       </div>
     </dialog>
-
-    <script>
-      // TODO: remove
-      // keep modal window open, nigga yousa window shopper.
-      document.getElementById('username-dialog').showModal()
-    </script>
 
     <template id="t-message">
       <div class="chat-history__item">

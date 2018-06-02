@@ -34,12 +34,93 @@
   &__content {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     padding: 5rem 0;
+  }
+
+  &__content-item--primary {
+    flex: 1.5 0 0;
+  }
+
+  &__content-item--secondary {
+    flex: 1 0 0;
+    align-self: center;
   }
 
   &__actions {
     display: flex;
     justify-content: center;
+  }
+
+  // TODO: factor out from add-form__input
+  &__input {
+    width: 100%;
+    border: none;
+    font-size: 1.6rem;
+    color: rgba(0, 0, 0, .5);
+    background-color: transparent;
+    outline: none;
+    border-bottom: 1px solid var(--color-text-primary);
+    padding: 1.1rem 0;
+    margin-bottom: .3rem;
+    //transition: all .3s; // TODO: this looks bad, margin and padding are animated with different speed
+  
+    &:focus,
+    &:active {
+      padding-bottom: 1.4rem;
+      margin-bottom: 0;
+    }
+  
+    &::placeholder {
+      color: #000;
+      opacity: .5;
+    }
+  }
+
+  &__select-wrapper {
+    position: relative;
+
+    svg {
+      position: absolute;
+      bottom: 0.6rem;
+      right: 0.6rem;
+      width: 3rem;
+      height: 3rem;
+      transform: rotate(180deg);
+      pointer-events: none;
+      
+      polygon, path {
+        fill: var(--color-secondary);
+      }
+    }
+  }
+  
+  &__select {
+    -moz-appearance: window;
+    -webkit-appearance: none;
+    appearance: none;
+    background: #fff url('/img/arrow_circle_up.svg') right center no-repeat;
+    padding-right: 20px;
+    cursor: pointer;
+  }
+}
+
+// TODO: factor out from message-form__input
+.input-oval {
+  width: 100%;
+  height: auto;
+  padding: 1.2rem;
+  border-radius: 1.5rem;
+  font-size: 1.4rem;
+  color: var(--color-text-silver-dark);
+  border: 1px solid var(--color-text-silver-light);
+  outline: none;
+  opacity: 0.9;
+  transition: all .3s;
+
+  &:focus,
+  &:active {
+    opacity: 1;
+    border-color: var(--color-text-silver-dark);
   }
 }
