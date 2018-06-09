@@ -21,13 +21,17 @@ A DevLabs Project
 
     (Read their docs here: https://developers.google.com/youtube/)
 
-0. Create .env file using .env.sample as template
+0. Create .env file using .env.sample as template.
 
     `cp .env.sample .env`
 
-0. Set your YouTube API key as an environment variable in the newly created .env file:
+1. Set your YouTube API key as an environment variable in the newly created .env file.
 
-0. Run the project:
+0. Generate frontend assets.
+
+    `npm run build:css`
+
+1. Run the project.
 
     `npm start`
 
