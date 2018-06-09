@@ -4,6 +4,7 @@
   "description": "A radio station that anyone can enjoy",
   "main": "radio.js",
   "dependencies": {
+    "dotenv": "^6.0.0",
     "express": "^4.13.4",
     "moment": "^2.11.2",
     "request": "^2.69.0",

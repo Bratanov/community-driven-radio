@@ -21,31 +21,19 @@ A DevLabs Project
 
     (Read their docs here: https://developers.google.com/youtube/)
 
-0. Set the YouTube API key as an environment variable:
+0. Create .env file using .env.sample as template
 
-	- For Windows:
+    `cp .env.sample .env`
 
-		`SET YOUTUBE_API_KEY=mykeyhere`
+0. Set your YouTube API key as an environment variable in the newly created .env file:
 
-	- For Linux/MacOS:
-
-        `export YOUTUBE_API_KEY=mykeyhere`
-   
 0. Run the project:
 
-    `node radio` or `npm start`
+    `npm start`
 
-0. _Alternatively_, you can combine the previous steps with:
+1. Run the project in develop mode. _This will rebuild your css bundle every time you make a change in .scss source file._
 
-    `SET YOUTUBE_API_KEY=mykeyhere && node radio`
-   
-    or use the provided shell script:
-   
-    - `cp start.sh.sample start.sh` - copy the example script
-
-    - `vi start.sh` - update with your API key
-   
-    - `./start.sh` - sets API key and runs project
+    `npm run develop`
 
 ## Contributions
 

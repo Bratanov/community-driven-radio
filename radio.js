@@ -1,3 +1,6 @@
+// load environment variables from .env file
+require('dotenv').config()
+
 const Queue = require('./server/core/queue.js');
 const QueueManager = require('./server/core/queue-manager.js');
 const VotesManager = require('./server/core/votes-manager.js');

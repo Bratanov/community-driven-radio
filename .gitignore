@@ -16,8 +16,8 @@ npm-debug.log*
 # Visual Studio Code
 .vscode
 
-# Startup script
-start.sh
+# Environment variables
+.env
 
 # Runtime data
 pids
