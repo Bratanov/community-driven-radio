@@ -122,6 +122,7 @@
 //@import "objects/objects.crop";
 //@import "objects/objects.table";
 //@import "objects/objects.pack";
+@import "objects/objects.grid";
 
 
 
@@ -130,7 +131,9 @@
 // COMPONENTS
 //
 // Build and include your project’s UI components here.
-//@import "components/example.components.buttons";
+@import "components/components.btn";
+@import "components/components.tgl";
+@import "components/components.action-icon";
 
 
 
@@ -144,8 +147,9 @@
 // Only set this to `true` if you are absolutely sure about what you are doing.
 //$inuit-offsets: true;
 //@import "utilities/utilities.widths";
-//@import "utilities/utilities.headings";
-//@import "utilities/utilities.spacings";
+@import "utilities/utilities.headings";
+@import "utilities/utilities.spacings";
 //@import "utilities/utilities.responsive-spacings";
 //@import "utilities/utilities.print";
 //@import "utilities/utilities.hide";
+@import "utilities/utilities.positions";

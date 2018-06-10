@@ -12,7 +12,7 @@
   </head>
   <body class="container">
     <header class="header">
-      <svg class="action-icon js-name-change" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+      <svg class="c-action-icon js-name-change" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
         width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#fff">
         <g>
           <path d="M17.5,50C23.841,50,29,44.841,29,38.5S23.841,27,17.5,27S6,32.159,6,38.5S11.159,50,17.5,50z M9.137,43H13v3.863
@@ -31,7 +31,7 @@
       <div class="header__logo">
         <img src="img/logo.png" alt="cdr-logo">
       </div>
-      <svg class="action-icon" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+      <svg class="c-action-icon" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
         width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#fff">
         <g>
           <path d="M46,40c-4.962,0-9,4.038-9,9s4.038,9,9,9s9-4.038,9-9V-0.237L25,6.191v43.165C23.349,47.312,20.826,46,18,46
@@ -42,7 +42,7 @@
       </svg>
     </header>
 
-    <div class="content">
+    <div class="o-grid">
       <section class="video-player">
         <figure id="song-container" class="video-player__container">
           <div id="player" class="video-player__youtube-player"></div>
@@ -71,7 +71,7 @@
           </div>
           <form action="#" class="message-form">
             <input type="textarea" id="message-input" class="message-form__input" placeholder="Type your message here...">
-            <button id="message-submit" class="btn message-form__submit">
+            <button id="message-submit" class="c-btn message-form__submit">
               <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                 viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve"
               >
@@ -87,17 +87,17 @@
         </div>
       </section>
       <section class="song-queue">
-        <h2 class="heading-2">Queue:</h2>
-        <h3 class="heading-3 heading-secondary">(Highest voted will play first)</h3>
+        <h2 class="u-h2">Queue:</h2>
+        <h3 class="u-h3 u-h-secondary">(Highest voted will play first)</h3>
         <ol id="queue-list" class="queue-list">
           <!-- t-queue-list-item -->
         </ol>
       </section>
       <section class="related">
-        <h2 class="heading-2 mb-3">Add Song to Queue:</h2>
+        <h2 class="u-h2 u-margin-bottom">Add Song to Queue:</h2>
         <form action="#" class="add-form">
           <input type="text" id="badass-search" class="add-form__input" placeholder="Paste youtube URL or ID here">
-          <button id="badaass-song-add" class="btn add-form__btn-add">
+          <button id="badaass-song-add" class="c-btn add-form__btn-add">
             <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
               viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
               <g>
@@ -112,8 +112,8 @@
             </svg>
           </button>
         </form>
-        <h2 class="heading-2">Related:</h2>
-        <h3 class="heading-3 heading-secondary mb-3">(First one will play if nothing in queue)</h3>
+        <h2 class="u-h2">Related:</h2>
+        <h3 class="u-h3 u-h-secondary u-margin-bottom">(First one will play if nothing in queue)</h3>
         <ul id="related-list" class="related-list">
           <!-- t-related-list-item -->
         </ul>
@@ -126,34 +126,34 @@
           <p>Themes</p>
           <div class="theme-controls__toggle">
             <div>
-              <input class="tgl tgl-light js-theme-toggle" id="calm-green" type="checkbox"/>
-              <label class="tgl-btn" for="calm-green"></label>
+              <input class="c-tgl c-tgl-light js-theme-toggle" id="calm-green" type="checkbox"/>
+              <label class="c-tgl-btn" for="calm-green"></label>
             </div>
             <span>Calm green</span>
           </div>
           <div class="theme-controls__toggle">
             <div>
-              <input class="tgl tgl-light js-theme-toggle" id="crazy-orange" type="checkbox"/>
-              <label class="tgl-btn" for="crazy-orange"></label>
+              <input class="c-tgl c-tgl-light js-theme-toggle" id="crazy-orange" type="checkbox"/>
+              <label class="c-tgl-btn" for="crazy-orange"></label>
             </div>
             <span>Crazy orange</span>
           </div>
           <div class="theme-controls__toggle">
             <div>
-              <input class="tgl tgl-light js-theme-toggle" id="water-color" type="checkbox"/>
-              <label class="tgl-btn" for="water-color"></label>
+              <input class="c-tgl c-tgl-light js-theme-toggle" id="water-color" type="checkbox"/>
+              <label class="c-tgl-btn" for="water-color"></label>
             </div>
             <span>Water color</span>
           </div>
           <div class="theme-controls__toggle">
             <div>
-              <input class="tgl tgl-light js-theme-toggle" id="beauty-lila" type="checkbox"/>
-              <label class="tgl-btn" for="beauty-lila"></label>
+              <input class="c-tgl c-tgl-light js-theme-toggle" id="beauty-lila" type="checkbox"/>
+              <label class="c-tgl-btn" for="beauty-lila"></label>
             </div>
             <span>Beauty lila</span>
           </div>
         </div>
-        <svg id="theme-controls-toggle" class="action-icon" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+        <svg id="theme-controls-toggle" class="c-action-icon" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
         width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#fff">
           <g>
             <path d="M0,64h64V0H0V64z M2,2h60v60H2V2z"/>
@@ -178,7 +178,7 @@
       </div>
       <div class="footer__users">
         <div class="footer__users-count"><span id="users-count">-</span> users online</div>
-        <svg class="action-icon" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+        <svg class="c-action-icon" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
           width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#fff">
           <g>
             <path d="M53,32h-1v-5c0-0.17-0.229-17-20-17S12,26.83,12,27v5h-1C4.935,32,0,36.935,0,43s4.935,11,11,11h3V36v-4v-5
@@ -192,22 +192,22 @@
     <dialog id="username-dialog" class="dialog">
       <div class="dialog-container">
         <form method="dialog" id="username-form" class="username-form">
-          <h1 class="heading-1 username-form__heading">Community Driven Radio</h1>
+          <h1 class="u-h1 username-form__heading">Community Driven Radio</h1>
           <section class="username-form__content">
             <div class="username-form__content-item--primary">
               <label for="username-input" class="u-center">
-                <h2 class="heading-2">Please ener your (nick) name</h2>
-                <h3 class="heading-3 heading-secondary mb-3">(It will be visible for all CDRadio users)</h3>
+                <h2 class="u-h2">Please ener your (nick) name</h2>
+                <h3 class="u-h3 u-h-secondary u-margin-bottom">(It will be visible for all CDRadio users)</h3>
               </label>
               <input type="text" id="username-input" class="username-form__input" placeholder="Your (nick) name"> 
             </div>
             <div class="username-form__content-item--secondary">
-              <div class="heading-3 heading-secondary u-center">- or -</div>
+              <div class="u-h3 u-h-secondary u-center">- or -</div>
             </div>
             <div class="username-form__content-item--primary">
               <label for="special-username-input" class="u-center">
-                <h2 class="heading-2">Select from specials</h2>
-                <h3 class="heading-3 heading-secondary mb-3">(Special selection for you)</h3>
+                <h2 class="u-h2">Select from specials</h2>
+                <h3 class="u-u3 u-h-secondary u-margin-bottom">(Special selection for you)</h3>
               </label>
               <div class="username-form__select-wrapper">
                 <select id="badass-usernames" class="input-oval username-form__select">
@@ -229,7 +229,7 @@
             </div>
           </section>
           <menu class="username-form__actions">
-            <button class="btn btn--enter" type="submit"></button>
+            <button class="c-btn c-btn--enter" type="submit"></button>
           </menu>
         </form>
       </div>
@@ -257,7 +257,7 @@
         <span class="queue-list__item-number">-</span>
         <a href="" target="_blank" class="queue-list__item-title">-</a>
         <span class="queue-list__item-duration">-</span>
-        <button class="btn queue-list__btn-upvote js-btn-vote">
+        <button class="c-btn queue-list__btn-upvote js-btn-vote">
           <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
             viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
             <g>
@@ -279,7 +279,7 @@
       <li class="related-list__item">
         <span class="related-list__item-number">-</span>
         <a href="" target="_blank" class="related-list__item-title">-</a>
-        <button class="btn related-list__btn-add js-btn-add">
+        <button class="c-btn related-list__btn-add js-btn-add">
           <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
             viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
             <g>

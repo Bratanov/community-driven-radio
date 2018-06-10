@@ -1,0 +1,20 @@
+.c-btn {
+  background-color: transparent;
+  border: none;
+  border-style: none;
+  color: #fff;
+  cursor: pointer;
+  outline: none;
+
+  &:active {
+    border: 1px solid var(--color-secondary);
+    border-radius: 50%;
+  }
+
+  &--enter {
+    width: 6.4rem;
+    height: 6.4rem;
+    background-image: url(../img/play.svg);
+    background-size: cover;
+  }
+}
