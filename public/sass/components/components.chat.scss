@@ -1,4 +1,4 @@
-.chat {
+.c-chat {
   grid-column: col-start-2 / col-end-2;
 
   @media only screen and (max-width: $bp-medium) {
@@ -6,7 +6,7 @@
   }
 }
 
-.chat-history {
+.c-chat-history {
   position: relative; // for --sticky-top items
   display: flex;
   flex-direction: column;
@@ -80,7 +80,7 @@
   }
 }
 
-.message-form {
+.c-message-form {
   position: relative;
   width: 100%;
   margin-top: auto;

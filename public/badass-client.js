@@ -233,7 +233,7 @@ socket.on('song_info', function(data) {
 
 	// sync song time diplayed in chat
 	// find song in chat by song id attr and update template
-	$timer = findSongSystemMessage(data.youtubeId).find('.chat-history__timer');
+	$timer = findSongSystemMessage(data.youtubeId).find('.c-chat-history__timer');
 	if (data.duration - data.playingAt > 1) {
 		// more than 1 second is remaining until song ends
 		$timer.text(data.playTime + ' sec.');
@@ -255,13 +255,13 @@ socket.on('song_info', function(data) {
 	var previouslyPlayingSongId = false;
 
 	function resetStickyMessages() {
-		$('.chat-history__item').removeClass('chat-history__item--sticky');
-		$('.chat-history').removeClass('chat-history--with-sticky-item');
+		$('.c-chat-history__item').removeClass('c-chat-history__item--sticky');
+		$('.c-chat-history').removeClass('c-chat-history--with-sticky-item');
 	}
 
 	function setStickyMessage($message) {
-		$message.addClass('chat-history__item--sticky');
-		$('.chat-history').addClass('chat-history--with-sticky-item');
+		$message.addClass('c-chat-history__item--sticky');
+		$('.c-chat-history').addClass('c-chat-history--with-sticky-item');
 	}
 
 	function setStickyMessagePosition(e) {
@@ -289,7 +289,7 @@ socket.on('song_info', function(data) {
 		// get original position relative to parent ($chatHistory)
 		var messagePosition = 0;
 		// position will be incorrect if element is already sticky
-		// Note: another way to check this would be to seek for .chat-history--with-sticky-item in container
+		// Note: another way to check this would be to seek for .c-chat-history--with-sticky-item in container
 		if (stickyMessageOriginalTopCoords !== false) {
 			messagePosition = stickyMessageOriginalTopCoords;
 		} else {
@@ -312,7 +312,7 @@ socket.on('song_info', function(data) {
 })()
 
 function findSongSystemMessage (youtubeId) {
-	return $('.chat-history__item[data-id=' + youtubeId + ']');
+	return $('.c-chat-history__item[data-id=' + youtubeId + ']');
 }
 
 function addMessage(message) {
@@ -420,14 +420,14 @@ var renderer = {
 
 		if (currentUserName === message.author) {
 			// logged user's message
-			$clone.addClass('chat-history__item--right chat-history__item--inverse');
+			$clone.addClass('c-chat-history__item--right c-chat-history__item--inverse');
 		} else {
 			// another user's message
-			$clone.addClass('chat-history__item--left');
+			$clone.addClass('c-chat-history__item--left');
 		}
 
-		$clone.find('.chat-history__author').text(message.author);
-		$clone.find('.chat-history__message').text(message.value);
+		$clone.find('.c-chat-history__author').text(message.author);
+		$clone.find('.c-chat-history__message').text(message.value);
 
 		return $clone;
 	},
@@ -436,8 +436,8 @@ var renderer = {
 		var $clone = this._cloneTemplate('t-system-message');
 
 		$clone.attr('data-id', id);
-		$clone.find('.chat-history__text').text(title);
-		$clone.find('.chat-history__timer').text(duration + ' sec.');
+		$clone.find('.c-chat-history__text').text(title);
+		$clone.find('.c-chat-history__timer').text(duration + ' sec.');
 
 		return $clone;
 	}
@@ -616,7 +616,7 @@ var changeTheme = function(e) {
 setDefaultTheme();
 
 $('#theme-controls-toggle').on('click', function(e) {
-	$('.js-theme-controls').toggleClass('theme-controls--active');
+	$('.js-theme-controls').toggleClass('c-theme-controls--active');
 });
 
 $('.js-theme-toggle').on('click', changeTheme);

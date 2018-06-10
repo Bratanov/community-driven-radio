@@ -11,7 +11,7 @@
     <title>CDR &mdash; your splice of music</title>
   </head>
   <body class="container">
-    <header class="header">
+    <header class="c-header">
       <svg class="c-action-icon js-name-change" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
         width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#fff">
         <g>
@@ -43,9 +43,9 @@
     </header>
 
     <div class="o-grid">
-      <section class="video-player">
-        <figure id="song-container" class="video-player__container">
-          <div id="player" class="video-player__youtube-player"></div>
+      <section class="c-video-player">
+        <figure id="song-container" class="c-video-player__container">
+          <div id="player" class="c-video-player__youtube-player"></div>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -56,7 +56,7 @@
             viewBox="0 0 128 128"
             style="enable-background:new 0 0 128 128;"
             xml:space="preserve"
-            class="video-player__background"
+            class="c-video-player__background"
           >
             <g>
               <path d="M122,8H6c-3.3,0-6,2.7-6,6v80c0,3.3,2.7,6,6,6h46c0,1.719-0.89,9.083-4.469,16H42v1.55c0,1.348,1.102,2.45,2.449,2.45   h39.102c1.347,0,2.449-1.102,2.449-2.45V116h-5.531C76.89,109.083,76,101.719,76,100h46c3.3,0,6-2.7,6-6V14C128,10.7,125.3,8,122,8   z M85,117v0.55c0,0.8-0.65,1.45-1.449,1.45H44.449C43.65,119,43,118.35,43,117.55V117H85z M79.343,116H48.656   C52.123,109.112,53,101.744,53,100h22C75,101.744,75.877,109.114,79.343,116z M126,94c0,2.206-1.794,4-4,4H6c-2.206,0-4-1.794-4-4   V83h124V94z M126,82H2V14c0-2.206,1.794-4,4-4h116c2.206,0,4,1.794,4,4V82z" fill="#FFFFFF"/>
@@ -64,14 +64,14 @@
           </svg>
         </figure>
       </section>
-      <section class="chat">
-        <div class="chat-history">
-          <div id="chat-history" class="chat-history__messages">
+      <section class="c-chat">
+        <div class="c-chat-history">
+          <div id="chat-history" class="c-chat-history__messages">
             <!-- t-message || t-system-message -->
           </div>
-          <form action="#" class="message-form">
-            <input type="textarea" id="message-input" class="message-form__input" placeholder="Type your message here...">
-            <button id="message-submit" class="c-btn message-form__submit">
+          <form action="#" class="c-message-form">
+            <input type="textarea" id="message-input" class="c-message-form__input" placeholder="Type your message here...">
+            <button id="message-submit" class="c-btn c-message-form__submit">
               <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                 viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve"
               >
@@ -120,32 +120,32 @@
       </section>
     </div>
 
-    <footer class="footer">
-      <div class="controls-container">
-        <div class="theme-controls js-theme-controls">
+    <footer class="c-footer">
+      <div class="c-controls-container">
+        <div class="c-theme-controls js-theme-controls">
           <p>Themes</p>
-          <div class="theme-controls__toggle">
+          <div class="c-theme-controls__toggle">
             <div>
               <input class="c-tgl c-tgl-light js-theme-toggle" id="calm-green" type="checkbox"/>
               <label class="c-tgl-btn" for="calm-green"></label>
             </div>
             <span>Calm green</span>
           </div>
-          <div class="theme-controls__toggle">
+          <div class="c-theme-controls__toggle">
             <div>
               <input class="c-tgl c-tgl-light js-theme-toggle" id="crazy-orange" type="checkbox"/>
               <label class="c-tgl-btn" for="crazy-orange"></label>
             </div>
             <span>Crazy orange</span>
           </div>
-          <div class="theme-controls__toggle">
+          <div class="c-theme-controls__toggle">
             <div>
               <input class="c-tgl c-tgl-light js-theme-toggle" id="water-color" type="checkbox"/>
               <label class="c-tgl-btn" for="water-color"></label>
             </div>
             <span>Water color</span>
           </div>
-          <div class="theme-controls__toggle">
+          <div class="c-theme-controls__toggle">
             <div>
               <input class="c-tgl c-tgl-light js-theme-toggle" id="beauty-lila" type="checkbox"/>
               <label class="c-tgl-btn" for="beauty-lila"></label>
@@ -189,8 +189,8 @@
       </div>
     </footer>
 
-    <dialog id="username-dialog" class="dialog">
-      <div class="dialog-container">
+    <dialog id="username-dialog" class="c-dialog">
+      <div class="c-dialog-container">
         <form method="dialog" id="username-form" class="username-form">
           <h1 class="u-h1 username-form__heading">Community Driven Radio</h1>
           <section class="username-form__content">
@@ -236,18 +236,18 @@
     </dialog>
 
     <template id="t-message">
-      <div class="chat-history__item">
-        <span class="chat-history__author">-</span>
-        <div class="chat-history__message">-</div>
+      <div class="c-chat-history__item">
+        <span class="c-chat-history__author">-</span>
+        <div class="c-chat-history__message">-</div>
       </div>
     </template>
 
     <template id="t-system-message">
-      <div class="chat-history__item chat-history__item--right chat-history__item--system">
-        <span class="chat-history__author">Now Playing:</span>
-        <div class="chat-history__message">
-          <span class="chat-history__text">-</span> - 
-          <span class="chat-history__timer">-</span>
+      <div class="c-chat-history__item c-chat-history__item--right c-chat-history__item--system">
+        <span class="c-chat-history__author">Now Playing:</span>
+        <div class="c-chat-history__message">
+          <span class="c-chat-history__text">-</span> - 
+          <span class="c-chat-history__timer">-</span>
         </div>
       </div>
     </template>

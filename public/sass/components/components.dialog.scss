@@ -1,4 +1,4 @@
-.dialog {
+.c-dialog {
   width: 100%;
   height: 100vh;
   color: var(--color-text-primary);
@@ -6,7 +6,7 @@
   border: none;
 }
 
-.dialog-container {
+.c-dialog-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -14,6 +14,7 @@
   height: 100%;
 }
 
+// TODO: this does not belong here
 .username-form {
   display: flex;
   flex-direction: column;
