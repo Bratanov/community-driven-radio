@@ -25,17 +25,17 @@ A DevLabs Project
 
     `cp .env.sample .env`
 
-1. Set your YouTube API key as an environment variable in the newly created .env file.
+0. Set your YouTube API key as an environment variable in the newly created .env file.
 
 0. Generate frontend assets.
 
     `npm run build:css`
 
-1. Run the project.
+0. Run the project.
 
     `npm start`
 
-1. Run the project in develop mode. _This will rebuild your css bundle every time you make a change in .scss source file._
+0. Run the project in develop mode. _This will rebuild your css bundle every time you make a change in .scss source file._
 
     `npm run develop`
 
