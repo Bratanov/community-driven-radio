@@ -1,0 +1,67 @@
+html {
+  font-size: 62.5%; // 1rem = 10px if default browser font-size
+  overflow-y: scroll;
+  min-height: 100%;
+
+  @media only screen and (max-width: $bp-large) {
+    font-size: 50%; // 8px/16px = 50%
+  }
+}
+
+body {
+  min-height: 100vh;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #fff;
+  background-image: linear-gradient(
+    to right bottom,
+    var(--color-bg-start) 25%,
+    var(--color-bg-end)
+  ), url(../img/worn_dots.png);
+}
+
+
+// Scrollbars
+::-webkit-scrollbar {
+  width: .6rem;
+
+  &-track {
+    background: var(--color-text-silver-dark);
+    border-radius: 0.5rem;
+  }
+  
+  &-thumb {
+    background: var(--color-text-primary);
+    border-radius: 0.5rem;
+    
+    &:hover {
+      background: var(--color-text-secondary);
+    }
+  }
+}
+// page scroll track cannot be transparent
+body {
+  ::-webkit-scrollbar-track {
+    background: transparent;
+    border: 1px solid var(--color-text-primary);
+  }
+}
+
+::selection {
+  background: var(--color-primary);
+}
+
+// change Autocomplete styles in Chrome
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus
+input:-webkit-autofill, 
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px var(--color-primary) inset;
+}

@@ -70,9 +70,9 @@
 
 // SETTINGS
 @import "settings/settings.config";
-//@import "settings/settings.core";
+//@import "node_modules/inuitcss/settings/settings.core";
 @import "settings/settings.global";
-
+@import "settings/settings.colors";
 
 
 
@@ -88,9 +88,9 @@
 
 
 // GENERIC
-//@import "generic/generic.box-sizing";
-//@import "generic/generic.normalize";
-//@import "generic/generic.reset";
+@import "node_modules/inuitcss/generic/generic.box-sizing";
+@import "node_modules/inuitcss/generic/generic.normalize";
+@import "node_modules/inuitcss/generic/generic.reset";
 //@import "generic/generic.shared";
 
 
@@ -98,10 +98,10 @@
 
 
 // ELEMENTS
-//@import "elements/elements.page";
+@import "elements/elements.page";
 //@import "elements/elements.headings";
-//@import "elements/elements.images";
-//@import "elements/elements.tables";
+@import "node_modules/inuitcss/elements/elements.images";
+@import "node_modules/inuitcss/elements/elements.tables";
 
 
 
