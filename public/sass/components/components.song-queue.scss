@@ -1,4 +1,4 @@
-.song-queue {
+.c-song-queue {
   grid-column: col-start-1 / col-end-1;
 
   @media only screen and (max-width: $bp-small) {
@@ -6,7 +6,7 @@
   }
 }
 
-.queue-list {
+.c-queue-list {
   max-height: 32rem;
   overflow-y: scroll;
   overflow-x: hidden; // TODO: ugly fix for scroll caused by absolute position of upvote svg part 1
@@ -61,6 +61,7 @@
     align-items: center;
     width: 1.65rem;
     height: 1.65rem;
+    font-size: 1.1rem;
     color: var(--color-primary);
     background-color: var(--color-text-primary);
     border-radius: 50%;

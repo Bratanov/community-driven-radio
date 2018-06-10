@@ -1,4 +1,4 @@
-.related {
+.c-related {
   grid-column: col-start-2 / col-end-2;
 
   @media only screen and (max-width: $bp-small) {
@@ -6,7 +6,7 @@
   }
 }
 
-.add-form {
+.c-add-form {
   position: relative;
   margin-bottom: 5rem;
 
@@ -51,35 +51,7 @@
   }
 }
 
-// override autocomlete plugin styles
-.autocomplete-suggestions {
-  border: none;
-  max-height: 35rem;
-  opacity: 0.95;
-}
-
-.autocomplete-suggestion {
-  display: flex;
-  background-color: var(--color-bg-start);
-  border: none;
-  padding: 0.5rem;
-  
-  &.selected {
-    background-color: var(--color-bg-end);
-    cursor: pointer;
-  }
-  
-  &__thumb {
-    height: 2.5rem;
-    margin-right: 0.5rem;
-  }
-  
-  &__title {
-    font-size: 1.5rem;
-  }
-}
-
-.related-list {
+.c-related-list {
 
   &__item {
     display: flex;
@@ -114,5 +86,4 @@
       }
     }
   }
-
 }

@@ -86,18 +86,18 @@
           </form>
         </div>
       </section>
-      <section class="song-queue">
+      <section class="c-song-queue">
         <h2 class="u-h2">Queue:</h2>
         <h3 class="u-h3 u-h-secondary">(Highest voted will play first)</h3>
-        <ol id="queue-list" class="queue-list">
+        <ol id="queue-list" class="c-queue-list">
           <!-- t-queue-list-item -->
         </ol>
       </section>
-      <section class="related">
+      <section class="c-related">
         <h2 class="u-h2 u-margin-bottom">Add Song to Queue:</h2>
-        <form action="#" class="add-form">
-          <input type="text" id="badass-search" class="add-form__input" placeholder="Paste youtube URL or ID here">
-          <button id="badaass-song-add" class="c-btn add-form__btn-add">
+        <form action="#" class="c-add-form">
+          <input type="text" id="badass-search" class="c-add-form__input" placeholder="Paste youtube URL or ID here">
+          <button id="badaass-song-add" class="c-btn c-add-form__btn-add">
             <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
               viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
               <g>
@@ -114,7 +114,7 @@
         </form>
         <h2 class="u-h2">Related:</h2>
         <h3 class="u-h3 u-h-secondary u-margin-bottom">(First one will play if nothing in queue)</h3>
-        <ul id="related-list" class="related-list">
+        <ul id="related-list" class="c-related-list">
           <!-- t-related-list-item -->
         </ul>
       </section>
@@ -163,11 +163,11 @@
           </g>
         </svg>
       </div>
-      <div class="footer__content">
-        <p class="footer__text">
+      <div class="c-footer__content">
+        <p class="c-footer__text">
           &lt;/&gt; with &hearts; by <a href="https://devlabs.bg">DevLabs</a>
         </p>
-        <div class="footer__text">
+        <div class="c-footer__text">
           Icons made by 
           <a href="https://www.flaticon.com/authors/dale-humphries" title="Dale Humphries">Dale Humphries</a> 
           from 
@@ -176,8 +176,8 @@
           <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
         </div>
       </div>
-      <div class="footer__users">
-        <div class="footer__users-count"><span id="users-count">-</span> users online</div>
+      <div class="c-footer__users">
+        <div class="c-footer__users-count"><span id="users-count">-</span> users online</div>
         <svg class="c-action-icon" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
           width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#fff">
           <g>
@@ -253,11 +253,11 @@
     </template>
 
     <template id="t-queue-list-item">
-      <li class="queue-list__item">
-        <span class="queue-list__item-number">-</span>
-        <a href="" target="_blank" class="queue-list__item-title">-</a>
-        <span class="queue-list__item-duration">-</span>
-        <button class="c-btn queue-list__btn-upvote js-btn-vote">
+      <li class="c-queue-list__item">
+        <span class="c-queue-list__item-number">-</span>
+        <a href="" target="_blank" class="c-queue-list__item-title">-</a>
+        <span class="c-queue-list__item-duration">-</span>
+        <button class="c-btn c-queue-list__btn-upvote js-btn-vote">
           <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
             viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
             <g>
@@ -270,16 +270,16 @@
                 C5.121,47.548,2,40.015,2.001,32.001C2,23.987,5.121,16.453,10.787,10.787z"/>
             </g>
           </svg>
-          <span class="queue-list__item-votes">-</span>
+          <span class="c-queue-list__item-votes">-</span>
         </button>
       </li>
     </template>
 
     <template id="t-related-list-item">
-      <li class="related-list__item">
-        <span class="related-list__item-number">-</span>
-        <a href="" target="_blank" class="related-list__item-title">-</a>
-        <button class="c-btn related-list__btn-add js-btn-add">
+      <li class="c-related-list__item">
+        <span class="c-related-list__item-number">-</span>
+        <a href="" target="_blank" class="c-related-list__item-title">-</a>
+        <button class="c-btn c-related-list__btn-add js-btn-add">
           <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
             viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
             <g>

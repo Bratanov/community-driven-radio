@@ -177,6 +177,7 @@ $('body').on('click', '.js-btn-vote', function() {
 	socket.emit('vote', $(this).data('song-id'));
 });
 
+// TODO: this is unused
 $('body').on('click', '.btn-delete', function() {
 	socket.emit('delete_queued', $(this).data('song-id'));
 });
@@ -349,22 +350,6 @@ socket.on('be_alerted', function(message) {
 
 socket.on('youtube_search', fillAutocompleteOptions);
 
-function renderRelatedSongs(songs) {
-	var view = '<ul>Related <i>(First one will play if nothing in queue)</i>:';
-
-	for(var relatedId in songs) {
-		var relatedSong = songs[relatedId];
-		view += '<li>' + relatedSong.title + ' <button class="add-song" data-youtube-id="' + relatedSong.youtubeId + '">Add to queue</button></li>'
-	}
-
-	view += '</ul>';
-
-	return view;
-}
-
-/*function play(thingie) {
-	$('iframe').attr('src', 'https://www.youtube.com/embed/' + thingie);
-}*/
 
 var renderer = {
 
@@ -375,15 +360,15 @@ var renderer = {
 	getQueueItem: function(number, songData) {
 		var $clone = this._cloneTemplate('t-queue-list-item'); 
 	
-		$clone.find('.queue-list__item-number').text(number + '.');
-		$clone.find('.queue-list__item-title')
+		$clone.find('.c-queue-list__item-number').text(number + '.');
+		$clone.find('.c-queue-list__item-title')
 			.attr('href', 'https://youtube.com/watch?v=' + songData.youtubeId)
 			.text(songData.title);
 		var duration = (songData.playTime) ? songData.playTime : songData.duration;
-		$clone.find('.queue-list__item-duration').text('- ' + duration + ' sec.');
+		$clone.find('.c-queue-list__item-duration').text('- ' + duration + ' sec.');
 	
 		$clone.find('.js-btn-vote').attr('data-song-id', songData.id);
-		$clone.find('.queue-list__item-votes').text(songData.votes);
+		$clone.find('.c-queue-list__item-votes').text(songData.votes);
 	
 		// TOOD: delete button in template? There's a (backend?) bug here.
 		// var addedBy = songData.addedBy.substring(2);
@@ -398,8 +383,8 @@ var renderer = {
 	getRelatedItem: function(number, songData) {
 		var $clone = this._cloneTemplate('t-related-list-item');
 	
-		$clone.find('.related-list__item-number').text(number + '.');
-		$clone.find('.related-list__item-title')
+		$clone.find('.c-related-list__item-number').text(number + '.');
+		$clone.find('.c-related-list__item-title')
 			.attr('href', 'https://youtube.com/watch?v=' + songData.youtubeId)
 			.text(songData.title);
 		$clone.find('.js-btn-add').attr('data-youtube-id', songData.youtubeId);
