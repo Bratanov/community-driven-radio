@@ -87,25 +87,6 @@
   padding-right: .5rem;
   align-self: flex-end;
 
-  &__input {
-    width: 100%;
-    height: auto;
-    padding: 1.2rem;
-    border-radius: 1.5rem;
-    font-size: 1.4rem;
-    color: var(--color-text-silver-dark);
-    border: 1px solid var(--color-text-silver-light);
-    outline: none;
-    opacity: 0.9;
-    transition: all .3s;
-
-    &:focus,
-    &:active {
-      opacity: 1;
-      border-color: var(--color-text-silver-dark);
-    }
-  }
-
   &__submit {
     position: absolute;
     width: 3rem;

@@ -1,0 +1,42 @@
+.c-input-basic {
+  width: 100%;
+  border: none;
+  font-size: 1.6rem;
+  color: rgba(0, 0, 0, .5);
+  background-color: transparent;
+  outline: none;
+  border-bottom: 1px solid var(--color-text-primary);
+  padding: 1.1rem 0;
+  margin-bottom: .3rem;
+  //transition: all .3s; // TODO: this looks bad, margin and padding are animated with different speed
+
+  &:focus,
+  &:active {
+    padding-bottom: 1.4rem;
+    margin-bottom: 0;
+  }
+
+  &::placeholder {
+    color: #000;
+    opacity: .5;
+  }
+}
+
+.c-input-oval {
+  width: 100%;
+  height: auto;
+  padding: 1.2rem;
+  border-radius: 1.5rem;
+  font-size: 1.4rem;
+  color: var(--color-text-silver-dark);
+  border: 1px solid var(--color-text-silver-light);
+  outline: none;
+  opacity: 0.9;
+  transition: all .3s;
+
+  &:focus,
+  &:active {
+    opacity: 1;
+    border-color: var(--color-text-silver-dark);
+  }
+}

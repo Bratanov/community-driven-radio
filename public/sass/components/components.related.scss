@@ -10,30 +10,6 @@
   position: relative;
   margin-bottom: 5rem;
 
-  &__input {
-    width: 100%;
-    border: none;
-    font-size: 1.6rem;
-    color: rgba(0, 0, 0, .5);
-    background-color: transparent;
-    outline: none;
-    border-bottom: 1px solid var(--color-text-primary);
-    padding: 1.1rem 0;
-    margin-bottom: .3rem;
-    //transition: all .3s; // TODO: this looks bad, margin and padding are animated with different speed
-
-    &:focus,
-    &:active {
-      padding-bottom: 1.4rem;
-      margin-bottom: 0;
-    }
-
-    &::placeholder {
-      color: #000;
-      opacity: .5;
-    }
-  }
-
   &__btn-add {
     flex: 0 0 auto;
     position: absolute;

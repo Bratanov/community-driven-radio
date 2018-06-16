@@ -126,6 +126,7 @@
 //@import "objects/objects.table";
 //@import "objects/objects.pack";
 @import "objects/objects.grid";
+@import "objects/objects.dialog";
 
 
 
@@ -137,7 +138,8 @@
 @import "components/components.btn";
 @import "components/components.tgl";
 @import "components/components.action-icon";
-@import "components/components.dialog";
+@import "components/components.form";
+@import "components/components.username-form";
 @import "components/components.header";
 @import "components/components.footer";
 @import "components/components.chat";

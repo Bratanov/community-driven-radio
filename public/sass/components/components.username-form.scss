@@ -1,0 +1,65 @@
+.username-form {
+  display: flex;
+  flex-direction: column;
+  width: 70vw;
+  height: 70vh;
+  padding: 5rem;
+  border-radius: 3rem;
+  background-image: linear-gradient(
+    to right bottom,
+    var(--color-bg-start) 25%,
+    var(--color-bg-end)
+  ), url(../img/worn_dots.png);
+
+  &__heading {
+    text-align: center;
+  }
+
+  &__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 5rem 0;
+  }
+
+  &__content-item--primary {
+    flex: 1.5 0 0;
+  }
+
+  &__content-item--secondary {
+    flex: 1 0 0;
+    align-self: center;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__select-wrapper {
+    position: relative;
+
+    svg {
+      position: absolute;
+      bottom: 0.6rem;
+      right: 0.6rem;
+      width: 3rem;
+      height: 3rem;
+      transform: rotate(180deg);
+      pointer-events: none;
+      
+      polygon, path {
+        fill: var(--color-secondary);
+      }
+    }
+  }
+  
+  &__select {
+    -moz-appearance: window;
+    -webkit-appearance: none;
+    appearance: none;
+    background: #fff url('/img/arrow_circle_up.svg') right center no-repeat;
+    padding-right: 20px;
+    cursor: pointer;
+  }
+}
