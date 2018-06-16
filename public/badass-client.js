@@ -27,13 +27,17 @@ var NAMES = [
 	'zucc'
 ];
 
-// TODO: persist in local storage?
-var userName = null;
+var LOCAL_STORAGE_USERNAME_KEY = 'usrnm';
+
+var userName = localStorage.getItem(LOCAL_STORAGE_USERNAME_KEY);
 var usernameDialog = $('#username-dialog').get(0);
+var $usernameInput = $('#username-input');
 
 if (!userName) {
 	// TODO: scroll lock?
 	usernameDialog.showModal();
+} else {
+	$usernameInput.val(userName);
 }
 
 $('.js-name-change').on('click', function(e) {
@@ -42,7 +46,6 @@ $('.js-name-change').on('click', function(e) {
 
 // username dialog
 var $badassUsernames = $('#badass-usernames');
-var $usernameInput = $('#username-input');
 // render options
 NAMES.forEach(function(name) {
 	var $option = $('<option>');
@@ -59,6 +62,7 @@ $('#username-form').on('submit', function(e) {
 
 	if (!$usernameInput.val()) return;
 	userName = $usernameInput.val();
+	localStorage.setItem(LOCAL_STORAGE_USERNAME_KEY, userName);
 	usernameDialog.close();
 });
 
