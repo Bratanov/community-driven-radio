@@ -360,15 +360,15 @@ var renderer = {
 	getQueueItem: function(number, songData) {
 		var $clone = this._cloneTemplate('t-queue-list-item'); 
 	
-		$clone.find('.c-queue-list__item-number').text(number + '.');
-		$clone.find('.c-queue-list__item-title')
+		$clone.find('.c-song-list-item__number').text(number + '.');
+		$clone.find('.c-song-list-item__title')
 			.attr('href', 'https://youtube.com/watch?v=' + songData.youtubeId)
 			.text(songData.title);
 		var duration = (songData.playTime) ? songData.playTime : songData.duration;
-		$clone.find('.c-queue-list__item-duration').text('- ' + duration + ' sec.');
+		$clone.find('.c-song-list-item__duration').text('- ' + duration + ' sec.');
 	
 		$clone.find('.js-btn-vote').attr('data-song-id', songData.id);
-		$clone.find('.c-queue-list__item-votes').text(songData.votes);
+		$clone.find('.c-song-list-item__votes').text(songData.votes);
 	
 		// TOOD: delete button in template? There's a (backend?) bug here.
 		// var addedBy = songData.addedBy.substring(2);
@@ -383,8 +383,8 @@ var renderer = {
 	getRelatedItem: function(number, songData) {
 		var $clone = this._cloneTemplate('t-related-list-item');
 	
-		$clone.find('.c-related-list__item-number').text(number + '.');
-		$clone.find('.c-related-list__item-title')
+		$clone.find('.c-song-list-item__number').text(number + '.');
+		$clone.find('.c-song-list-item__title')
 			.attr('href', 'https://youtube.com/watch?v=' + songData.youtubeId)
 			.text(songData.title);
 		$clone.find('.js-btn-add').attr('data-youtube-id', songData.youtubeId);

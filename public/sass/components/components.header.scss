@@ -1,7 +1,5 @@
 .c-header {
-  display: flex;
-  justify-content: space-between;
-  padding: 2rem;
+  @extend %columns-container;
 
   &__logo {
     display: flex;

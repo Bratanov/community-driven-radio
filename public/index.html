@@ -42,7 +42,7 @@
       </svg>
     </header>
 
-    <div class="o-grid">
+    <div class="o-grid u-mb-large">
       <section class="c-video-player">
         <figure id="song-container" class="c-video-player__container">
           <div id="player" class="c-video-player__youtube-player"></div>
@@ -94,7 +94,7 @@
         </ol>
       </section>
       <section class="c-related">
-        <h2 class="u-h2 u-margin-bottom">Add Song to Queue:</h2>
+        <h2 class="u-h2 u-mb-small">Add Song to Queue:</h2>
         <form action="#" class="c-add-form">
           <input type="text" id="badass-search" class="c-add-form__input" placeholder="Paste youtube URL or ID here">
           <button id="badaass-song-add" class="c-btn c-add-form__btn-add">
@@ -113,8 +113,8 @@
           </button>
         </form>
         <h2 class="u-h2">Related:</h2>
-        <h3 class="u-h3 u-h-secondary u-margin-bottom">(First one will play if nothing in queue)</h3>
-        <ul id="related-list" class="c-related-list">
+        <h3 class="u-h3 u-h-secondary u-mb-small">(First one will play if nothing in queue)</h3>
+        <ul id="related-list">
           <!-- t-related-list-item -->
         </ul>
       </section>
@@ -197,7 +197,7 @@
             <div class="username-form__content-item--primary">
               <label for="username-input" class="u-center">
                 <h2 class="u-h2">Please ener your (nick) name</h2>
-                <h3 class="u-h3 u-h-secondary u-margin-bottom">(It will be visible for all CDRadio users)</h3>
+                <h3 class="u-h3 u-h-secondary u-mb-small">(It will be visible for all CDRadio users)</h3>
               </label>
               <input type="text" id="username-input" class="username-form__input" placeholder="Your (nick) name"> 
             </div>
@@ -207,7 +207,7 @@
             <div class="username-form__content-item--primary">
               <label for="special-username-input" class="u-center">
                 <h2 class="u-h2">Select from specials</h2>
-                <h3 class="u-u3 u-h-secondary u-margin-bottom">(Special selection for you)</h3>
+                <h3 class="u-u3 u-h-secondary u-mb-small">(Special selection for you)</h3>
               </label>
               <div class="username-form__select-wrapper">
                 <select id="badass-usernames" class="input-oval username-form__select">
@@ -253,11 +253,11 @@
     </template>
 
     <template id="t-queue-list-item">
-      <li class="c-queue-list__item">
-        <span class="c-queue-list__item-number">-</span>
-        <a href="" target="_blank" class="c-queue-list__item-title">-</a>
-        <span class="c-queue-list__item-duration">-</span>
-        <button class="c-btn c-queue-list__btn-upvote js-btn-vote">
+      <li class="c-song-list-item">
+        <span class="c-song-list-item__number">-</span>
+        <a href="" target="_blank" class="c-song-list-item__title">-</a>
+        <span class="c-song-list-item__duration">-</span>
+        <button class="c-btn c-song-list-item__btn-upvote js-btn-vote">
           <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
             viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
             <g>
@@ -270,16 +270,16 @@
                 C5.121,47.548,2,40.015,2.001,32.001C2,23.987,5.121,16.453,10.787,10.787z"/>
             </g>
           </svg>
-          <span class="c-queue-list__item-votes">-</span>
+          <span class="c-song-list-item__votes">-</span>
         </button>
       </li>
     </template>
 
     <template id="t-related-list-item">
-      <li class="c-related-list__item">
-        <span class="c-related-list__item-number">-</span>
-        <a href="" target="_blank" class="c-related-list__item-title">-</a>
-        <button class="c-btn c-related-list__btn-add js-btn-add">
+      <li class="c-song-list-item">
+        <span class="c-song-list-item__number">-</span>
+        <a href="" target="_blank" class="c-song-list-item__title">-</a>
+        <button class="c-btn c-song-list-item__btn-add js-btn-add">
           <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
             viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
             <g>
