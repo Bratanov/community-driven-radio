@@ -1,10 +1,12 @@
 .c-action-icon {
-  width: 4rem;
-  height: 4rem;
-  transition: fill .3s;
-
-  &:hover {
-    cursor: pointer;
-    fill: var(--color-primary);
+  svg {
+    width: 4rem;
+    height: 4rem;
+    transition: fill .3s;
+  
+    &:hover {
+      cursor: pointer;
+      fill: var(--color-primary);
+    }
   }
 }

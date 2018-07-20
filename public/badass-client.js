@@ -24,7 +24,8 @@ var NAMES = [
 	'bobisgolfa',
 	'goran-patron',
 	'geri-moderen',
-	'zucc'
+	'zucc',
+	'nadeto-v-malta'
 ];
 
 var LOCAL_STORAGE_USERNAME_KEY = 'usrnm';
@@ -604,8 +605,27 @@ var changeTheme = function(e) {
 
 setDefaultTheme();
 
-$('#theme-controls-toggle').on('click', function(e) {
+$('.js-theme-controls-toggle').on('click', function(e) {
 	$('.js-theme-controls').toggleClass('c-theme-controls--active');
 });
 
 $('.js-theme-toggle').on('click', changeTheme);
+
+
+/* Tooltips mudhaflickah, powered by https://popper.js.org */
+var nameChangeTooltip = new Tooltip($('.js-name-change'), {
+	placement: 'right',
+	title: 'Say My Name'
+});
+var muteTooltip = new Tooltip($('.js-mute'), {
+	placement: 'left',
+	title: 'Silence'
+});
+var themeControlsTooltip = new Tooltip($('.js-theme-controls-toggle'), {
+	placement: 'right',
+	title: 'Green Gucci Suit'
+});
+var usersOnlineTooltip = new Tooltip($('.js-users-online'), {
+	placement: 'top',
+	title: 'All The People In The World'
+});
