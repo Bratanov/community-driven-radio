@@ -3,10 +3,10 @@
 
   &__logo {
     display: flex;
-    height: 10rem;
+    height: 4.5rem;
 
     @media only screen and (max-width: $bp-medium) {
-      height: 5rem;
+      height: 3.5rem;
     }
 
     img {

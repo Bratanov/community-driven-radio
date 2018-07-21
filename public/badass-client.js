@@ -535,6 +535,18 @@ var player = {
 			// call is defered for when player is ready
 			self._queuedActionsAfterInit.push(self.play.bind(self, videoId, params));
 		}
+	},
+
+	mute: function() {
+		this.instance.mute();
+	},
+
+	unMute: function() {
+		this.instance.unMute();
+	},
+
+	isMuted: function() {
+		return this.instance.isMuted();
 	}
 };
 
@@ -567,6 +579,18 @@ function queryStringToObj(q) {
 	}
 	return query;
 }
+
+/* Mute controls */
+$('.js-mute').on('click', function(e) {
+	if (player.isMuted()) {
+		player.unMute();
+		$(this).removeClass('active');
+		return;
+	}
+
+	player.mute();
+	$(this).addClass('active');
+});
 
 
 /* Theme controls */
@@ -608,6 +632,7 @@ var changeTheme = function(e) {
 setDefaultTheme();
 
 $('.js-theme-controls-toggle').on('click', function(e) {
+	$(this).toggleClass('active');
 	$('.js-theme-controls').toggleClass('c-theme-controls--active');
 });
 

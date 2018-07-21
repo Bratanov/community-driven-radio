@@ -3,9 +3,18 @@
     width: 4rem;
     height: 4rem;
     transition: fill .3s;
-  
-    &:hover {
-      cursor: pointer;
+  }
+
+  &:hover {
+    cursor: pointer;
+
+    svg {
+      fill: var(--color-primary);
+    }
+  }
+
+  &.active {
+    svg {
       fill: var(--color-primary);
     }
   }
