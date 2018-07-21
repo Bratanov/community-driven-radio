@@ -291,7 +291,7 @@ socket.on('song_info', function(data) {
 			top: $chatHistory.scrollTop(),
 			bottom: $chatHistory.scrollTop() + $chatHistory.height()
 		};
-	
+
 		// get original position relative to parent ($chatHistory)
 		var messagePosition = 0;
 		// position will be incorrect if element is already sticky
@@ -350,7 +350,9 @@ socket.on('related_info', function(data) {
 
 socket.on('be_alerted', function(message) {
 	// alert lolzorz
-	alert(message);
+	toastr.info(message, null, {
+		positionClass: 'toast-bottom-right'
+	});
 });
 
 socket.on('youtube_search', fillAutocompleteOptions);
@@ -613,19 +615,24 @@ $('.js-theme-toggle').on('click', changeTheme);
 
 
 /* Tooltips mudhaflickah, powered by https://popper.js.org */
+var tooltipDelay = { show: 1000, hide: 0 };
 var nameChangeTooltip = new Tooltip($('.js-name-change'), {
 	placement: 'right',
-	title: 'Say My Name'
+	title: 'Say My Name',
+	delay: tooltipDelay
 });
 var muteTooltip = new Tooltip($('.js-mute'), {
 	placement: 'left',
-	title: 'Silence'
+	title: 'Silence',
+	delay: tooltipDelay
 });
 var themeControlsTooltip = new Tooltip($('.js-theme-controls-toggle'), {
 	placement: 'right',
-	title: 'Green Gucci Suit'
+	title: 'Green Gucci Suit',
+	delay: tooltipDelay
 });
 var usersOnlineTooltip = new Tooltip($('.js-users-online'), {
 	placement: 'top',
-	title: 'All The People In The World'
+	title: 'All The People In The World',
+	delay: tooltipDelay
 });
