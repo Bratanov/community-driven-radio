@@ -1,5 +1,6 @@
 .c-footer {
   @extend %columns-container;
+  margin-top: auto;
 
   &__content {
     display: flex;

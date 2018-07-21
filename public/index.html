@@ -11,191 +11,195 @@
     <title>CDR &mdash; your splice of music</title>
   </head>
   <body class="container">
-    <header class="c-header">
-      <div class="c-action-icon js-name-change">
-        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-          width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#fff">
-          <g>
-            <path d="M17.5,50C23.841,50,29,44.841,29,38.5S23.841,27,17.5,27S6,32.159,6,38.5S11.159,50,17.5,50z M9.137,43H13v3.863
-              C11.366,45.981,10.02,44.634,9.137,43z M15,47.655V43h5v4.655C19.202,47.874,18.366,48,17.5,48S15.798,47.874,15,47.655z M15,41v-5
-              h5v5H15z M22,46.863V43h3.863C24.98,44.634,23.634,45.981,22,46.863z M26.655,41H22v-5h4.655C26.873,36.798,27,37.634,27,38.5
-              S26.873,40.202,26.655,41z M25.863,34H22v-3.863C23.634,31.019,24.98,32.366,25.863,34z M20,29.345V34h-5v-4.655
-              C15.798,29.126,16.634,29,17.5,29S19.202,29.126,20,29.345z M13,30.137V34H9.137C10.02,32.366,11.366,31.019,13,30.137z M8.345,36
-              H13v5H8.345C8.127,40.202,8,39.366,8,38.5S8.127,36.798,8.345,36z"/>
-            <path d="M58,34H33v17h25V34z M56,49H35V36h21V49z"/>
-            <path d="M58,26h-7v6h7V26z M56,30h-3v-2h3V30z"/>
-            <path d="M49,26h-7v6h7V26z M47,30h-3v-2h3V30z"/>
-            <path d="M40,26h-7v6h7V26z M38,30h-3v-2h3V30z"/>
-            <path d="M60,7H4v13H0v37h64V20h-4V7z M58,9v2H6V9H58z M6,13h52v7H6V13z M62,55H2V22h60V55z"/>
-          </g>
-        </svg>
-      </div>
-      <div class="header__logo">
-        <img src="img/logo.png" alt="cdr-logo">
-      </div>
-      <div class="c-action-icon js-mute">
-        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-          width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#fff">
-          <g>
-            <path d="M46,40c-4.962,0-9,4.038-9,9s4.038,9,9,9s9-4.038,9-9V-0.237L25,6.191v43.165C23.349,47.312,20.826,46,18,46
-              c-4.962,0-9,4.038-9,9s4.038,9,9,9s9-4.038,9-9V23.809l26-5.571v25.119C51.349,41.312,48.826,40,46,40z M18,62c-3.86,0-7-3.14-7-7
-              s3.14-7,7-7s7,3.14,7,7S21.86,62,18,62z M27,21.763V7.809l26-5.572v13.955L27,21.763z M46,56c-3.86,0-7-3.14-7-7s3.14-7,7-7
-              s7,3.14,7,7S49.86,56,46,56z"/>
-          </g>
-        </svg>
-      </div>
-    </header>
+    <div class="o-content">
 
-    <div class="o-grid u-mb-large">
-      <section class="c-video-player">
-        <figure id="song-container" class="c-video-player__container">
-          <div id="player" class="c-video-player__youtube-player"></div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
-            version="1.1"
-            id="Capa_1"
-            x="0px"
-            y="0px" 
-            viewBox="0 0 128 128"
-            style="enable-background:new 0 0 128 128;"
-            xml:space="preserve"
-            class="c-video-player__background"
-          >
+      <header class="c-header">
+        <div class="c-action-icon js-name-change">
+          <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#fff">
             <g>
-              <path d="M122,8H6c-3.3,0-6,2.7-6,6v80c0,3.3,2.7,6,6,6h46c0,1.719-0.89,9.083-4.469,16H42v1.55c0,1.348,1.102,2.45,2.449,2.45   h39.102c1.347,0,2.449-1.102,2.449-2.45V116h-5.531C76.89,109.083,76,101.719,76,100h46c3.3,0,6-2.7,6-6V14C128,10.7,125.3,8,122,8   z M85,117v0.55c0,0.8-0.65,1.45-1.449,1.45H44.449C43.65,119,43,118.35,43,117.55V117H85z M79.343,116H48.656   C52.123,109.112,53,101.744,53,100h22C75,101.744,75.877,109.114,79.343,116z M126,94c0,2.206-1.794,4-4,4H6c-2.206,0-4-1.794-4-4   V83h124V94z M126,82H2V14c0-2.206,1.794-4,4-4h116c2.206,0,4,1.794,4,4V82z" fill="#FFFFFF"/>
+              <path d="M17.5,50C23.841,50,29,44.841,29,38.5S23.841,27,17.5,27S6,32.159,6,38.5S11.159,50,17.5,50z M9.137,43H13v3.863
+                C11.366,45.981,10.02,44.634,9.137,43z M15,47.655V43h5v4.655C19.202,47.874,18.366,48,17.5,48S15.798,47.874,15,47.655z M15,41v-5
+                h5v5H15z M22,46.863V43h3.863C24.98,44.634,23.634,45.981,22,46.863z M26.655,41H22v-5h4.655C26.873,36.798,27,37.634,27,38.5
+                S26.873,40.202,26.655,41z M25.863,34H22v-3.863C23.634,31.019,24.98,32.366,25.863,34z M20,29.345V34h-5v-4.655
+                C15.798,29.126,16.634,29,17.5,29S19.202,29.126,20,29.345z M13,30.137V34H9.137C10.02,32.366,11.366,31.019,13,30.137z M8.345,36
+                H13v5H8.345C8.127,40.202,8,39.366,8,38.5S8.127,36.798,8.345,36z"/>
+              <path d="M58,34H33v17h25V34z M56,49H35V36h21V49z"/>
+              <path d="M58,26h-7v6h7V26z M56,30h-3v-2h3V30z"/>
+              <path d="M49,26h-7v6h7V26z M47,30h-3v-2h3V30z"/>
+              <path d="M40,26h-7v6h7V26z M38,30h-3v-2h3V30z"/>
+              <path d="M60,7H4v13H0v37h64V20h-4V7z M58,9v2H6V9H58z M6,13h52v7H6V13z M62,55H2V22h60V55z"/>
             </g>
           </svg>
-        </figure>
-      </section>
-      <section class="c-chat">
-        <div class="c-chat-history">
-          <div id="chat-history" class="c-chat-history__messages">
-            <!-- t-message || t-system-message -->
+        </div>
+        <div class="header__logo">
+          <img src="img/logo.png" alt="cdr-logo">
+        </div>
+        <div class="c-action-icon js-mute">
+          <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#fff">
+            <g>
+              <path d="M46,40c-4.962,0-9,4.038-9,9s4.038,9,9,9s9-4.038,9-9V-0.237L25,6.191v43.165C23.349,47.312,20.826,46,18,46
+                c-4.962,0-9,4.038-9,9s4.038,9,9,9s9-4.038,9-9V23.809l26-5.571v25.119C51.349,41.312,48.826,40,46,40z M18,62c-3.86,0-7-3.14-7-7
+                s3.14-7,7-7s7,3.14,7,7S21.86,62,18,62z M27,21.763V7.809l26-5.572v13.955L27,21.763z M46,56c-3.86,0-7-3.14-7-7s3.14-7,7-7
+                s7,3.14,7,7S49.86,56,46,56z"/>
+            </g>
+          </svg>
+        </div>
+      </header>
+
+      <div class="o-grid u-mb-large">
+        <section class="c-video-player">
+          <figure id="song-container" class="c-video-player__container">
+            <div id="player" class="c-video-player__youtube-player"></div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              version="1.1"
+              id="Capa_1"
+              x="0px"
+              y="0px" 
+              viewBox="0 8 128 112"
+              style="enable-background:new 0 8 128 112;"
+              xml:space="preserve"
+              class="c-video-player__background"
+            >
+              <g>
+                <path d="M122,8H6c-3.3,0-6,2.7-6,6v80c0,3.3,2.7,6,6,6h46c0,1.719-0.89,9.083-4.469,16H42v1.55c0,1.348,1.102,2.45,2.449,2.45   h39.102c1.347,0,2.449-1.102,2.449-2.45V116h-5.531C76.89,109.083,76,101.719,76,100h46c3.3,0,6-2.7,6-6V14C128,10.7,125.3,8,122,8   z M85,117v0.55c0,0.8-0.65,1.45-1.449,1.45H44.449C43.65,119,43,118.35,43,117.55V117H85z M79.343,116H48.656   C52.123,109.112,53,101.744,53,100h22C75,101.744,75.877,109.114,79.343,116z M126,94c0,2.206-1.794,4-4,4H6c-2.206,0-4-1.794-4-4   V83h124V94z M126,82H2V14c0-2.206,1.794-4,4-4h116c2.206,0,4,1.794,4,4V82z" fill="#FFFFFF"/>
+              </g>
+            </svg>
+          </figure>
+        </section>
+        <section class="c-chat">
+          <div class="c-chat-history">
+            <div id="chat-history" class="c-chat-history__messages">
+              <!-- t-message || t-system-message -->
+            </div>
+            <form action="#" class="c-message-form">
+              <input type="textarea" id="message-input" class="c-input-oval" placeholder="Type your message here...">
+              <button id="message-submit" class="c-btn c-message-form__submit">
+                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                  viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve"
+                >
+                  <g>
+                    <polyline fill="none" stroke="#000000" stroke-width="2" stroke-linejoin="bevel" stroke-miterlimit="10" points="13,33 25,45 49,21"/>
+                  </g>
+                  <g>
+                    <circle fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" cx="32" cy="32" r="30.999"/>
+                  </g>
+                </svg>
+              </button>
+            </form>
           </div>
-          <form action="#" class="c-message-form">
-            <input type="textarea" id="message-input" class="c-input-oval" placeholder="Type your message here...">
-            <button id="message-submit" class="c-btn c-message-form__submit">
+        </section>
+        <section class="c-song-queue">
+          <h2 class="u-h2">Queue:</h2>
+          <h3 class="u-h3 u-h-secondary u-mb-large">(Highest voted will play first)</h3>
+          <ol id="queue-list" class="c-queue-list">
+            <!-- t-queue-list-item -->
+          </ol>
+        </section>
+        <section class="c-related">
+          <h2 class="u-h2 u-mb-small">Add Song to Queue:</h2>
+          <form action="#" class="c-add-form">
+            <input type="text" id="badass-search" class="c-input-basic" placeholder="Paste youtube URL or ID here">
+            <button id="badaass-song-add" class="c-btn c-add-form__btn-add">
               <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve"
-              >
+                viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
                 <g>
-                  <polyline fill="none" stroke="#000000" stroke-width="2" stroke-linejoin="bevel" stroke-miterlimit="10" points="13,33 25,45 49,21"/>
-                </g>
-                <g>
-                  <circle fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" cx="32" cy="32" r="30.999"/>
+                <polygon points="31,50 33,50 33,33 50,33 50,31 33,31 33,14 31,14 31,31 14,31 14,33 31,33 	"/>
+                  <path d="M31.999,64C32,64,32,64,32.001,64c8.548,0,16.584-3.33,22.627-9.373c6.044-6.043,9.371-14.08,9.371-22.628
+                  s-3.328-16.584-9.371-22.627C48.584,3.329,40.549,0,32.001,0c0,0-0.001,0-0.002,0C23.451,0,15.415,3.329,9.372,9.373
+                  c-6.044,6.044-9.371,14.081-9.371,22.628s3.328,16.584,9.371,22.627C15.416,60.671,23.451,64,31.999,64z M10.786,10.787
+                  C16.452,5.121,23.986,2,32.001,2c0.001,0,0.001,0,0.002,0c8.012,0,15.546,3.121,21.211,8.786c5.666,5.666,8.785,13.2,8.785,21.213
+                  s-3.119,15.548-8.785,21.214S40.015,62,32.001,62h-0.002c-0.001,0-0.001,0-0.002,0c-8.012,0-15.546-3.121-21.211-8.786
+                  c-5.666-5.666-8.785-13.2-8.785-21.213C2.001,23.987,5.12,16.453,10.786,10.787z"/>
                 </g>
               </svg>
             </button>
           </form>
-        </div>
-      </section>
-      <section class="c-song-queue">
-        <h2 class="u-h2">Queue:</h2>
-        <h3 class="u-h3 u-h-secondary u-mb-large">(Highest voted will play first)</h3>
-        <ol id="queue-list" class="c-queue-list">
-          <!-- t-queue-list-item -->
-        </ol>
-      </section>
-      <section class="c-related">
-        <h2 class="u-h2 u-mb-small">Add Song to Queue:</h2>
-        <form action="#" class="c-add-form">
-          <input type="text" id="badass-search" class="c-input-basic" placeholder="Paste youtube URL or ID here">
-          <button id="badaass-song-add" class="c-btn c-add-form__btn-add">
+          <h2 class="u-h2">Related:</h2>
+          <h3 class="u-h3 u-h-secondary u-mb-small">(First one will play if nothing in queue)</h3>
+          <ul id="related-list">
+            <!-- t-related-list-item -->
+          </ul>
+        </section>
+      </div>
+
+      <footer class="c-footer">
+        <div class="c-controls-container">
+          <div class="c-theme-controls js-theme-controls">
+            <p>Themes</p>
+            <div class="c-theme-controls__toggle">
+              <div>
+                <input class="c-tgl c-tgl-light js-theme-toggle" id="calm-green" type="checkbox"/>
+                <label class="c-tgl-btn" for="calm-green"></label>
+              </div>
+              <span>Calm green</span>
+            </div>
+            <div class="c-theme-controls__toggle">
+              <div>
+                <input class="c-tgl c-tgl-light js-theme-toggle" id="crazy-orange" type="checkbox"/>
+                <label class="c-tgl-btn" for="crazy-orange"></label>
+              </div>
+              <span>Crazy orange</span>
+            </div>
+            <div class="c-theme-controls__toggle">
+              <div>
+                <input class="c-tgl c-tgl-light js-theme-toggle" id="water-color" type="checkbox"/>
+                <label class="c-tgl-btn" for="water-color"></label>
+              </div>
+              <span>Water color</span>
+            </div>
+            <div class="c-theme-controls__toggle">
+              <div>
+                <input class="c-tgl c-tgl-light js-theme-toggle" id="beauty-lila" type="checkbox"/>
+                <label class="c-tgl-btn" for="beauty-lila"></label>
+              </div>
+              <span>Beauty lila</span>
+            </div>
+          </div>
+          <div class="c-action-icon js-theme-controls-toggle">
             <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-              viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+            width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#fff">
               <g>
-              <polygon points="31,50 33,50 33,33 50,33 50,31 33,31 33,14 31,14 31,31 14,31 14,33 31,33 	"/>
-                <path d="M31.999,64C32,64,32,64,32.001,64c8.548,0,16.584-3.33,22.627-9.373c6.044-6.043,9.371-14.08,9.371-22.628
-                s-3.328-16.584-9.371-22.627C48.584,3.329,40.549,0,32.001,0c0,0-0.001,0-0.002,0C23.451,0,15.415,3.329,9.372,9.373
-                c-6.044,6.044-9.371,14.081-9.371,22.628s3.328,16.584,9.371,22.627C15.416,60.671,23.451,64,31.999,64z M10.786,10.787
-                C16.452,5.121,23.986,2,32.001,2c0.001,0,0.001,0,0.002,0c8.012,0,15.546,3.121,21.211,8.786c5.666,5.666,8.785,13.2,8.785,21.213
-                s-3.119,15.548-8.785,21.214S40.015,62,32.001,62h-0.002c-0.001,0-0.001,0-0.002,0c-8.012,0-15.546-3.121-21.211-8.786
-                c-5.666-5.666-8.785-13.2-8.785-21.213C2.001,23.987,5.12,16.453,10.786,10.787z"/>
+                <path d="M0,64h64V0H0V64z M2,2h60v60H2V2z"/>
+                <polygon points="17,10 15,10 15,13 10,13 10,15 15,15 15,54 17,54 17,15 22,15 22,13 17,13"/>
+                <polygon points="49,10 47,10 47,49 42,49 42,51 47,51 47,54 49,54 49,51 54,51 54,49 49,49"/>
+                <polygon points="33,10 31,10 31,31 26,31 26,33 31,33 31,54 33,54 33,33 38,33 38,31 33,31"/>
               </g>
             </svg>
-          </button>
-        </form>
-        <h2 class="u-h2">Related:</h2>
-        <h3 class="u-h3 u-h-secondary u-mb-small">(First one will play if nothing in queue)</h3>
-        <ul id="related-list">
-          <!-- t-related-list-item -->
-        </ul>
-      </section>
-    </div>
+          </div>
+        </div>
+        <div class="c-footer__content">
+          <p class="c-footer__text">
+            &lt;/&gt; with &hearts; by <a href="https://devlabs.bg">DevLabs</a>
+          </p>
+          <div class="c-footer__text">
+            Icons made by 
+            <a href="https://www.flaticon.com/authors/dale-humphries" title="Dale Humphries">Dale Humphries</a> 
+            from 
+            <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> 
+            is licensed by 
+            <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
+          </div>
+        </div>
+        <div class="c-footer__users">
+          <div class="c-footer__users-count"><span id="users-count">-</span> users online</div>
+          <div class="c-action-icon js-users-online">
+            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+              width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#fff">
+              <g>
+                <path d="M53,32h-1v-5c0-0.17-0.229-17-20-17S12,26.83,12,27v5h-1C4.935,32,0,36.935,0,43s4.935,11,11,11h3V36v-4v-5
+                  c0-0.612,0.205-15,18-15c17.739,0,17.998,14.389,18,15v5v1v21h3c6.065,0,11-4.935,11-11S59.065,32,53,32z M12,52h-1
+                  c-4.963,0-9-4.038-9-9s4.037-9,9-9h1v2V52z M53,52h-1V34h1c4.963,0,9,4.038,9,9S57.963,52,53,52z"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </footer>
 
-    <footer class="c-footer">
-      <div class="c-controls-container">
-        <div class="c-theme-controls js-theme-controls">
-          <p>Themes</p>
-          <div class="c-theme-controls__toggle">
-            <div>
-              <input class="c-tgl c-tgl-light js-theme-toggle" id="calm-green" type="checkbox"/>
-              <label class="c-tgl-btn" for="calm-green"></label>
-            </div>
-            <span>Calm green</span>
-          </div>
-          <div class="c-theme-controls__toggle">
-            <div>
-              <input class="c-tgl c-tgl-light js-theme-toggle" id="crazy-orange" type="checkbox"/>
-              <label class="c-tgl-btn" for="crazy-orange"></label>
-            </div>
-            <span>Crazy orange</span>
-          </div>
-          <div class="c-theme-controls__toggle">
-            <div>
-              <input class="c-tgl c-tgl-light js-theme-toggle" id="water-color" type="checkbox"/>
-              <label class="c-tgl-btn" for="water-color"></label>
-            </div>
-            <span>Water color</span>
-          </div>
-          <div class="c-theme-controls__toggle">
-            <div>
-              <input class="c-tgl c-tgl-light js-theme-toggle" id="beauty-lila" type="checkbox"/>
-              <label class="c-tgl-btn" for="beauty-lila"></label>
-            </div>
-            <span>Beauty lila</span>
-          </div>
-        </div>
-        <div class="c-action-icon js-theme-controls-toggle">
-          <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-          width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#fff">
-            <g>
-              <path d="M0,64h64V0H0V64z M2,2h60v60H2V2z"/>
-              <polygon points="17,10 15,10 15,13 10,13 10,15 15,15 15,54 17,54 17,15 22,15 22,13 17,13"/>
-              <polygon points="49,10 47,10 47,49 42,49 42,51 47,51 47,54 49,54 49,51 54,51 54,49 49,49"/>
-              <polygon points="33,10 31,10 31,31 26,31 26,33 31,33 31,54 33,54 33,33 38,33 38,31 33,31"/>
-            </g>
-          </svg>
-        </div>
-      </div>
-      <div class="c-footer__content">
-        <p class="c-footer__text">
-          &lt;/&gt; with &hearts; by <a href="https://devlabs.bg">DevLabs</a>
-        </p>
-        <div class="c-footer__text">
-          Icons made by 
-          <a href="https://www.flaticon.com/authors/dale-humphries" title="Dale Humphries">Dale Humphries</a> 
-          from 
-          <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> 
-          is licensed by 
-          <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
-        </div>
-      </div>
-      <div class="c-footer__users">
-        <div class="c-footer__users-count"><span id="users-count">-</span> users online</div>
-        <div class="c-action-icon js-users-online">
-          <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-            width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#fff">
-            <g>
-              <path d="M53,32h-1v-5c0-0.17-0.229-17-20-17S12,26.83,12,27v5h-1C4.935,32,0,36.935,0,43s4.935,11,11,11h3V36v-4v-5
-                c0-0.612,0.205-15,18-15c17.739,0,17.998,14.389,18,15v5v1v21h3c6.065,0,11-4.935,11-11S59.065,32,53,32z M12,52h-1
-                c-4.963,0-9-4.038-9-9s4.037-9,9-9h1v2V52z M53,52h-1V34h1c4.963,0,9,4.038,9,9S57.963,52,53,52z"/>
-            </g>
-          </svg>
-        </div>
-      </div>
-    </footer>
+    </div>
 
     <dialog id="username-dialog" class="c-dialog">
       <div class="c-dialog-container">
