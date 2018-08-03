@@ -89,14 +89,15 @@
 
   &__submit {
     position: absolute;
+    color: var(--color-secondary); // to be picked up from currentColor
     width: 3rem;
     height: 3rem;
     bottom: 0.6rem;
     right: 1.1rem;
 
     svg {
-      polyline, circle {
-        stroke: var(--color-secondary);
+      path {
+        fill: var(--color-secondary);
       }
     }
   }
