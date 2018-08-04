@@ -646,6 +646,12 @@ $('.js-theme-controls-toggle').on('click', function(e) {
 
 $('.js-theme-toggle').on('click', changeTheme);
 
+/* Users online label toggle */
+var toggleUsersOnline = function(e) {
+	$(this).toggleClass('active');
+	$('.js-users-count').toggleClass('u-hidden');
+}
+$('.js-users-online').on('click', toggleUsersOnline)
 
 /* Tooltips mudhaflickah, powered by https://popper.js.org */
 var tooltipDelay = { show: 1000, hide: 0 };

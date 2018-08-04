@@ -81,7 +81,7 @@
 @import "tools/tools.placeholders";
 //@import "tools/tools.font-size";
 //@import "tools/tools.clearfix";
-//@import "tools/tools.hidden";
+@import "node_modules/inuitcss/tools/tools.hidden";
 //@import "node_modules/sass-mq/mq";
 
 
@@ -168,5 +168,5 @@
 @import "utilities/utilities.spacings";
 //@import "utilities/utilities.responsive-spacings";
 //@import "utilities/utilities.print";
-//@import "utilities/utilities.hide";
+@import "node_modules/inuitcss/utilities/utilities.hide";
 @import "utilities/utilities.positions";
