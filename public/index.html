@@ -122,33 +122,33 @@
 
     <dialog id="username-dialog" class="c-dialog">
       <div class="c-dialog-container">
-        <form method="dialog" id="username-form" class="username-form">
-          <h1 class="u-h1 username-form__heading">Community Driven Radio</h1>
-          <section class="username-form__content">
-            <div class="username-form__content-item--primary">
+        <form method="dialog" id="username-form" class="c-username-form">
+          <h1 class="c-username-form__heading u-h1">Community Driven Radio</h1>
+          <section class="c-username-form__content">
+            <div class="c-username-form__content-item--primary">
               <label for="username-input" class="u-center">
                 <h2 class="u-h2">Please ener your (nick) name</h2>
                 <h3 class="u-h3 u-h-secondary u-mb-small">(It will be visible for all CDRadio users)</h3>
               </label>
               <input type="text" id="username-input" class="c-input-basic" placeholder="Your (nick) name"> 
             </div>
-            <div class="username-form__content-item--secondary">
+            <div class="c-username-form__content-item--secondary">
               <div class="u-h3 u-h-secondary u-center">- or -</div>
             </div>
-            <div class="username-form__content-item--primary">
+            <div class="c-username-form__content-item--primary">
               <label for="special-username-input" class="u-center">
                 <h2 class="u-h2">Select from specials</h2>
                 <h3 class="u-h3 u-h-secondary u-mb-small">(Special selection for you)</h3>
               </label>
-              <div class="username-form__select-wrapper">
-                <select id="badass-usernames" class="c-input-oval username-form__select">
+              <div class="c-username-form__select-wrapper">
+                <select id="badass-usernames" class="c-input-oval c-username-form__select">
                   <option value="" disabled selected>Your (nick) name</option>
                 </select>
                 <img class="js-svg-injection-baby" data-src="img/arrow_up.svg">
               </div>
             </div>
           </section>
-          <menu class="username-form__actions">
+          <menu class="c-username-form__actions">
             <button class="c-btn c-btn--enter" type="submit"></button>
           </menu>
         </form>

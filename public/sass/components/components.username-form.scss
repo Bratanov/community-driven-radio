@@ -1,8 +1,10 @@
-.username-form {
+.c-username-form {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   width: 70vw;
   height: 70vh;
+  min-height: 47rem;
   padding: 5rem;
   border-radius: 3rem;
   background-image: linear-gradient(
