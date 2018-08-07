@@ -1,0 +1,58 @@
+/**
+ * Credits to Kelley Rose for this awesome animation.
+ * https://codepen.io/kelleyrose/pen/PJqxVm
+ */
+.c-sound-wave {
+  width: 6rem;
+  height: 5rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  cursor: pointer;
+
+  &__bar {
+    display: block;
+    width: 2px;
+    height: 33%;
+    background: var(--color-primary);
+    animation: sound 0ms -800ms linear infinite alternate;
+    transition: height 0.8s;
+
+    &:nth-child(1)   { animation-duration: 474ms; }
+    &:nth-child(2)   { animation-duration: 433ms; }
+    &:nth-child(3)   { animation-duration: 407ms; }
+    &:nth-child(4)   { animation-duration: 458ms; }
+    &:nth-child(5)   { animation-duration: 400ms; }
+    &:nth-child(6)   { animation-duration: 427ms; }
+    &:nth-child(7)   { animation-duration: 441ms; }
+    &:nth-child(8)   { animation-duration: 419ms; }
+    &:nth-child(9)   { animation-duration: 487ms; }
+    &:nth-child(10)  { animation-duration: 442ms; }
+    &:nth-child(11)  { animation-duration: 474ms; }
+    &:nth-child(12)  { animation-duration: 433ms; }
+    &:nth-child(13)  { animation-duration: 407ms; }
+    &:nth-child(14)  { animation-duration: 458ms; }
+    &:nth-child(15)  { animation-duration: 400ms; }
+    &:nth-child(16)  { animation-duration: 427ms; }
+    &:nth-child(17)  { animation-duration: 441ms; }
+    &:nth-child(18)  { animation-duration: 419ms; }
+    &:nth-child(19)  { animation-duration: 487ms; }
+    &:nth-child(20)  { animation-duration: 442ms; }
+  }
+
+  &--stopped &__bar {
+    animation-iteration-count: 1;
+    animation-fill-mode: backwards;
+  }
+}
+
+@keyframes sound {
+  0% {
+     opacity: .35;
+      height: .5rem;
+  }
+  100% {
+      opacity: 1;
+      height: 100%;
+  }
+}

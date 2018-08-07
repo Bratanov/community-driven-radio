@@ -444,6 +444,19 @@ var renderer = {
 renderer.injectSvgs()
 
 /**
+ * A soundwave animation
+ */
+var soundWave = {
+	$element: $('.js-sound-wave'),
+	play: function() {
+		this.$element.removeClass('c-sound-wave--stopped');
+	},
+	stop: function() {
+		this.$element.addClass('c-sound-wave--stopped');
+	}
+}
+
+/**
  * A player object
  */
 var player = {
@@ -502,7 +515,8 @@ var player = {
 		})[0].toLowerCase() + ".");
 		switch (self.instance.getPlayerState()) {
 			case YT.PlayerState.PAUSED:
-				// player paused. do nothing. for now.
+				// player paused.
+				soundWave.stop();
 				break;
 			case YT.PlayerState.PLAYING:
 				// player resumed, seek video to server time.
@@ -514,6 +528,7 @@ var player = {
 				} else {
 					self.seekedFromCode = false;
 				}
+				soundWave.play();
 				break;
 		}
 	},
