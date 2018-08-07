@@ -1,7 +1,7 @@
 .c-video-player {
   grid-column: col-start-1 / col-end-1;
 
-  @media only screen and (max-width: $bp-medium) {
+  @include mq($until: desktop) {
     grid-column: col-start-1 / col-end-2;
   }
 

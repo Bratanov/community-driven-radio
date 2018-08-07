@@ -35,7 +35,7 @@
     color: var(--color-primary);
     margin-right: 1.8rem;
 
-    @media only screen and (max-width: $bp-small) {
+    @include mq($until: tablet) {
       margin-right: 0.5rem;
     }
   }

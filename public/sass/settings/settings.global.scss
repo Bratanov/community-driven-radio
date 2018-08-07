@@ -13,6 +13,10 @@ $global-radius: 3px !default;
 $global-transition: all 300ms ease-in-out !default;
 
 // RESPONSIVE BREAKPOINTS
-$bp-large: 75em; // 1200px
-$bp-medium: 62.5em; // 1000px
-$bp-small: 43.75em; // 700px
+$mq-media-type: screen;
+$mq-breakpoints: (
+  mobile:  25em, // 400px
+  tablet:  43.75em, // 700px
+  desktop: 62.5em, // 1000px
+  wide:    75em // 1200px
+);
