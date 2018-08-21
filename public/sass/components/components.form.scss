@@ -10,15 +10,10 @@
   margin-bottom: .3rem;
   //transition: all .3s; // TODO: this looks bad, margin and padding are animated with different speed
 
-  &:focus,
-  &:active {
-    padding-bottom: 1.4rem;
-    margin-bottom: 0;
-  }
-
   &::placeholder {
     color: #000;
     opacity: .5;
+    font-style: italic;
   }
 }
 
