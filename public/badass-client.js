@@ -607,12 +607,12 @@ function queryStringToObj(q) {
 $('.js-mute').on('click', function(e) {
 	if (player.isMuted()) {
 		player.unMute();
-		$(this).removeClass('active');
+		$(this).find('.c-icon').removeClass('active');
 		return;
 	}
 
 	player.mute();
-	$(this).addClass('active');
+	$(this).find('.c-icon').addClass('active');
 });
 
 

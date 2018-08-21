@@ -49,4 +49,11 @@
     background: url('/img/icon-headphones-user.svg') no-repeat center center;
     background-size: 24px;
   }
+  &--musical-note {
+    background: url('/img/icon-musical-note.svg') no-repeat center center;
+    background-size: 20px;
+    &.active {
+      opacity: .5;
+    }
+  }
 }
