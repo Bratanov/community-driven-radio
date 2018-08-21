@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-labelledby="title"
+aria-describedby="desc" role="img" xmlns:xlink="http://www.w3.org/1999/xlink"
+width="128" height="128">
+  <title>Musical Note</title>
+  <desc>A line styled icon from Orion Icon Library.</desc>
+  <path data-name="layer2"
+  d="M16 52a8 8 0 0 0 16 0v-8h-8a8 8 0 0 0-8 8zm16-36v28" fill="none" stroke="#ffffff"
+  stroke-miterlimit="10" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path>
+  <path data-name="layer1" d="M32 4v12s4 0 16 2C48 6.3 38 8 32 4z"
+  fill="none" stroke="#ffffff" stroke-miterlimit="10" stroke-width="2" stroke-linejoin="round"
+  stroke-linecap="round"></path>
+</svg>

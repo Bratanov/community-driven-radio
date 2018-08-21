@@ -1,0 +1,52 @@
+/* ==========================================================================
+   #ICONS
+   ========================================================================== */
+
+/**
+ * Default styling for icons.
+ */
+
+.c-icon {
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  display: block;
+  margin: 0 auto;
+  &--small {
+    width: 30px;
+    height: 30px;
+  }
+  &--bordered {
+    border: 1px solid #fff;
+    border-radius: 50%;
+    transition: all .4s ease;
+    &:hover,
+    &:active {
+      //transform: rotate(360deg);
+    }
+  }
+  &--settings {
+    background: url('/img/icon-settings.svg') no-repeat center center;
+    background-size: 20px;
+  }
+  &--search {
+    background: url('/img/icon-search.svg') no-repeat center center;
+    background-size: 20px;
+  }
+  &--plus {
+    background: url('/img/icon-plus.svg') no-repeat center center;
+    background-size: 16px;
+  }
+  &--arrow-up {
+    background: url('/img/icon-arrow-up.svg') no-repeat center center;
+    background-size: 26px;
+  }
+  &--chat {
+    background: url('/img/icon-chat.svg') no-repeat center center;
+    background-size: 20px;
+  }
+  &--headphones-user {
+    background: url('/img/icon-headphones-user.svg') no-repeat center center;
+    background-size: 24px;
+  }
+}
