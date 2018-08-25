@@ -1,0 +1,15 @@
+@mixin iconBackgroundContent($iconUrl, $color: var(--color-text-primary)) {
+  // #1 default background strategy
+  background-image: url($iconUrl);
+  background-size: cover;
+
+  // #2 set icon as mask if supported
+  @supports (-webkit-mask-image: url()) or (mask-image: url()) {
+    background-image: none; // reset default
+    background-color: $color;
+    -webkit-mask: url($iconUrl) center no-repeat;
+    -webkit-mask-size: cover;
+    mask: url($iconUrl) center no-repeat;
+    mask-size: cover;
+  }
+}

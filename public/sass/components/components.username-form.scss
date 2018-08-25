@@ -40,27 +40,24 @@
 
   &__select-wrapper {
     position: relative;
-
-    svg {
-      position: absolute;
-      bottom: 0.6rem;
-      right: 0.6rem;
-      width: 3rem;
-      height: 3rem;
-      transform: rotate(180deg);
-      pointer-events: none;
-      
-      polygon, path {
-        fill: var(--color-secondary);
-      }
-    }
   }
-  
+
   &__select {
     -moz-appearance: window;
     -webkit-appearance: none;
     appearance: none;
-    background: #fff url('/img/arrow_circle_up.svg') right center no-repeat;
+    background: #fff;
     cursor: pointer;
+  }
+
+  &__select-icon {
+    position: absolute;
+    bottom: 0.6rem;
+    right: 0.6rem;
+    width: 3rem;
+    height: 3rem;
+    pointer-events: none;
+    @include iconBackgroundContent('/img/arrow_up.svg', var(--color-secondary));
+    transform: rotate(180deg);
   }
 }
