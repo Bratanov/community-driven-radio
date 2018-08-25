@@ -647,7 +647,7 @@ var changeTheme = function(e) {
 setDefaultTheme();
 
 $('.js-theme-controls-toggle').on('click', function(e) {
-	$(this).toggleClass('active');
+	$(this).find('.c-icon').toggleClass('active');
 	$('.js-theme-controls').toggleClass('c-theme-controls--active');
 });
 
@@ -655,7 +655,7 @@ $('.js-theme-toggle').on('click', changeTheme);
 
 /* Users online label toggle */
 var toggleUsersOnline = function(e) {
-	$(this).toggleClass('active');
+	$(this).find('.c-icon').toggleClass('active');
 	$('.js-users-count').toggleClass('u-hidden');
 }
 $('.js-users-online').on('click', toggleUsersOnline)
@@ -678,7 +678,7 @@ var themeControlsTooltip = new Tooltip($('.js-theme-controls-toggle'), {
 	delay: tooltipDelay
 });
 var usersOnlineTooltip = new Tooltip($('.js-users-online'), {
-	placement: 'top',
+	placement: 'top-end',
 	title: 'All The People In The World',
 	delay: tooltipDelay
 });

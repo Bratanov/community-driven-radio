@@ -24,17 +24,16 @@
   }
 
   &__users {
+    position: relative;
     display: flex;
     align-items: center;
   }
 
   &__users-count {
+    position: absolute;
+    right: 5.5rem;
     font-size: 1.5rem;
+    white-space: nowrap;
     color: var(--color-primary);
-    margin-right: 1.8rem;
-
-    @include mq($until: tablet) {
-      margin-right: 0.5rem;
-    }
   }
 }
