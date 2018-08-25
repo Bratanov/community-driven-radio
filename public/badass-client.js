@@ -432,16 +432,8 @@ var renderer = {
 		$clone.find('.c-chat-history__timer').text(duration + ' sec.');
 
 		return $clone;
-	},
-
-	injectSvgs: function() {
-		var $svgs = $('.js-svg-injection-baby')
-		SVGInjector($svgs)
 	}
 };
-
-/* inject all svgs into template */
-renderer.injectSvgs()
 
 /**
  * A soundwave animation
