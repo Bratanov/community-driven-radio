@@ -35,6 +35,7 @@
     height: 100%;
     padding-right: .5rem;
     overflow-y: scroll;
+    overflow-x: hidden;
   }
 
   &__item {
@@ -83,6 +84,11 @@
   &__author {
     color: var(--color-text-silver-light);
     padding-right: 1rem;
+  }
+
+  &__message {
+    overflow: hidden;
+    word-wrap: break-word;
   }
 
   &__timer {
