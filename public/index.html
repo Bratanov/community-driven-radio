@@ -56,18 +56,20 @@
           </figure>
         </section>
         <section class="c-chat">
-          <div class="c-chat-history">
-            <div id="chat-history" class="c-chat-history__messages">
-              <!-- t-message || t-system-message -->
+          <div class="c-chat__container">
+            <div class="c-chat-history">
+              <div id="chat-history" class="c-chat-history__messages">
+                <!-- t-message || t-system-message -->
+              </div>
+              <form action="#" class="c-message-form">
+                <input type="textarea" id="message-input" class="c-input-basic" placeholder="Type your message here...">
+                <button id="message-submit" class="c-btn c-message-form__submit">
+                  <span class="c-icon c-icon--small c-icon--bordered">
+                    <i class="c-icon__content c-icon__content--chat"></i>
+                  </span>
+                </button>
+              </form>
             </div>
-            <form action="#" class="c-message-form">
-              <input type="textarea" id="message-input" class="c-input-basic" placeholder="Type your message here...">
-              <button id="message-submit" class="c-btn c-message-form__submit">
-                <span class="c-icon c-icon--small c-icon--bordered">
-                  <i class="c-icon__content c-icon__content--chat"></i>
-                </span>
-              </button>
-            </form>
           </div>
         </section>
         <section class="c-song-queue">
