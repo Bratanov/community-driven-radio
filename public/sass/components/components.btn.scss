@@ -17,4 +17,21 @@
     background-image: url(../img/play.svg);
     background-size: cover;
   }
+
+  &--link {
+    color: var(--color-text-silver-dark);
+    font-size: 1.2rem;
+    text-align: center;
+
+    // override defaults
+    &:active {
+      box-shadow: none;
+      border-radius: 0;
+    }
+
+    &:active,
+    &:hover {
+      color: var(--color-primary);
+    }
+  }
 }
