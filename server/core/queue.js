@@ -3,6 +3,7 @@ const Song = require('./song.js');
 const Logger = require('./logger.js');
 const YoutubeApi = require('./youtube-api.js');
 const youTubeApi = new YoutubeApi(process.env.YOUTUBE_API_KEY);
+const _ = require('lodash');
 
 /**
  * Contains the list of songs and plays the next one at the correct time
@@ -64,23 +65,10 @@ class Queue {
 	 * @return {[Song]} Array of song items, sorted by votes/position
 	 */
 	getItems() {
-		// Make a fresh copy of the original items
-		let copyItems = this.items.slice();
-
-		// sort by votes
-		copyItems.sort((item1, item2) => {
-			if(item1.votes > item2.votes) {
-				return -1;
-			}
-
-			if(item1.votes < item2.votes) {
-				return 1;
-			}
-
-			return 0;
-		});
-
-		return copyItems;
+		// sort by votes, using lodash's *stable* sorting
+		// in order to preserve the original order of
+		// similar voted songs based on time added
+		return _.sortBy(this.items, (item) => item.votes);
 	}
 
 	/**
