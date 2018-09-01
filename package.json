@@ -10,14 +10,18 @@
     "socket.io": "^1.4.5"
   },
   "devDependencies": {
+    "chai": "^4.1.2",
     "docdash": "^0.4.0",
     "fs-extra": "^2.1.2",
-    "jsdoc": "^3.4.3"
+    "jsdoc": "^3.4.3",
+    "lodash": "^4.17.10",
+    "mocha": "^5.2.0",
+    "sinon": "^6.1.5"
   },
   "scripts": {
     "start": "node radio.js",
     "publish-docs": "node server/scripts/publish-gh-pages.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "keywords": [
     "radio"
