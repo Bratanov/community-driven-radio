@@ -432,16 +432,8 @@ var renderer = {
 		$clone.find('.c-chat-history__timer').text(duration + ' sec.');
 
 		return $clone;
-	},
-
-	injectSvgs: function() {
-		var $svgs = $('.js-svg-injection-baby')
-		SVGInjector($svgs)
 	}
 };
-
-/* inject all svgs into template */
-renderer.injectSvgs()
 
 /**
  * A soundwave animation
@@ -607,12 +599,12 @@ function queryStringToObj(q) {
 $('.js-mute').on('click', function(e) {
 	if (player.isMuted()) {
 		player.unMute();
-		$(this).removeClass('active');
+		$(this).find('.c-icon').removeClass('active');
 		return;
 	}
 
 	player.mute();
-	$(this).addClass('active');
+	$(this).find('.c-icon').addClass('active');
 });
 
 
@@ -655,7 +647,7 @@ var changeTheme = function(e) {
 setDefaultTheme();
 
 $('.js-theme-controls-toggle').on('click', function(e) {
-	$(this).toggleClass('active');
+	$(this).find('.c-icon').toggleClass('active');
 	$('.js-theme-controls').toggleClass('c-theme-controls--active');
 });
 
@@ -663,7 +655,7 @@ $('.js-theme-toggle').on('click', changeTheme);
 
 /* Users online label toggle */
 var toggleUsersOnline = function(e) {
-	$(this).toggleClass('active');
+	$(this).find('.c-icon').toggleClass('active');
 	$('.js-users-count').toggleClass('u-hidden');
 }
 $('.js-users-online').on('click', toggleUsersOnline)
@@ -686,7 +678,7 @@ var themeControlsTooltip = new Tooltip($('.js-theme-controls-toggle'), {
 	delay: tooltipDelay
 });
 var usersOnlineTooltip = new Tooltip($('.js-users-online'), {
-	placement: 'top',
+	placement: 'top-end',
 	title: 'All The People In The World',
 	delay: tooltipDelay
 });

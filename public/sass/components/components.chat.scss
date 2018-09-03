@@ -4,13 +4,23 @@
   @include mq($until: desktop) {
     grid-column: col-start-1 / col-end-2;
   }
+
+  // container with fixed aspect ratio (same as neighbour svg image)
+  &__container {
+    width: 100%;
+    padding-top: 85%;
+    position: relative;
+  }
 }
 
 .c-chat-history {
-  position: relative; // for --sticky-top items
+  position: absolute; // --sticky-top items is relative to that
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   flex-direction: column;
-  height: 45vh;
   padding: 1.5rem 1rem 1.5rem 1.5rem;
   border: 1px solid #fff;
   border-radius: 1.5rem;
@@ -25,6 +35,7 @@
     height: 100%;
     padding-right: .5rem;
     overflow-y: scroll;
+    overflow-x: hidden;
   }
 
   &__item {
@@ -75,6 +86,11 @@
     padding-right: 1rem;
   }
 
+  &__message {
+    overflow: hidden;
+    word-wrap: break-word;
+  }
+
   &__timer {
     font-style: italic;
   }
@@ -92,8 +108,8 @@
     color: var(--color-secondary); // to be picked up from currentColor
     width: 3rem;
     height: 3rem;
-    bottom: 0.6rem;
-    right: 1.1rem;
+    top: .5rem;
+    right: .5rem;
 
     svg {
       path {

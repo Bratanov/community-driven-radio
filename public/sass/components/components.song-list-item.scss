@@ -2,12 +2,13 @@
   flex: 0 0 auto;
   width: 3rem;
   height: 3rem;
-  margin-left: auto;
 }
 
 .c-song-list-item {
   display: flex;
-  font-size: 2rem;
+  align-items: center;
+  height: 5.2rem;
+  font-size: 1.7rem;
   padding: 1rem 0;
   color: var(--color-text-primary);
 
@@ -15,22 +16,28 @@
     border-bottom: 1px solid var(--color-text-primary);
   }
 
-  &__title {
-    text-decoration: none;
-    color: var(--color-text-primary);
+  &__number {
+    margin-right: .5rem;
   }
 
-  &__number {
-    margin-right: 0.5rem;
+  &__title {
+    height: 100%;
+    text-decoration: none;
+    color: var(--color-text-primary);
+    overflow: hidden;
+    margin-right: auto;
   }
 
   &__duration {
-    margin-left: 0.5rem;
     color: var(--color-text-secondary);
+    margin-right: .5rem;
+    margin-left: .5rem;
+    white-space: nowrap;
   }
 
   &__btn-add {
     @extend %song-list-item-button;
+    margin-left: .5rem;
 
     svg {
       polygon, path {
@@ -43,7 +50,7 @@
   &__btn-upvote {
     @extend %song-list-item-button;
     position: relative;
-    margin-right: 0.5rem; // TODO: ugly fix for scroll caused by absolute position of upvote svg part 2
+    margin-right: .5rem; // TODO: ugly fix for scroll caused by absolute position of upvote svg part 2
 
     svg {
       polygon, path {

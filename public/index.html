@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400" rel="stylesheet">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.css" />
     <link href="/css/style.css" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="img/favicon.ico">
@@ -13,7 +13,7 @@
   <body class="container">
     <div class="o-content">
 
-      <header class="c-header u-mb-large">
+      <header class="c-header">
         <div class="c-action-icon js-name-change">
           <div class="c-sound-wave js-sound-wave c-sound-wave--stopped">
             <i class="c-sound-wave__bar"></i>
@@ -39,36 +39,42 @@
           </div>
         </div>
         <div class="c-header__logo">
-          <img src="img/logo.png" alt="cdr-logo">
+          <img src="img/cdradio-logo.png" width="200" alt="cdr-logo">
         </div>
         <div class="c-action-icon js-mute">
-          <img class="js-svg-injection-baby" data-src="img/musical_note.svg">
+          <span class="c-icon c-icon--bordered">
+            <i class="c-icon__content c-icon__content--musical-note"></i>
+          </span>
         </div>
       </header>
 
-      <div class="o-grid u-mb-large">
+      <div class="o-grid">
         <section class="c-video-player">
           <figure id="song-container" class="c-video-player__container">
+            <div class="c-video-player__background"></div>
             <div id="player" class="c-video-player__youtube-player"></div>
-            <img class="js-svg-injection-baby c-video-player__background" data-src="img/iMac.svg">
           </figure>
         </section>
         <section class="c-chat">
-          <div class="c-chat-history">
-            <div id="chat-history" class="c-chat-history__messages">
-              <!-- t-message || t-system-message -->
+          <div class="c-chat__container">
+            <div class="c-chat-history">
+              <div id="chat-history" class="c-chat-history__messages">
+                <!-- t-message || t-system-message -->
+              </div>
+              <form action="#" class="c-message-form">
+                <input type="textarea" id="message-input" class="c-input-basic c-input-basic--with-icon" placeholder="Type your message here...">
+                <button id="message-submit" class="c-btn c-message-form__submit">
+                  <span class="c-icon c-icon--small c-icon--bordered">
+                    <i class="c-icon__content c-icon__content--chat"></i>
+                  </span>
+                </button>
+              </form>
             </div>
-            <form action="#" class="c-message-form">
-              <input type="textarea" id="message-input" class="c-input-oval" placeholder="Type your message here...">
-              <button id="message-submit" class="c-btn c-message-form__submit">
-                <img class="js-svg-injection-baby" data-src="img/check.svg">
-              </button>
-            </form>
           </div>
         </section>
         <section class="c-song-queue">
           <h2 class="u-h2">Queue:</h2>
-          <h3 class="u-h3 u-h-secondary u-mb-large">(Highest voted will play first)</h3>
+          <h3 class="u-h3 u-h-secondary u-mb-small">(Highest voted will play first)</h3>
           <ol id="queue-list" class="c-queue-list">
             <!-- t-queue-list-item -->
           </ol>
@@ -76,9 +82,11 @@
         <section class="c-related">
           <h2 class="u-h2 u-mb-small">Add Song to Queue:</h2>
           <form action="#" class="c-add-form">
-            <input type="text" id="badass-search" class="c-input-basic" placeholder="Paste youtube URL or ID here">
+            <input type="text" id="badass-search" class="c-input-basic c-input-basic--with-icon" placeholder="Paste youtube URL, ID or type a song">
             <button id="badaass-song-add" class="c-btn c-add-form__btn-add">
-              <img class="js-svg-injection-baby" data-src="img/plus.svg">
+              <span class="c-icon c-icon--small c-icon--bordered">
+                <i class="c-icon__content c-icon__content--search"></i>
+              </span>
             </button>
           </form>
           <h2 class="u-h2">Related:</h2>
@@ -114,16 +122,21 @@
               </div>
               <span>Water color</span>
             </div>
-            <div class="c-theme-controls__toggle">
+            <div class="c-theme-controls__toggle u-mb-tiny">
               <div>
                 <input class="c-tgl c-tgl-light js-theme-toggle" id="beauty-lila" type="checkbox"/>
                 <label class="c-tgl-btn" for="beauty-lila"></label>
               </div>
               <span>Beauty lila</span>
             </div>
+            <div class="u-center">
+              <button class="c-btn c-btn--link js-name-change">Rename me</button>
+            </div>
           </div>
           <div class="c-action-icon js-theme-controls-toggle">
-            <img class="js-svg-injection-baby" data-src="img/sinth.svg">
+            <span class="c-icon c-icon--bordered">
+              <i class="c-icon__content c-icon__content--settings"></i>
+            </span>
           </div>
         </div>
         <div class="c-footer__content">
@@ -134,7 +147,9 @@
         <div class="c-footer__users">
           <div class="c-footer__users-count js-users-count u-hidden"><span id="users-count">-</span> users online</div>
           <div class="c-action-icon js-users-online">
-            <img class="js-svg-injection-baby" data-src="img/headphones.svg">
+            <span class="c-icon c-icon--bordered">
+              <i class="c-icon__content c-icon__content--headphones-user"></i>
+            </span>
           </div>
         </div>
       </footer>
@@ -165,7 +180,7 @@
                 <select id="badass-usernames" class="c-input-oval c-username-form__select">
                   <option value="" disabled selected>Your (nick) name</option>
                 </select>
-                <img class="js-svg-injection-baby" data-src="img/arrow_up.svg">
+                <span class="c-username-form__select-icon"></span>
               </div>
             </div>
           </section>
@@ -199,19 +214,9 @@
         <a href="" target="_blank" class="c-song-list-item__title">-</a>
         <span class="c-song-list-item__duration">-</span>
         <button class="c-btn c-song-list-item__btn-upvote js-btn-vote">
-          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-            viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
-            <g>
-              <path d="M33.454,17.627c-0.756-0.801-2.152-0.801-2.908,0l-17,18c-0.758,0.803-0.722,2.069,0.081,2.827
-                c0.803,0.758,2.069,0.722,2.827-0.081L32,21.913l15.546,16.46C47.939,38.79,48.469,39,49,39c0.493,0,0.986-0.181,1.373-0.546
-                c0.803-0.758,0.839-2.024,0.081-2.827L33.454,17.627z"/>
-              <path d="M32,0C23.453,0,15.417,3.329,9.374,9.373C3.329,15.417,0,23.453,0,32s3.33,16.583,9.374,22.626
-                C15.417,60.671,23.453,64,32,64s16.583-3.329,22.626-9.373C60.671,48.583,64,40.547,64,32s-3.33-16.583-9.374-22.626
-                C48.583,3.329,40.547,0,32,0z M51.797,51.798C46.509,57.087,39.479,60,32,60s-14.509-2.913-19.798-8.202C6.913,46.51,4,39.479,4,32
-                s2.913-14.51,8.203-19.798C17.491,6.913,24.521,4,32,4s14.509,2.913,19.798,8.202C57.087,17.49,60,24.521,60,32
-                S57.087,46.51,51.797,51.798z"/>
-            </g>
-          </svg>
+          <span class="c-icon c-icon--small c-icon--bordered">
+            <i class="c-icon__content c-icon__content--arrow-up"></i>
+          </span>
           <span class="c-song-list-item__votes">-</span>
         </button>
       </li>
@@ -222,18 +227,9 @@
         <span class="c-song-list-item__number">-</span>
         <a href="" target="_blank" class="c-song-list-item__title">-</a>
         <button class="c-btn c-song-list-item__btn-add js-btn-add">
-          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-            viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
-            <g>
-              <path d="M32,0c-8.548,0-16.584,3.33-22.627,9.374C3.328,15.417-0.001,23.453-0.001,32s3.329,16.583,9.374,22.626
-                C15.416,60.671,23.452,64,32,64c8.547,0,16.583-3.33,22.627-9.374c6.045-6.044,9.374-14.079,9.374-22.626
-                s-3.329-16.583-9.374-22.626C48.583,3.329,40.547,0,32,0z M51.799,51.798C46.51,57.087,39.479,60,32,60
-                c-7.479,0-14.511-2.913-19.799-8.203C6.912,46.509,3.999,39.479,3.999,32s2.913-14.509,8.202-19.798C17.489,6.913,24.521,4,32,4
-                c7.479,0,14.51,2.913,19.799,8.203c5.289,5.288,8.202,12.319,8.202,19.797S57.088,46.509,51.799,51.798z"/>
-              <path d="M50,30H34V14c0-1.104-0.896-2-2-2s-2,0.896-2,2v16H14c-1.104,0-2,0.896-2,2s0.896,2,2,2h16v16c0,1.104,0.896,2,2,2
-                s2-0.896,2-2V34h16c1.104,0,2-0.896,2-2S51.104,30,50,30z"/>
-            </g>
-          </svg>
+          <span class="c-icon c-icon--small c-icon--bordered">
+            <i class="c-icon__content c-icon__content--plus"></i>
+          </span>
         </button>
       </li>
     </template>
@@ -241,7 +237,6 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/svg-injector/1.1.3/svg-injector.min.js"></script>
     <script src="//unpkg.com/popper.js/dist/umd/popper.min.js"></script>
     <script src="//unpkg.com/tooltip.js/dist/umd/tooltip.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
