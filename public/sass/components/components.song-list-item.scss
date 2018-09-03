@@ -6,7 +6,9 @@
 
 .c-song-list-item {
   display: flex;
-  font-size: 2rem;
+  align-items: center;
+  height: 5.2rem;
+  font-size: 1.7rem;
   padding: 1rem 0;
   color: var(--color-text-primary);
 
@@ -19,7 +21,7 @@
   }
 
   &__title {
-    height: 3.2rem;
+    height: 100%;
     text-decoration: none;
     color: var(--color-text-primary);
     overflow: hidden;

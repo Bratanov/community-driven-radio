@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-labelledby="title"
+aria-describedby="desc" role="img" xmlns:xlink="http://www.w3.org/1999/xlink"
+width="128" height="128">
+  <title>Chat</title>
+  <desc>A line styled icon from Orion Icon Library.</desc>
+  <path data-name="layer2"
+  d="M42 8H22a20 20 0 0 0 0 40h2v10l12-10h6a20 20 0 0 0 0-40z" fill="none"
+  stroke="#ffffff" stroke-miterlimit="10" stroke-width="2" stroke-linejoin="round"
+  stroke-linecap="round"></path>
+  <circle data-name="layer1" cx="20" cy="28" r="2" fill="none" stroke="#ffffff"
+  stroke-miterlimit="10" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></circle>
+  <circle data-name="layer1" cx="32" cy="28" r="2" fill="none"
+  stroke="#ffffff" stroke-miterlimit="10" stroke-width="2" stroke-linejoin="round"
+  stroke-linecap="round"></circle>
+  <circle data-name="layer1" cx="44" cy="28" r="2" fill="none"
+  stroke="#ffffff" stroke-miterlimit="10" stroke-width="2" stroke-linejoin="round"
+  stroke-linecap="round"></circle>
+</svg>

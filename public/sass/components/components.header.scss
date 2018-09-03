@@ -1,17 +1,3 @@
 .c-header {
   @extend %columns-container;
-
-  &__logo {
-    display: flex;
-    height: 4.5rem;
-
-    @include mq($until: desktop) {
-      height: 3.5rem;
-    }
-
-    img {
-      display: block;
-      object-fit: contain;
-    }
-  }
 }
