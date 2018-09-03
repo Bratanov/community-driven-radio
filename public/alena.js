@@ -3,7 +3,7 @@
 const zodiacSigns = ['aries', 'taurus', 'gemini', 'cancer', 'leo', 'virgo', 'libra', 'scorpio', 'sagittarius', 'capricorn', 'aquarius', 'pisces']
 let zodiacRunning = false
 
-// configuration
+// configuration with global varibles - young, wild and free
 const intervalBetweenZodiacs = 60 * 1000
 const startAtMinute = 33
 const defaultColor = 'pink'
@@ -36,15 +36,16 @@ const singleZodiac = (sign) => {
 }
 
 const cleanUpZodiac = () => {
-  $(".zodiac-wraper").remove()
+  $('.zodiac-wrapper').remove()
 }
 
 const renderZodiac = (sign, description, mood, color) => {
   const $zodiacWrapper = $('<div class="zodiac-wrapper">')
   $zodiacWrapper.css({
-    'background-color': defaultColor, // default,
+    'background-color': defaultColor,
     'position': 'absolute',
-    'bottom': '28.9%',
+    'bottom': '29%',
+    'left': '4%',
     'width': '92%',
     'height': '21%',
     'opacity': '.95'
