@@ -1,0 +1,49 @@
+/**
+ * [1] A handy trick that ensures container size keeps the same 
+ * aspect ratio since padding is calculated as a percentage of width.
+ * Aspect ratio of the svg background: 524/444
+ */
+
+.c-video-player {
+  grid-column: col-start-1 / col-end-1;
+
+  @include mq($until: desktop) {
+    grid-column: col-start-1 / col-end-2;
+  }
+
+  &__container {
+    width: 100%;
+    padding-top: 85%; /* [1] */
+    position: relative;
+  }
+
+  &__youtube-player {
+    position: absolute;
+    top: 5%;
+    left: 4%;
+    width: 92%;
+    height: 66%;
+  }
+
+  &__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    // #1 default background strategy
+    background-image: url(/img/iMac.svg);
+    background-size: contain;
+
+    // #2 set icon as mask if supported
+    @supports (-webkit-mask-image: url()) or (mask-image: url()) {
+      background-image: none; // reset default
+      background-color: var(--color-text-primary);
+      -webkit-mask: url(/img/iMac.svg) center no-repeat;
+      -webkit-mask-size: contain;
+      mask: url(/img/iMac.svg) center no-repeat;
+      mask-size: contain;
+    }
+  }
+}

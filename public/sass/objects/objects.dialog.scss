@@ -1,0 +1,15 @@
+.c-dialog {
+  width: 100%;
+  height: 100vh;
+  color: var(--color-text-primary);
+  background-color: rgba(0, 0, 0, .5);
+  border: none;
+}
+
+.c-dialog-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}

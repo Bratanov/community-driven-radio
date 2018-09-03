@@ -1,0 +1,23 @@
+///* ========================================================================
+//   #GLOBAL
+//   ======================================================================== */
+
+// The global settings file contains any project-wide variables; things that
+// need to be made available to the entire codebase.
+
+
+
+// Standardise some UI treatments.
+
+$global-radius: 3px !default;
+$global-transition: all 300ms ease-in-out !default;
+
+// RESPONSIVE BREAKPOINTS
+$mq-media-type: screen;
+$mq-breakpoints: (
+  mobile:  25em, // 400px
+  tablet:  43.75em, // 700px
+  desktop: 62.5em, // 1000px
+  wide:    75em, // 1200px
+  huge:    100em // 1600px
+);

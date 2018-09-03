@@ -1,34 +1,124 @@
 var socket = io.connect('/');
 
-$('#message').on('keyup', function(e){
-	if(e.keyCode == 13){
-		var message = $('#my-name').val() + ' - ' + $(this).val();
+var NAMES = [
+	'igra4a91',
+	'malkaSiNoSLatkasi',
+	'Radioactive',
+	'dqvola',
+	'MaNeKeNa',
+	'kArAmeL4e70',
+	'ivan_tigara',
+	'mn_loff_fiki',
+	'bonbonchetoy',
+	'armani-vn',
+	'|͇̿V͇̿I͇̿P͇̿| FuTbOlIst4eTo(•̪●)',
+	'666<<<®鬼ExecutoR鬼®>>>666',
+	'•̪̀●́ iskam_yaka_kaka •̪̀●́,',
+	'OtRoVnA_CeLuvKa',
+	'LOVEMACHINE',
+	'kachestvenia',
+	'bi4e70',
+	'SliderMan',
+	'sasho_kvadrata',
+	'gucciBang',
+	'bobisgolfa',
+	'goran-patron',
+	'geri-moderen',
+	'zucc',
+	'nadeto-v-malta'
+];
 
-		//Send msg
-		socket.emit('chat_msg', message);
+var LOCAL_STORAGE_USERNAME_KEY = 'usrnm';
 
-		addMessage(message);
+var userName = localStorage.getItem(LOCAL_STORAGE_USERNAME_KEY);
+var usernameDialog = $('#username-dialog').get(0);
+var $usernameInput = $('#username-input');
 
-		//Clear text in input
-		$(this).val('');
+if (!userName) {
+	// TODO: scroll lock?
+	usernameDialog.showModal();
+} else {
+	$usernameInput.val(userName);
+}
+
+$('.js-name-change').on('click', function(e) {
+	usernameDialog.showModal();
+});
+
+// username dialog
+var $badassUsernames = $('#badass-usernames');
+// render options
+NAMES.forEach(function(name) {
+	var $option = $('<option>');
+	$option.attr('value', name);
+	$option.text(name);
+	$badassUsernames.append($option);
+});
+// username select handler
+$badassUsernames.on('change', function(e) {
+	$usernameInput.val(e.target.value);
+});
+$('#username-form').on('submit', function(e) {
+	e.preventDefault();
+
+	if (!$usernameInput.val()) return;
+	userName = $usernameInput.val();
+	localStorage.setItem(LOCAL_STORAGE_USERNAME_KEY, userName);
+	usernameDialog.close();
+});
+
+$('#message-submit').on('click', function(e) {
+	e.preventDefault();
+	onMessageSubmit($('#message-input'));
+});
+
+function onMessageSubmit($input) {
+	var value = $input.val();
+	if (!value) return;
+
+	var message = {
+		author: userName,
+		value: value
+	};
+
+	// Send msg
+	socket.emit('chat_msg', message);
+
+	addMessage(message);
+
+	// Clear text in input
+	$input.val('');
+}
+
+/**
+ * Emit a new_song event with youtube id, parsed from youtube url
+ */
+function addSongToQueue() {
+	var $input = $('#badass-search');
+	var url = $input.val();
+	var id = getIdFromYoutubeUrl(url);
+
+	// Send msg
+	socket.emit('new_song', id);
+
+	// Clear text in input
+	$input.val('');
+
+	// Hide autocomplete suggestions, if any
+	// ref: https://github.com/Pixabay/JavaScript-autoComplete/blob/master/auto-complete.js#L57
+	$('.autocomplete-suggestions').css('display', 'none');
+}
+
+// search input, handle direct entering of URL or Youtube id
+$('#badass-search').on('keyup', function(e) {
+	if (e.keyCode == 13) {
+		addSongToQueue();
 	}
 });
 
-// search input, handle direct entering of URL or Youtube id
-$('#badassSearch').on('keyup', function(e) {
-	if (e.keyCode == 13) {
-		var id = getIdFromYoutubeUrl($(this).val());
-
-		// Send msg
-		socket.emit('new_song', id);
-
-		// Clear text in input
-		$(this).val('');
-
-		// Hide autocomplete suggestions, if any
-		// ref: https://github.com/Pixabay/JavaScript-autoComplete/blob/master/auto-complete.js#L57
-		$('.autocomplete-suggestions').css('display', 'none');
-	}
+$('#badaass-song-add').on('click', function(e) {
+	e.preventDefault();
+	addSongToQueue();
 });
 
 /**
@@ -61,7 +151,7 @@ var suggestCb = new Function();
  * Initialize search autocompelte input.
  */
 var badassSearch = new autoComplete({
-	selector: '#badassSearch',
+	selector: '#badass-search',
 	minChars: 2,
 	delay: 500,
 	source: function(term, suggest) {
@@ -75,8 +165,8 @@ var badassSearch = new autoComplete({
 		// Autocomplete item html. 
 		// "data-val" is what we see in input when item is selected.
 		return '<div class="autocomplete-suggestion" data-id="'+item.videoId+'" data-title="'+item.title+'" data-val="'+item.title+'">' +
-			'<img src="'+item.thumbnail+'" height="16px"> ' +
-			item.title +
+			'<img class="autocomplete-suggestion__thumb" src="'+item.thumbnail+'"> ' +
+			'<div class="autocomplete-suggestion__title">' + item.title + '</div>' +
 		'</div>';
 	},
 	onSelect: function(e, term, item) {
@@ -88,30 +178,32 @@ var badassSearch = new autoComplete({
 	}
 });
 
-$('body').on('click', '.btn-vote', function() {
+$('body').on('click', '.js-btn-vote', function() {
 	socket.emit('vote', $(this).data('song-id'));
 });
 
+// TODO: this is unused
 $('body').on('click', '.btn-delete', function() {
 	socket.emit('delete_queued', $(this).data('song-id'));
 });
 
-$('body').on('click', '.add-song', function() {
+$('body').on('click', '.js-btn-add', function() {
 	socket.emit('new_song', $(this).data('youtube-id'));
 });
 
-socket.on('chat_msg', function(data){
+socket.on('chat_msg', function(data) {
 	addMessage(data);
 });
 
 socket.on('new_song', function(song) {
-	var recv = song;
-	var song = queryStringToObj(song.url_params);
+	var songUrlParams = queryStringToObj(song.url_params);
 
-	$('#text').append('<p>Now playing: ' + recv.info.title + '</p>');
-	$('#text').scrollTop(999999999);
+	$message = renderer.getChatSystemMessage(song.info.youtubeId, song.info.title, song.info.duration);
+	$('#chat-history').append($message);
+	$('#chat-history').scrollTop(999999999);
 
-	player.play(song.url, song);
+	player.play(songUrlParams.url, songUrlParams);
+
 	var sendNotification = function(song) {
 		var options = {
 			body: song.info.title,
@@ -120,13 +212,14 @@ socket.on('new_song', function(song) {
 		var n = new Notification('Now playing:', options);
 		setTimeout(function() { n.close(); }, 5000);
 	}
+
 	if (Notification.permission !== 'denied') {
 		if (Notification.permisson === 'granted') {
-			sendNotification(recv);
+			sendNotification(song);
 		} else {
 			Notification.requestPermission(function (permission) {
 				if (permission === 'granted') {
-					sendNotification(recv);
+					sendNotification(song);
 				}
 			});
 		}
@@ -134,7 +227,7 @@ socket.on('new_song', function(song) {
 });
 
 socket.on('usersCount', function(data){
-	$('#usersCount').text(data);
+	$('#users-count').text(data);
 });
 
 socket.on('getRefreshed', function(data){
@@ -142,74 +235,217 @@ socket.on('getRefreshed', function(data){
 });
 
 socket.on('song_info', function(data) {
-	if (data.playTime) {
-		$('#song-info').html(renderSong(data));
-		player.streamPlayingAt(data.playingAt);
+	if (!data.playTime) return;
+
+	// sync song time diplayed in chat
+	// find song in chat by song id attr and update template
+	$timer = findSongSystemMessage(data.youtubeId).find('.c-chat-history__timer');
+	if (data.duration - data.playingAt > 1) {
+		// more than 1 second is remaining until song ends
+		$timer.text(data.playTime + ' sec.');
+	} else {
+		// update with duration
+		$timer.text(data.duration + ' sec.');
 	}
+
+	// sync player play time with server
+	player.streamPlayingAt(data.playingAt);
 });
 
-socket.on('queue_info', function(data) {
-	$queue_info = $('#queue-info');
-	$queue_info.html('<ol></ol>');
-	$queue_info = $queue_info.find('ol');
+// set currently playing song postion on top of mesage container
+// when it's not visible
+// TODO: Soooo many corner cases. What if song persist more than once in the same list?
+(function() {
 
-	for(var song in data) {
-		var o = data[song];
-		var addedBy = o.addedBy.substring(2);
-		var deleteButton = '';
-		if (addedBy == socket.id) {
-			deleteButton = '<button class="btn-delete" data-song-id="' + o.id + '">Remove</button>';
-		}
-		$queue_info.append('<li>' + renderSong(o) + deleteButton + '</li>');
+	var stickyMessageOriginalTopCoords = false;
+	var previouslyPlayingSongId = false;
+
+	function resetStickyMessages() {
+		$('.c-chat-history__item').removeClass('c-chat-history__item--sticky');
+		$('.c-chat-history').removeClass('c-chat-history--with-sticky-item');
 	}
+
+	function setStickyMessage($message) {
+		$message.addClass('c-chat-history__item--sticky');
+		$('.c-chat-history').addClass('c-chat-history--with-sticky-item');
+	}
+
+	function setStickyMessagePosition(e) {
+		// song not loaded yet, do nothing
+		if (!player.instance) return;
+		if (typeof player.instance.getVideoData !== 'function') return;
+		if (!player.instance.getVideoData()) return;
+
+		var currentlyPlayingSongId = player.instance.getVideoData().video_id;
+		if (currentlyPlayingSongId !== previouslyPlayingSongId) {
+			// song changed, reset and invalidate cached coords
+			resetStickyMessages();
+			stickyMessageOriginalTopCoords = false;
+			previouslyPlayingSongId = currentlyPlayingSongId;
+		}
+		// find song in chat messages
+		var $songMessage = findSongSystemMessage(currentlyPlayingSongId);
+	
+		var $chatHistory = $('#chat-history');
+		var visibleVerticalCoords = {
+			top: $chatHistory.scrollTop(),
+			bottom: $chatHistory.scrollTop() + $chatHistory.height()
+		};
+
+		// get original position relative to parent ($chatHistory)
+		var messagePosition = 0;
+		// position will be incorrect if element is already sticky
+		// Note: another way to check this would be to seek for .c-chat-history--with-sticky-item in container
+		if (stickyMessageOriginalTopCoords !== false) {
+			messagePosition = stickyMessageOriginalTopCoords;
+		} else {
+			messagePosition = stickyMessageOriginalTopCoords = $songMessage.get(0).offsetTop;
+		}
+
+		// determine if message is placed (originally) in visible portion of the chat
+		var belowTop = messagePosition > visibleVerticalCoords.top;
+		var aboveBottom = messagePosition < visibleVerticalCoords.bottom;
+		if (belowTop && aboveBottom) {
+			// mesage should be placed at its original place
+			resetStickyMessages();
+		} else {
+			// message should be on top of container
+			setStickyMessage($songMessage);
+		}
+	}
+
+	$('#chat-history').on('scroll', setStickyMessagePosition);
+})()
+
+function findSongSystemMessage (youtubeId) {
+	return $('.c-chat-history__item[data-id=' + youtubeId + ']');
+}
+
+function addMessage(message) {
+	var $chatHistory = $('#chat-history');
+	var $message = renderer.getChatMessage(userName, message);
+	$chatHistory.append($message);
+	$chatHistory.scrollTop(999999999);
+}
+
+socket.on('queue_info', function(data) {
+	var $queue = $('#queue-list');
+	$queue.empty();
+
+	data.forEach(function(song, i) {
+		var $songTemplate = renderer.getQueueItem(i + 1, song);
+		$queue.append($songTemplate);
+	});
+});
+
+socket.on('related_info', function(data) {
+	var $list = $('#related-list');
+	$list.empty();
+
+	data.forEach(function(song, i) {
+		var $songTemplate = renderer.getRelatedItem(i + 1, song);
+		$list.append($songTemplate);
+	});
 });
 
 socket.on('be_alerted', function(message) {
 	// alert lolzorz
-	alert(message);
-});
-
-socket.on('related_info', function(data) {
-	var relatedView = renderRelatedSongs(data);
-
-	$('#related-songs').html(relatedView);
+	toastr.info(message, null, {
+		positionClass: 'toast-bottom-right'
+	});
 });
 
 socket.on('youtube_search', fillAutocompleteOptions);
 
-function renderRelatedSongs(songs) {
-	var view = '<ul>Related <i>(First one will play if nothing in queue)</i>:';
 
-	for(var relatedId in songs) {
-		var relatedSong = songs[relatedId];
-		view += '<li>' + relatedSong.title + ' <button class="add-song" data-youtube-id="' + relatedSong.youtubeId + '">Add to queue</button></li>'
+var renderer = {
+
+	_cloneTemplate: function(templateId) {
+		return $($('#' + templateId).html().trim());
+	},
+
+	getQueueItem: function(number, songData) {
+		var $clone = this._cloneTemplate('t-queue-list-item'); 
+	
+		$clone.find('.c-song-list-item__number').text(number + '.');
+		$clone.find('.c-song-list-item__title')
+			.attr('href', 'https://youtube.com/watch?v=' + songData.youtubeId)
+			.text(songData.title);
+		var duration = (songData.playTime) ? songData.playTime : songData.duration;
+		$clone.find('.c-song-list-item__duration').text('- ' + duration + ' sec.');
+	
+		$clone.find('.js-btn-vote').attr('data-song-id', songData.id);
+		$clone.find('.c-song-list-item__votes').text(songData.votes);
+	
+		// TOOD: delete button in template? There's a (backend?) bug here.
+		// var addedBy = songData.addedBy.substring(2);
+		// var deleteButton = '';
+		// if (addedBy == socket.id) {
+		// 	deleteButton = '<button class="btn-delete" data-song-id="' + o.id + '">Remove</button>';
+		// }
+	
+		return $clone;
+	},
+
+	getRelatedItem: function(number, songData) {
+		var $clone = this._cloneTemplate('t-related-list-item');
+	
+		$clone.find('.c-song-list-item__number').text(number + '.');
+		$clone.find('.c-song-list-item__title')
+			.attr('href', 'https://youtube.com/watch?v=' + songData.youtubeId)
+			.text(songData.title);
+		$clone.find('.js-btn-add').attr('data-youtube-id', songData.youtubeId);
+	
+		return $clone;
+	},
+
+	/**
+	 * Render chat message.
+	 * @param {Object} message 
+	 * {
+	 * 	author: String,
+	 * 	value: String
+	 * }
+	 */
+	getChatMessage: function(currentUserName, message) {
+		var $clone = this._cloneTemplate('t-message');
+
+		if (currentUserName === message.author) {
+			// logged user's message
+			$clone.addClass('c-chat-history__item--right c-chat-history__item--inverse');
+		} else {
+			// another user's message
+			$clone.addClass('c-chat-history__item--left');
+		}
+
+		$clone.find('.c-chat-history__author').text(message.author);
+		$clone.find('.c-chat-history__message').text(message.value);
+
+		return $clone;
+	},
+
+	getChatSystemMessage: function(id, title, duration) {
+		var $clone = this._cloneTemplate('t-system-message');
+
+		$clone.attr('data-id', id);
+		$clone.find('.c-chat-history__text').text(title);
+		$clone.find('.c-chat-history__timer').text(duration + ' sec.');
+
+		return $clone;
 	}
+};
 
-	view += '</ul>';
-
-	return view;
-}
-
-function renderSong(song) {
-	// Default votes to 0
-	song.votes = song.votes || 0;
-
-	return '<a href="https://youtube.com/watch?v=' + song.youtubeId + '" target="_blank">'
-		+ song.title
-		+ '</a> - '
-		+ ((song.playTime) ? song.playTime : song.duration) + 'sec. '
-		+ '<button class="btn-vote" data-song-id="' + song.id + '">Vote up (' + song.votes + ')</button>'
-	;
-}
-
-/*function play(thingie) {
-	$('iframe').attr('src', 'https://www.youtube.com/embed/' + thingie);
-}*/
-
-function addMessage(message) {
-	$('#text').append('<p>Message: '+ $('<div/>').text(message).html() +'</p>');
-
-	$('#text').scrollTop(999999999);
+/**
+ * A soundwave animation
+ */
+var soundWave = {
+	$element: $('.js-sound-wave'),
+	play: function() {
+		this.$element.removeClass('c-sound-wave--stopped');
+	},
+	stop: function() {
+		this.$element.addClass('c-sound-wave--stopped');
+	}
 }
 
 /**
@@ -271,7 +507,8 @@ var player = {
 		})[0].toLowerCase() + ".");
 		switch (self.instance.getPlayerState()) {
 			case YT.PlayerState.PAUSED:
-				// player paused. do nothing. for now.
+				// player paused.
+				soundWave.stop();
 				break;
 			case YT.PlayerState.PLAYING:
 				// player resumed, seek video to server time.
@@ -283,6 +520,7 @@ var player = {
 				} else {
 					self.seekedFromCode = false;
 				}
+				soundWave.play();
 				break;
 		}
 	},
@@ -312,8 +550,20 @@ var player = {
 			// call is defered for when player is ready
 			self._queuedActionsAfterInit.push(self.play.bind(self, videoId, params));
 		}
+	},
+
+	mute: function() {
+		this.instance.mute();
+	},
+
+	unMute: function() {
+		this.instance.unMute();
+	},
+
+	isMuted: function() {
+		return this.instance.isMuted();
 	}
-}
+};
 
 player.init($('#player'));
 
@@ -344,3 +594,91 @@ function queryStringToObj(q) {
 	}
 	return query;
 }
+
+/* Mute controls */
+$('.js-mute').on('click', function(e) {
+	if (player.isMuted()) {
+		player.unMute();
+		$(this).find('.c-icon').removeClass('active');
+		return;
+	}
+
+	player.mute();
+	$(this).find('.c-icon').addClass('active');
+});
+
+
+/* Theme controls */
+var THEME_CLASS_SUFFIX = '-theme';
+var LOCAL_STORAGE_THEME_KEY = 'theme';
+
+/**
+ * Set theme button checked, according to default theme.
+ * If theme previosly set in local storage, use that,
+ * if not use the one set in html.
+ */
+var setDefaultTheme = function() {
+	var theme = $('html').attr('class');
+	var lastSetTheme = localStorage.getItem(LOCAL_STORAGE_THEME_KEY);
+	if (lastSetTheme) {
+		theme = lastSetTheme;
+		$('html').removeClass().addClass(theme);
+	}
+	$('#' + theme.substring(0, theme.indexOf(THEME_CLASS_SUFFIX))).prop('checked', true);
+}
+
+/**
+ * Change page theme, by modifying root class.
+ * Store chosen theme into localStorage.
+ * @param {Object} e HTML DOM Event
+ */
+var changeTheme = function(e) {
+	// reset all inputs
+	$('.js-theme-toggle').prop('checked', false);
+	var chosenInput = $(e.target);
+	// set theme
+	var theme = chosenInput.attr('id') + THEME_CLASS_SUFFIX;
+	$('html').removeClass().addClass(theme);
+	localStorage.setItem(LOCAL_STORAGE_THEME_KEY, theme);
+	// set target
+	chosenInput.prop('checked', true);
+}
+
+setDefaultTheme();
+
+$('.js-theme-controls-toggle').on('click', function(e) {
+	$(this).find('.c-icon').toggleClass('active');
+	$('.js-theme-controls').toggleClass('c-theme-controls--active');
+});
+
+$('.js-theme-toggle').on('click', changeTheme);
+
+/* Users online label toggle */
+var toggleUsersOnline = function(e) {
+	$(this).find('.c-icon').toggleClass('active');
+	$('.js-users-count').toggleClass('u-hidden');
+}
+$('.js-users-online').on('click', toggleUsersOnline)
+
+/* Tooltips mudhaflickah, powered by https://popper.js.org */
+var tooltipDelay = { show: 1000, hide: 0 };
+var nameChangeTooltip = new Tooltip($('.js-name-change'), {
+	placement: 'right',
+	title: 'Say My Name',
+	delay: tooltipDelay
+});
+var muteTooltip = new Tooltip($('.js-mute'), {
+	placement: 'left',
+	title: 'Silence',
+	delay: tooltipDelay
+});
+var themeControlsTooltip = new Tooltip($('.js-theme-controls-toggle'), {
+	placement: 'right',
+	title: 'Green Gucci Suit',
+	delay: tooltipDelay
+});
+var usersOnlineTooltip = new Tooltip($('.js-users-online'), {
+	placement: 'top-end',
+	title: 'All The People In The World',
+	delay: tooltipDelay
+});

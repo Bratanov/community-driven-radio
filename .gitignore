@@ -13,8 +13,11 @@ npm-debug.log*
 # IntelliJ
 .idea
 
-# Startup script
-start.sh
+# Visual Studio Code
+.vscode
+
+# Environment variables
+.env
 
 # Runtime data
 pids
@@ -44,3 +47,6 @@ node_modules
 
 # Optional REPL history
 .node_repl_history
+
+# Frontend compiled assets
+public/css/style.*

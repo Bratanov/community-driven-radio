@@ -1,0 +1,27 @@
+/**
+ * Note that most of these styles are not applied now, since we've migrated to
+ * setting actio icons svgs as background images. Currently the only useful declaration
+ * is `cursor: pointer` on icon hover.
+ */
+.c-action-icon {
+  svg {
+    width: 4rem;
+    height: 4rem;
+    transition: fill .3s;
+    fill: var(--color-text-primary);
+  }
+
+  &:hover {
+    cursor: pointer;
+
+    svg {
+      fill: var(--color-primary);
+    }
+  }
+
+  &.active {
+    svg {
+      fill: var(--color-primary);
+    }
+  }
+}

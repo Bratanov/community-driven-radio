@@ -1,0 +1,120 @@
+.c-chat {
+  grid-column: col-start-2 / col-end-2;
+
+  @include mq($until: desktop) {
+    grid-column: col-start-1 / col-end-2;
+  }
+
+  // container with fixed aspect ratio (same as neighbour svg image)
+  &__container {
+    width: 100%;
+    padding-top: 85%;
+    position: relative;
+  }
+}
+
+.c-chat-history {
+  position: absolute; // --sticky-top items is relative to that
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem 1.5rem 1.5rem;
+  border: 1px solid #fff;
+  border-radius: 1.5rem;
+
+  &--with-sticky-item {
+    padding-top: 4rem;
+  }
+
+  &__messages {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-right: .5rem;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+
+  &__item {
+    display: flex;
+    flex: 0 0 auto;
+    width: 80%;
+    background-color: var(--color-secondary);
+    margin-bottom: 1.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 1.5rem;
+    font-size: 1.4rem;
+
+    &--right {
+      margin-left: auto;
+      border-top-right-radius: initial;
+    }
+
+    &--left {
+      margin-right: auto;
+      border-top-left-radius: initial;
+    }
+  }
+
+  &__item--inverse {
+    background-color: #fff;
+  }
+
+  &__item--inverse &__author {
+    color: var(--color-text-silver-dark);
+  }
+
+  &__item--inverse &__message {
+    color: var(--color-primary);
+  }
+
+  &__item--sticky {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border-top-right-radius: 1.5rem;
+    border-bottom-left-radius: initial;
+    border-bottom-right-radius: initial;
+  }
+
+  &__author {
+    color: var(--color-text-silver-light);
+    padding-right: 1rem;
+  }
+
+  &__message {
+    overflow: hidden;
+    word-wrap: break-word;
+  }
+
+  &__timer {
+    font-style: italic;
+  }
+}
+
+.c-message-form {
+  position: relative;
+  width: 100%;
+  margin-top: auto;
+  padding-right: .5rem;
+  align-self: flex-end;
+
+  &__submit {
+    position: absolute;
+    color: var(--color-secondary); // to be picked up from currentColor
+    width: 3rem;
+    height: 3rem;
+    top: .5rem;
+    right: .5rem;
+
+    svg {
+      path {
+        fill: var(--color-secondary);
+      }
+    }
+  }
+}

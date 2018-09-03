@@ -1,0 +1,27 @@
+.c-related {
+  grid-column: col-start-2 / col-end-2;
+
+  @include mq($until: tablet) {
+    grid-column: col-start-1 / col-end-2;
+  }
+}
+
+.c-add-form {
+  position: relative;
+  margin-bottom: 5.6rem;
+
+  &__btn-add {
+    flex: 0 0 auto;
+    position: absolute;
+    right: 0;
+    top: 0.5rem;
+    width: 3rem;
+    height: 3rem;
+
+    svg {
+      path {
+        fill: var(--color-text-primary);
+      }
+    }
+  }
+}

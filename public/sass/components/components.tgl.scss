@@ -1,0 +1,66 @@
+// Toggle input
+// Credits: https://codepen.io/mallendeo/pen/eLIiG
+.c-tgl {
+	display: none;
+
+	// add default box-sizing for this scope
+	&,
+  &:after,
+  &:before,
+	& *,
+  & *:after,
+  & *:before,
+	& + .c-tgl-btn {
+		box-sizing: border-box;
+		&::selection {
+			background: none;
+		}
+	}
+
+  + .c-tgl-btn {
+		outline: 0;
+		display: block;
+		width: 2.5rem;
+		height: 1rem;
+		position: relative;
+		cursor: pointer;
+    user-select: none;
+		&:after,
+    &:before {
+			position: relative;
+			display: block;
+			content: "";
+			width: 1.5rem;
+      height: 1.5rem;
+      transform: translateY(-0.5rem);
+		}
+
+		&:after {
+      left: 50%;
+    }
+    
+		&:before {
+      display: none;
+		}
+	}
+  
+	&:checked + .c-tgl-btn:after {
+    left: -0.3rem;
+    // tgl-light theme color
+    background: var(--color-text-secondary);
+	}
+}
+
+.c-tgl-light {
+  + .c-tgl-btn {
+    background: var(--color-text-silver-light);
+		border-radius: 2em;
+		padding: 2px;
+		transition: all .4s ease;
+		&:after {
+      background: var(--color-text-silver-dark);
+			border-radius: 50%;
+			transition: all .2s ease;
+		}
+  }
+}

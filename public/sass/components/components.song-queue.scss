@@ -1,0 +1,13 @@
+.c-song-queue {
+  grid-column: col-start-1 / col-end-1;
+
+  @include mq($until: tablet) {
+    grid-column: col-start-1 / col-end-2;
+  }
+}
+
+.c-queue-list {
+  max-height: 42rem;
+  overflow-y: scroll;
+  overflow-x: hidden; // TODO: ugly fix for scroll caused by absolute position of upvote svg part 1
+}

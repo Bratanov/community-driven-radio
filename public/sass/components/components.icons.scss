@@ -1,0 +1,76 @@
+/* ==========================================================================
+   #ICONS
+   ========================================================================== */
+
+/**
+ * Default styling for icons.
+ */
+
+ .c-icon {
+  width: 4rem;
+  height: 4rem;
+  padding: 1rem;
+  display: block;
+  margin: 0 auto;
+  transition: all .3s ease;
+
+  @supports (-webkit-mask-image: url()) or (mask-image: url()) {
+    // change content bg color (e.g. masked area color) if mask is supported
+    &:hover,
+    &.active {
+
+      .c-icon__content {
+        background-color: var(--color-primary);
+      }
+    }
+  }
+
+  &--small {
+    width: 3rem;
+    height: 3rem;
+    padding: .4rem;
+  }
+
+  &--bordered {
+    border: 1px solid var(--color-text-primary);
+    border-radius: 50%;
+
+    &:hover,
+    &.active {
+      border: 1px solid var(--color-primary);
+    }
+  }
+
+  &__content {
+    display: block;
+    width: 100%;
+    height: 100%;
+    transition: all .3s ease;
+
+    &--settings {
+      @include iconBackgroundContent('/img/icon-settings.svg');
+    }
+    &--search {
+      @include iconBackgroundContent('/img/icon-search.svg');
+    }
+    &--plus {
+      @include iconBackgroundContent('/img/icon-plus.svg');
+      transform: scale(.85);
+    }
+    &--arrow-up {
+      @include iconBackgroundContent('/img/icon-arrow-up.svg');
+      transform: scale(1.2);
+    }
+    &--chat {
+      @include iconBackgroundContent('/img/icon-chat.svg');
+    }
+    &--headphones-user {
+      @include iconBackgroundContent('/img/icon-headphones-user.svg');
+      transform: scale(1.5) translateY(-1px);
+    }
+    &--musical-note {
+      @include iconBackgroundContent('/img/icon-musical-note.svg');
+      transform: translateX(-.1rem);
+    }
+  }
+}

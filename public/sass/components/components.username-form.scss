@@ -1,0 +1,63 @@
+.c-username-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 70vw;
+  height: 70vh;
+  min-height: 47rem;
+  padding: 5rem;
+  border-radius: 3rem;
+  background-image: linear-gradient(
+    to right bottom,
+    var(--color-bg-start) 25%,
+    var(--color-bg-end)
+  ), url(../img/worn_dots.png);
+
+  &__heading {
+    text-align: center;
+  }
+
+  &__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 5rem 0;
+  }
+
+  &__content-item--primary {
+    flex: 1.5 0 0;
+  }
+
+  &__content-item--secondary {
+    flex: 1 0 0;
+    align-self: center;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__select-wrapper {
+    position: relative;
+  }
+
+  &__select {
+    -moz-appearance: window;
+    -webkit-appearance: none;
+    appearance: none;
+    background: #fff;
+    cursor: pointer;
+  }
+
+  &__select-icon {
+    position: absolute;
+    bottom: 0.6rem;
+    right: 0.6rem;
+    width: 3rem;
+    height: 3rem;
+    pointer-events: none;
+    @include iconBackgroundContent('/img/arrow_up.svg', var(--color-secondary));
+    transform: rotate(180deg);
+  }
+}
