@@ -47,4 +47,15 @@
     --color-text-silver-light: #cccccc;
     --color-text-silver-dark: #999999;
   }
+
+  &.focus-theme {
+    --color-primary: #bada55;
+    --color-secondary: lightgreen;
+    --color-bg-start: rgba(0, 0, 0, 1);
+    --color-bg-end: rgba(0, 0, 0, 1);
+    --color-text-primary: green;
+    --color-text-secondary: green;
+    --color-text-silver-light: #cccccc;
+    --color-text-silver-dark: #999999;
+  }
 }
