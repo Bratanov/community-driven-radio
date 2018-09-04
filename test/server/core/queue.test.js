@@ -3,13 +3,15 @@ const sinon = require('sinon');
 const _ = require('lodash');
 const expect = chai.expect;
 const Queue = require('../../../server/core/queue');
+const VotesManager = require('../../../server/core/votes-manager');
+const Client = require('../../../server/core/client');
 
 describe('Queue', function() {
 	let queue;
 	let client;
 	let clientManager;
 	/**
-	 * A collection of a few completely random song igs that will be a valid match in a YT query
+	 * A collection of a few completely random song ids that will be a valid match in a YT query
 	 */
 	let songIds = [
 		'-gd0psCIdmM',
@@ -48,7 +50,7 @@ describe('Queue', function() {
 					if (songIdsCopy.length == 0) {
 						// get the sorted items list (dont queue.items directly!)
 						let itemsSorted = queue.getItems();
-						itemsSortedIds = _.map(itemsSorted, (song) => song.youtubeId);
+						let itemsSortedIds = _.map(itemsSorted, (song) => song.youtubeId);
 
 						expect(itemsSortedIds).to.deep.eq(songIds);
 
@@ -62,6 +64,53 @@ describe('Queue', function() {
 
 			// add first item to queue
 			queue.add(client, songIdsCopy.shift());
+		});
+
+		it('should sort highest rated first', function(next) {
+			// votes manager calculates votes of clients for the queue items
+			let votesManager = new VotesManager(queue);
+			// client has own votes attached
+			let client1 = new Client(sinon.mock());
+			votesManager.attachClient(client1);
+
+			let songIdsCopy = songIds.slice(0, 2);
+			let voteAdded = false;
+
+			clientManager.emitToAll = function (event, data) {
+				// catch the "item added to queue" event
+				if (event == 'queue_info') {
+					if (queue.getItems().length == 1) {
+						// add second item to queue
+						return queue.add(client1, songIdsCopy[1]);
+					}
+
+					// when all items have been added to queue
+					if (queue.getItems().length == 2) {
+						// add vote for second item
+						if (!voteAdded) {
+							votesManager.addVote(client1, queue.items[1].id);
+
+							voteAdded = true;
+							// update votes count manually, usually happens on a socket event
+							return votesManager.recalculateVotes();
+						}
+
+						// get the sorted items list (dont queue.items directly!)
+						let itemsSorted = queue.getItems();
+						let itemsSortedIds = _.map(itemsSorted, (song) => song.youtubeId);
+
+						expect(itemsSortedIds).to.deep.eq([
+							songIdsCopy[1],
+							songIdsCopy[0]
+						]);
+
+						return next()
+					}
+				}
+			};
+
+			// add first item to queue
+			queue.add(client1, songIdsCopy[0]);
 		});
 	})
 });

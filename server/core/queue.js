@@ -65,10 +65,10 @@ class Queue {
 	 * @return {[Song]} Array of song items, sorted by votes/position
 	 */
 	getItems() {
-		// sort by votes, using lodash's *stable* sorting
-		// in order to preserve the original order of
-		// similar voted songs based on time added
-		return _.sortBy(this.items, (item) => item.votes);
+		// sort by votes in descending order, using lodash's *stable*
+		// sorting in order to preserve the original order of
+		// songs with equal votes based on time added
+		return _.sortBy(this.items, (item) => -item.votes);
 	}
 
 	/**
