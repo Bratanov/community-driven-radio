@@ -2,8 +2,8 @@
   &.focus-theme {
     --color-primary: #BADA55;
     --color-secondary: lightgreen;
-    --color-bg-start: rgba(0, 0, 0, 1);
-    --color-bg-end: rgba(0, 0, 0, 1);
+    --color-bg-start: #030303;
+    --color-bg-end: #030303;
     --color-bg-popup: #FFF;
     --color-text-primary: green;
     --color-text-secondary: green;
@@ -15,15 +15,38 @@
 .focus-theme {
   .autocomplete-suggestion {
     color: var(--color-text-primary);
-    background-color: var(--color-primary);
+    background-color: var(--color-bg-start);
+    border-top: 1px solid var(--color-text-primary);
+    border-right: 1px solid var(--color-text-primary);
+    border-left: 1px solid var(--color-text-primary);
+
+    // includes the new borders
+    max-height: 36rem;
 
     &.selected {
-      background-color: var(--color-secondary);
+      background-color: var(--color-text-primary);
+      color: var(--color-bg-start);
     }
+  }
+
+  .c-header__logo img {
+    filter: invert(0.5) sepia(100%) hue-rotate(70deg) saturate(200%) contrast(2);
+  }
+
+  .autocomplete-suggestion:last-child {
+    border-bottom: 1px solid var(--color-text-primary);
   }
 
   .c-input-basic {
     color: var(--color-text-primary);
+  }
+
+  .c-dialog {
+    background-color: rgba(0, 255, 0, 0.1);
+  }
+
+  .c-footer__text a:hover {
+    color: var(--color-primary);
   }
 
   .c-video-player {
@@ -35,6 +58,10 @@
   }
 
   .c-chat {
+    display: none;
+  }
+
+  .u-h-secondary {
     display: none;
   }
 }

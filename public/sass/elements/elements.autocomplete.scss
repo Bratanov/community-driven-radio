@@ -25,14 +25,3 @@
     font-size: 1.5rem;
   }
 }
-
-.focus-theme {
-  .autocomplete-suggestion {
-    color: var(--color-text-primary);
-    background-color: var(--color-primary);
-
-    &.selected {
-      background-color: var(--color-secondary);
-    }
-  }
-}
