@@ -1,0 +1,39 @@
+:root {
+  &.focus-theme {
+    --color-primary: #BADA55;
+    --color-secondary: lightgreen;
+    --color-bg-start: rgba(0, 0, 0, 1);
+    --color-bg-end: rgba(0, 0, 0, 1);
+    --color-bg-popup: #FFF;
+    --color-text-primary: green;
+    --color-text-secondary: green;
+    --color-text-silver-light: #CCC;
+    --color-text-silver-dark: #999999;
+  }
+
+.focus-theme {
+  .autocomplete-suggestion {
+    color: var(--color-text-primary);
+    background-color: var(--color-primary);
+
+    &.selected {
+      background-color: var(--color-secondary);
+    }
+  }
+
+  .c-input-basic {
+    color: var(--color-text-primary);
+  }
+
+  .c-video-player {
+    display: none;
+  }
+
+  .c-sound-wave {
+    display: none;
+  }
+
+  .c-chat {
+    display: none;
+  }
+}
