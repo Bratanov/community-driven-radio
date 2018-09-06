@@ -72,10 +72,7 @@
 @import "settings/settings.config";
 //@import "node_modules/inuitcss/settings/settings.core";
 @import "settings/settings.global";
-@import "settings/settings.colors";
-
-
-
+@import "settings/settings.themes";
 
 // TOOLS
 @import "tools/tools.placeholders";
@@ -85,10 +82,6 @@
 @import "node_modules/inuitcss/tools/tools.hidden";
 @import "node_modules/sass-mq/mq";
 
-
-
-
-
 // GENERIC
 @import "node_modules/inuitcss/generic/generic.box-sizing";
 @import "node_modules/inuitcss/generic/generic.normalize";
@@ -96,20 +89,12 @@
 @import "generic/generic.reset-spacings";
 //@import "generic/generic.shared";
 
-
-
-
-
 // ELEMENTS
 @import "elements/elements.page";
 //@import "elements/elements.headings";
 @import "node_modules/inuitcss/elements/elements.images";
 @import "node_modules/inuitcss/elements/elements.tables";
 @import "elements/elements.autocomplete";
-
-
-
-
 
 // OBJECTS
 //
@@ -129,10 +114,6 @@
 @import "objects/objects.content";
 @import "objects/objects.grid";
 @import "objects/objects.dialog";
-
-
-
-
 
 // COMPONENTS
 //
@@ -154,9 +135,6 @@
 @import "components/components.related";
 @import "components/components.song-queue";
 @import "components/components.sound-wave";
-
-
-
 
 // UTILITIES
 //@import "utilities/utilities.clearfix";

@@ -1,0 +1,17 @@
+:root {
+  &.playstrip-theme {
+    --color-primary: #9a90a8;
+    --color-secondary: #3d2463;
+    --color-bg-start: #d8d8d8;
+    --color-bg-end: #d8d8d8;
+    --color-bg-popup: #FFF;
+    --color-text-primary: #4e317b;
+    --color-text-secondary: #4e317b;
+    --color-text-silver-light: #ffcf04;
+    --color-text-silver-dark: #454644;
+  }
+
+  .c-header__logo img {
+    filter: sepia(100%) saturate(1800%) hue-rotate(-40deg) contrast(50%);
+  }
+}

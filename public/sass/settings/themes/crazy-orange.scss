@@ -1,0 +1,13 @@
+:root {
+  &.crazy-orange-theme {
+    --color-primary: #E74B37;
+    --color-secondary: #F8463C;
+    --color-bg-start: rgba(244, 82, 41, .85);
+    --color-bg-end: rgba(245, 176, 85, .85);
+    --color-bg-popup: #FFF;
+    --color-text-primary: #FFF;
+    --color-text-secondary: #b17428;
+    --color-text-silver-light: #cccccc;
+    --color-text-silver-dark: #999999;
+  }
+}

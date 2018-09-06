@@ -5,11 +5,11 @@
 .c-theme-controls {
   display: none;
   position: absolute;
-  top: -16rem;
+  bottom: 5rem;
   left: -1rem;
   width: 11rem;
   padding: 0.8rem 0.5rem;
-  background-color: var(--color-text-primary);
+  background-color: var(--color-bg-popup);
   color: var(--color-text-secondary);
   border-radius: 1rem;
   line-height: 1; // sets height = font-size to fix translate of tgl button
