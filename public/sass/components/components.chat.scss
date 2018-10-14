@@ -25,10 +25,6 @@
   border: 1px solid var(--color-text-primary);
   border-radius: 1.5rem;
 
-  &--with-sticky-item {
-    padding-top: 4rem;
-  }
-
   &__messages {
     display: flex;
     flex-direction: column;
