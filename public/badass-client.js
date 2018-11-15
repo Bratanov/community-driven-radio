@@ -191,6 +191,91 @@ $('body').on('click', '.js-btn-add', function() {
 	socket.emit('new_song', $(this).data('youtube-id'));
 });
 
+var renderer = {
+
+	_cloneTemplate: function(templateId) {
+		return $($('#' + templateId).html().trim());
+	},
+
+	getQueueItem: function(number, songData) {
+		var $clone = this._cloneTemplate('t-queue-list-item');
+
+		$clone.find('.c-song-list-item__number').text(number + '.');
+		$clone.find('.c-song-list-item__title')
+			.attr('href', 'https://youtube.com/watch?v=' + songData.youtubeId)
+			.text(songData.title);
+		var duration = (songData.playTime) ? songData.playTime : songData.duration;
+		$clone.find('.c-song-list-item__duration').text('- ' + duration + ' sec.');
+
+		$clone.find('.js-btn-vote').attr('data-song-id', songData.id);
+		$clone.find('.c-song-list-item__votes').text(songData.votes);
+
+		// TOOD: delete button in template? There's a (backend?) bug here.
+		// var addedBy = songData.addedBy.substring(2);
+		// var deleteButton = '';
+		// if (addedBy == socket.id) {
+		// 	deleteButton = '<button class="btn-delete" data-song-id="' + o.id + '">Remove</button>';
+		// }
+
+		return $clone;
+	},
+
+	getRelatedItem: function(number, songData) {
+		var $clone = this._cloneTemplate('t-related-list-item');
+
+		$clone.find('.c-song-list-item__number').text(number + '.');
+		$clone.find('.c-song-list-item__title')
+			.attr('href', 'https://youtube.com/watch?v=' + songData.youtubeId)
+			.text(songData.title);
+		$clone.find('.js-btn-add').attr('data-youtube-id', songData.youtubeId);
+
+		return $clone;
+	},
+
+	/**
+	 * Render chat message.
+	 * @param {Object} message
+	 * {
+	 * 	author: String,
+	 * 	value: String
+	 * }
+	 */
+	getChatMessage: function(currentUserName, message) {
+		var $clone = this._cloneTemplate('t-message');
+
+		if (currentUserName === message.author) {
+			// logged user's message
+			$clone.addClass('c-chat-history__item--right c-chat-history__item--inverse');
+		} else {
+			// another user's message
+			$clone.addClass('c-chat-history__item--left');
+		}
+
+		$clone.find('.c-chat-history__author').text(message.author);
+		$clone.find('.c-chat-history__message').text(message.value);
+
+		return $clone;
+	},
+
+	getChatSystemMessage: function(id, title, duration) {
+		var $clone = this._cloneTemplate('t-system-message');
+
+		$clone.attr('data-id', id);
+		$clone.find('.c-chat-history__text').text(title);
+		$clone.find('.c-chat-history__timer').text(duration + ' sec.');
+
+		return $clone;
+	},
+
+	updateStickyMessage: function(id, title, duration) {
+		var $stickyMessage = $('.c-chat-history__item--sticky');
+
+		$stickyMessage.attr('data-id', id);
+		$stickyMessage.find('.c-chat-history__text').text(title);
+		$stickyMessage.find('.c-chat-history__timer').text(duration + ' sec.');
+	}
+};
+
 socket.on('chat_msg', function(data) {
 	addMessage(data);
 });
@@ -198,6 +283,7 @@ socket.on('chat_msg', function(data) {
 socket.on('new_song', function(song) {
 	var songUrlParams = queryStringToObj(song.url_params);
 
+	renderer.updateStickyMessage(song.info.youtubeId, song.info.title, song.info.duration);
 	$message = renderer.getChatSystemMessage(song.info.youtubeId, song.info.title, song.info.duration);
 	$('#chat-history').append($message);
 	$('#chat-history').scrollTop(999999999);
@@ -240,12 +326,15 @@ socket.on('song_info', function(data) {
 	// sync song time diplayed in chat
 	// find song in chat by song id attr and update template
 	$timer = findSongSystemMessage(data.youtubeId).find('.c-chat-history__timer');
+	$timerSticky = findSongSystemMessageSticky(data.youtubeId).find('.c-chat-history__timer');
 	if (data.duration - data.playingAt > 1) {
 		// more than 1 second is remaining until song ends
 		$timer.text(data.playTime + ' sec.');
+		$timerSticky.text(data.playTime + ' sec.');
 	} else {
 		// update with duration
 		$timer.text(data.duration + ' sec.');
+		$timerSticky.text(data.duration + ' sec.');
 	}
 
 	// sync player play time with server
@@ -261,13 +350,59 @@ socket.on('song_info', function(data) {
 	var previouslyPlayingSongId = false;
 
 	function resetStickyMessages() {
-		$('.c-chat-history__item').removeClass('c-chat-history__item--sticky');
-		$('.c-chat-history').removeClass('c-chat-history--with-sticky-item');
+		$('.c-chat-history__item--sticky').hide();
+		$('.c-chat-history__messages').removeClass('c-chat-history__messages--with-sticky');
 	}
 
-	function setStickyMessage($message) {
-		$message.addClass('c-chat-history__item--sticky');
-		$('.c-chat-history').addClass('c-chat-history--with-sticky-item');
+	function setStickyMessage() {
+		$('.c-chat-history__item--sticky').show();
+		$('.c-chat-history__messages').addClass('c-chat-history__messages--with-sticky');
+	}
+
+	function setHistoryStartMessage() {
+		var $chatHistoryStart = $('#chat-history-start');
+		var startMessages = [
+			'It starts with one',
+			'One thing, I don\'t know why',
+			'It doesn\'t even matter how hard you try',
+			'Keep that in mind',
+			'I designed this rhyme to explain in due time',
+			'All I know',
+			'Time is a valuable thing',
+			'Watch it fly by as the pendulum swings',
+			'Watch it count down to the end of the day',
+			'The clock ticks life away',
+			'It\'s so unreal',
+			'You didn\'t look out below',
+			'Watch the time go right out the window',
+			'Tryin\' to hold on, they didn\'t even know',
+			'I wasted it all just to watch you go',
+			'I kept everything inside',
+			'And even though I tried, it all fell apart',
+			'What it meant to me will eventually be a memory',
+			'Of a time when I tried so hard',
+			'One thing, I don\'t know why',
+			'It doesn\'t even matter how hard you try',
+			'Keep that in mind, I designed this rhyme',
+			'To remind myself how I tried so hard',
+			'It\'s part of the way you were mockin\' me',
+			'Actin\' like I was part of your property',
+			'Remembering all the times you fought with me',
+			'I\'m surprised it got so far',
+			'Things aren\'t the way they were before',
+			'You wouldn\'t even recognize me anymore',
+			'Not that you knew me back then',
+			'But it all comes back to me in the end',
+			'You kept everything inside',
+			'And even though I tried, it all fell apart',
+			'What it meant to me will eventually',
+			'Be a memory of a time when I tried so hard'
+		];
+		var chosenMessages = []
+		for (var i = 0; i < 3; i++) {
+			chosenMessages.push(startMessages.splice(parseInt(startMessages.length*Math.random()), 1)[0]);
+		}
+		$chatHistoryStart.html(`<i>${chosenMessages.join('<br />')}</i>`);
 	}
 
 	function setStickyMessagePosition(e) {
@@ -285,7 +420,7 @@ socket.on('song_info', function(data) {
 		}
 		// find song in chat messages
 		var $songMessage = findSongSystemMessage(currentlyPlayingSongId);
-	
+
 		var $chatHistory = $('#chat-history');
 		var visibleVerticalCoords = {
 			top: $chatHistory.scrollTop(),
@@ -294,8 +429,6 @@ socket.on('song_info', function(data) {
 
 		// get original position relative to parent ($chatHistory)
 		var messagePosition = 0;
-		// position will be incorrect if element is already sticky
-		// Note: another way to check this would be to seek for .c-chat-history--with-sticky-item in container
 		if (stickyMessageOriginalTopCoords !== false) {
 			messagePosition = stickyMessageOriginalTopCoords;
 		} else {
@@ -314,11 +447,23 @@ socket.on('song_info', function(data) {
 		}
 	}
 
+	setHistoryStartMessage();
+
+	// add sticky message
+	var $stickyMessage = renderer._cloneTemplate('t-system-message');
+	$stickyMessage.addClass('c-chat-history__item--sticky');
+	$stickyMessage.hide();
+	$('#chat-history').append($stickyMessage);
+
 	$('#chat-history').on('scroll', setStickyMessagePosition);
-})()
+})();
 
 function findSongSystemMessage (youtubeId) {
-	return $('.c-chat-history__item[data-id=' + youtubeId + ']');
+	return $('.c-chat-history__item[data-id=' + youtubeId + ']:not(.c-chat-history__item--sticky)').last();
+}
+
+function findSongSystemMessageSticky (youtubeId) {
+	return $('.c-chat-history__item[data-id=' + youtubeId + '].c-chat-history__item--sticky');
 }
 
 function addMessage(message) {
@@ -356,84 +501,6 @@ socket.on('be_alerted', function(message) {
 });
 
 socket.on('youtube_search', fillAutocompleteOptions);
-
-
-var renderer = {
-
-	_cloneTemplate: function(templateId) {
-		return $($('#' + templateId).html().trim());
-	},
-
-	getQueueItem: function(number, songData) {
-		var $clone = this._cloneTemplate('t-queue-list-item'); 
-	
-		$clone.find('.c-song-list-item__number').text(number + '.');
-		$clone.find('.c-song-list-item__title')
-			.attr('href', 'https://youtube.com/watch?v=' + songData.youtubeId)
-			.text(songData.title);
-		var duration = (songData.playTime) ? songData.playTime : songData.duration;
-		$clone.find('.c-song-list-item__duration').text('- ' + duration + ' sec.');
-	
-		$clone.find('.js-btn-vote').attr('data-song-id', songData.id);
-		$clone.find('.c-song-list-item__votes').text(songData.votes);
-	
-		// TOOD: delete button in template? There's a (backend?) bug here.
-		// var addedBy = songData.addedBy.substring(2);
-		// var deleteButton = '';
-		// if (addedBy == socket.id) {
-		// 	deleteButton = '<button class="btn-delete" data-song-id="' + o.id + '">Remove</button>';
-		// }
-	
-		return $clone;
-	},
-
-	getRelatedItem: function(number, songData) {
-		var $clone = this._cloneTemplate('t-related-list-item');
-	
-		$clone.find('.c-song-list-item__number').text(number + '.');
-		$clone.find('.c-song-list-item__title')
-			.attr('href', 'https://youtube.com/watch?v=' + songData.youtubeId)
-			.text(songData.title);
-		$clone.find('.js-btn-add').attr('data-youtube-id', songData.youtubeId);
-	
-		return $clone;
-	},
-
-	/**
-	 * Render chat message.
-	 * @param {Object} message 
-	 * {
-	 * 	author: String,
-	 * 	value: String
-	 * }
-	 */
-	getChatMessage: function(currentUserName, message) {
-		var $clone = this._cloneTemplate('t-message');
-
-		if (currentUserName === message.author) {
-			// logged user's message
-			$clone.addClass('c-chat-history__item--right c-chat-history__item--inverse');
-		} else {
-			// another user's message
-			$clone.addClass('c-chat-history__item--left');
-		}
-
-		$clone.find('.c-chat-history__author').text(message.author);
-		$clone.find('.c-chat-history__message').text(message.value);
-
-		return $clone;
-	},
-
-	getChatSystemMessage: function(id, title, duration) {
-		var $clone = this._cloneTemplate('t-system-message');
-
-		$clone.attr('data-id', id);
-		$clone.find('.c-chat-history__text').text(title);
-		$clone.find('.c-chat-history__timer').text(duration + ' sec.');
-
-		return $clone;
-	}
-};
 
 /**
  * A soundwave animation

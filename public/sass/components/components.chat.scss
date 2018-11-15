@@ -25,10 +25,6 @@
   border: 1px solid var(--color-text-primary);
   border-radius: 1.5rem;
 
-  &--with-sticky-item {
-    padding-top: 4rem;
-  }
-
   &__messages {
     display: flex;
     flex-direction: column;
@@ -36,6 +32,15 @@
     padding-right: .5rem;
     overflow-y: scroll;
     overflow-x: hidden;
+
+    &--with-sticky::-webkit-scrollbar-track {
+      margin-top: 2rem;
+    }
+  }
+
+  &__start {
+    margin: 100px auto;
+    text-align: center;
   }
 
   &__item {
