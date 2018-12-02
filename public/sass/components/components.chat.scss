@@ -62,6 +62,10 @@
       margin-right: auto;
       border-top-left-radius: initial;
     }
+
+    &--system {
+      background-color: var(--color-primary)
+    }
   }
 
   &__item--inverse {
