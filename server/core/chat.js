@@ -26,6 +26,7 @@ class Chat {
 
 		//Bind events to this user:
 		client.on('chat_msg', data => {
+			data.created = new Date();
 			this.newMessage(client, data);
 		});
 	}

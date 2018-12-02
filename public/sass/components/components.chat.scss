@@ -100,6 +100,13 @@
     word-wrap: break-word;
   }
 
+  &__created {
+    margin-left: auto;
+    font-size: 1rem;
+    height: 1rem;
+    color: var(--color-text-silver-light);
+  }
+
   &__timer {
     font-style: italic;
   }

@@ -78,7 +78,8 @@ function onMessageSubmit($input) {
 
 	var message = {
 		author: userName,
-		value: value
+		value: value,
+		created: new Date() // local use only
 	};
 
 	// Send msg
@@ -251,8 +252,13 @@ var renderer = {
 			$clone.addClass('c-chat-history__item--left');
 		}
 
+		var createdShort = `${message.created.getHours()}:${message.created.getMinutes()}`;
+		var createdLong = message.created.toISOString();
+
 		$clone.find('.c-chat-history__author').text(message.author + ':');
 		$clone.find('.c-chat-history__message').text(message.value);
+		$clone.find('.c-chat-history__created').text(createdShort);
+		$clone.find('.c-chat-history__created').attr('title', createdLong);
 
 		return $clone;
 	},
