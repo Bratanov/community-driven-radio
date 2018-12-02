@@ -251,7 +251,7 @@ var renderer = {
 			$clone.addClass('c-chat-history__item--left');
 		}
 
-		$clone.find('.c-chat-history__author').text(message.author);
+		$clone.find('.c-chat-history__author').text(message.author + ':');
 		$clone.find('.c-chat-history__message').text(message.value);
 
 		return $clone;
