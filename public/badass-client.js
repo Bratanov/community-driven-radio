@@ -85,7 +85,7 @@ function onMessageSubmit($input) {
 	// Send msg
 	socket.emit('chat_msg', message);
 
-	addMessage(message);
+	addMessage(message, true);
 
 	// Clear text in input
 	$input.val('');
@@ -282,8 +282,34 @@ var renderer = {
 	}
 };
 
+/**
+ * Allows (optional) append a message to the chat,
+ * and scrolls the chat if the chat is already
+ * scrolled to the bottom before new message
+ * is appended, or if force was specified
+ * @param $message DOM element with new message
+ * @param force Boolean
+ */
+function appendAndScrollChatToTopIfNeeded($message, force) {
+	if (typeof force === 'undefined') {
+		force = false
+	}
+
+	var chatHistory = $('#chat-history')
+	var totalScrollAvailable = chatHistory[0].scrollHeight;
+	var currentScrollPosition = chatHistory.scrollTop() + chatHistory.height()
+
+	if($message) {
+		chatHistory.append($message);
+	}
+
+	if ((currentScrollPosition >= totalScrollAvailable) || force) {
+		chatHistory.scrollTop(999999999);
+	}
+}
+
 socket.on('chat_msg', function(data) {
-	addMessage(data);
+	addMessage(data, false);
 });
 
 socket.on('new_song', function(song) {
@@ -291,8 +317,8 @@ socket.on('new_song', function(song) {
 
 	renderer.updateStickyMessage(song.info.youtubeId, song.info.title, song.info.duration);
 	$message = renderer.getChatSystemMessage(song.info.youtubeId, song.info.title, song.info.duration);
-	$('#chat-history').append($message);
-	$('#chat-history').scrollTop(999999999);
+
+	appendAndScrollChatToTopIfNeeded();
 
 	player.play(songUrlParams.url, songUrlParams);
 
@@ -427,6 +453,9 @@ socket.on('song_info', function(data) {
 		// find song in chat messages
 		var $songMessage = findSongSystemMessage(currentlyPlayingSongId);
 
+		// radio just started, no songs playing
+		if(!$songMessage.length) return;
+
 		var $chatHistory = $('#chat-history');
 		var visibleVerticalCoords = {
 			top: $chatHistory.scrollTop(),
@@ -472,11 +501,15 @@ function findSongSystemMessageSticky (youtubeId) {
 	return $('.c-chat-history__item[data-id=' + youtubeId + '].c-chat-history__item--sticky');
 }
 
-function addMessage(message) {
+function addMessage(message, ownMessage) {
+	// allows date to be passed as a string
+	if (typeof message.created === 'string') {
+		message.created = new Date(message.created)
+	}
+
 	var $chatHistory = $('#chat-history');
 	var $message = renderer.getChatMessage(userName, message);
-	$chatHistory.append($message);
-	$chatHistory.scrollTop(999999999);
+	appendAndScrollChatToTopIfNeeded($message, ownMessage)
 }
 
 socket.on('queue_info', function(data) {
