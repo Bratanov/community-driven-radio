@@ -76,6 +76,10 @@
     color: var(--color-text-silver-dark);
   }
 
+  &__item--inverse &__created {
+    color: var(--color-text-silver-dark);
+  }
+
   &__item--inverse &__message {
     color: var(--color-primary);
   }

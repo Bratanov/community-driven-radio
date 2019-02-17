@@ -192,6 +192,15 @@ $('body').on('click', '.js-btn-add', function() {
 	socket.emit('new_song', $(this).data('youtube-id'));
 });
 
+var getTimeShort = function (date) {
+	var hours = date.getHours();
+	var minutes = date.getMinutes();
+	var hoursPadded = hours.toString().padStart(2, '0');
+	var minutesPadded = minutes.toString().padStart(2, '0');
+
+	return [hoursPadded, minutesPadded].join(':');
+};
+
 var renderer = {
 
 	_cloneTemplate: function(templateId) {
@@ -252,7 +261,7 @@ var renderer = {
 			$clone.addClass('c-chat-history__item--left');
 		}
 
-		var createdShort = `${message.created.getHours()}:${message.created.getMinutes()}`;
+		var createdShort = getTimeShort(message.created);
 		var createdLong = message.created.toISOString();
 
 		$clone.find('.c-chat-history__author').text(message.author + ':');
@@ -288,14 +297,14 @@ var renderer = {
  * scrolled to the bottom before new message
  * is appended, or if force was specified
  * @param $message DOM element with new message
- * @param force Boolean
+ * @param forceScroll Boolean
  */
-function appendAndScrollChatToTopIfNeeded($message, force) {
-	if (typeof force === 'undefined') {
-		force = false
+function appendAndScrollChatToTopIfNeeded($message, forceScroll) {
+	if (typeof forceScroll === 'undefined') {
+		forceScroll = false;
 	}
 
-	var chatHistory = $('#chat-history')
+	var chatHistory = $('#chat-history');
 	var totalScrollAvailable = chatHistory[0].scrollHeight;
 	var currentScrollPosition = chatHistory.scrollTop() + chatHistory.height()
 
@@ -303,7 +312,7 @@ function appendAndScrollChatToTopIfNeeded($message, force) {
 		chatHistory.append($message);
 	}
 
-	if ((currentScrollPosition >= totalScrollAvailable) || force) {
+	if ((currentScrollPosition >= totalScrollAvailable) || forceScroll) {
 		chatHistory.scrollTop(999999999);
 	}
 }
@@ -318,7 +327,7 @@ socket.on('new_song', function(song) {
 	renderer.updateStickyMessage(song.info.youtubeId, song.info.title, song.info.duration);
 	$message = renderer.getChatSystemMessage(song.info.youtubeId, song.info.title, song.info.duration);
 
-	appendAndScrollChatToTopIfNeeded();
+	appendAndScrollChatToTopIfNeeded($message);
 
 	player.play(songUrlParams.url, songUrlParams);
 
@@ -504,12 +513,12 @@ function findSongSystemMessageSticky (youtubeId) {
 function addMessage(message, ownMessage) {
 	// allows date to be passed as a string
 	if (typeof message.created === 'string') {
-		message.created = new Date(message.created)
+		message.created = new Date(message.created);
 	}
 
 	var $chatHistory = $('#chat-history');
 	var $message = renderer.getChatMessage(userName, message);
-	appendAndScrollChatToTopIfNeeded($message, ownMessage)
+	appendAndScrollChatToTopIfNeeded($message, ownMessage);
 }
 
 socket.on('queue_info', function(data) {
