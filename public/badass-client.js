@@ -291,6 +291,22 @@ var renderer = {
 	}
 };
 
+function isChatHistoryScrolledToBottom() {
+	var chatHistory = $('#chat-history');
+	var totalScrollAvailable = chatHistory[0].scrollHeight;
+	var currentScrollPosition = chatHistory.scrollTop() + chatHistory.height();
+
+	return (currentScrollPosition >= totalScrollAvailable);
+}
+
+function showNewMessageNotice() {
+	$('#chat-history-new-message').show();
+}
+
+function hideNewMessageNotice() {
+	$('#chat-history-new-message').hide();
+}
+
 /**
  * Allows (optional) append a message to the chat,
  * and scrolls the chat if the chat is already
@@ -305,15 +321,22 @@ function appendAndScrollChatToTopIfNeeded($message, forceScroll) {
 	}
 
 	var chatHistory = $('#chat-history');
-	var totalScrollAvailable = chatHistory[0].scrollHeight;
-	var currentScrollPosition = chatHistory.scrollTop() + chatHistory.height()
+
+	// important to take this measurement before adding the new message
+	// so we know if history was scrolled *before* new message arrived
+	var chatHistoryScrolledToBottom = isChatHistoryScrolledToBottom();
 
 	if($message) {
 		chatHistory.append($message);
 	}
 
-	if ((currentScrollPosition >= totalScrollAvailable) || forceScroll) {
+	if (chatHistoryScrolledToBottom || forceScroll) {
 		chatHistory.scrollTop(999999999);
+	} else {
+		if($message && !$message.hasClass('c-chat-history__item--system')) {
+			// show new message notice, for all non-system messages
+			showNewMessageNotice();
+		}
 	}
 }
 
@@ -446,6 +469,12 @@ socket.on('song_info', function(data) {
 		$chatHistoryStart.html(`<i>${chosenMessages.join('<br />')}</i>`);
 	}
 
+	function hideNewMessageNoticeIfNeeded() {
+		if(isChatHistoryScrolledToBottom()) {
+			hideNewMessageNotice();
+		}
+	}
+
 	function setStickyMessagePosition(e) {
 		// song not loaded yet, do nothing
 		if (!player.instance) return;
@@ -500,6 +529,11 @@ socket.on('song_info', function(data) {
 	$('#chat-history').append($stickyMessage);
 
 	$('#chat-history').on('scroll', setStickyMessagePosition);
+	$('#chat-history').on('scroll', hideNewMessageNoticeIfNeeded);
+	$('#chat-history-new-message').on('click', function() {
+		appendAndScrollChatToTopIfNeeded(null, true);
+		hideNewMessageNotice();
+	});
 })();
 
 function findSongSystemMessage (youtubeId) {

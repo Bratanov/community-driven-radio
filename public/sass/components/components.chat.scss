@@ -43,6 +43,21 @@
     text-align: center;
   }
 
+  &__new-message {
+    position: absolute;
+    bottom: 60px;
+    width: 100%;
+    display: none;
+  }
+
+  &__new-message .c-chat-history__item {
+    margin: 0 auto;
+    width: 140px;
+    text-align: center;
+    background-color: var(--color-primary);
+    cursor: pointer;
+  }
+
   &__item {
     display: flex;
     flex: 0 0 auto;
