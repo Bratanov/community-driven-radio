@@ -72,6 +72,10 @@ $('#message-submit').on('click', function(e) {
 	onMessageSubmit($('#message-input'));
 });
 
+wdtEmojiBundle.defaults.emojiSheets.apple = '//ned.im/wdt-emoji-bundle/sheets/sheet_apple_64_indexed_128.png';
+wdtEmojiBundle.defaults.type = 'apple';
+wdtEmojiBundle.init('#message-input');
+
 function onMessageSubmit($input) {
 	var value = $input.val();
 	if (!value) return;
@@ -263,9 +267,12 @@ var renderer = {
 
 		var createdShort = getTimeShort(message.created);
 		var createdLong = message.created.toISOString();
+		// note: escapes original message here, so we can use .html to show emojis in messages
+		var messageEscaped = $('<div></div>').text(message.value).html();
+		var messageWithEmojis = wdtEmojiBundle.render(messageEscaped);
 
 		$clone.find('.c-chat-history__author').text(message.author + ':');
-		$clone.find('.c-chat-history__message').text(message.value);
+		$clone.find('.c-chat-history__message').html(messageWithEmojis);
 		$clone.find('.c-chat-history__created').text(createdShort);
 		$clone.find('.c-chat-history__created').attr('title', createdLong);
 
@@ -405,7 +412,7 @@ socket.on('song_info', function(data) {
 	player.streamPlayingAt(data.playingAt);
 });
 
-// set currently playing song postion on top of mesage container
+// set currently playing song position on top of message container
 // when it's not visible
 // TODO: Soooo many corner cases. What if song persist more than once in the same list?
 (function() {

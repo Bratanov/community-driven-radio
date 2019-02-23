@@ -13,6 +13,11 @@
   }
 }
 
+.c-chat .wdt-emoji-picker {
+  right: 38px;
+  bottom: 10px;
+}
+
 .c-chat-history {
   position: absolute; // --sticky-top items is relative to that
   top: 0;
