@@ -11,11 +11,11 @@
     padding-top: 85%;
     position: relative;
   }
-}
 
-.c-chat .wdt-emoji-picker {
-  right: 38px;
-  bottom: 10px;
+  .wdt-emoji-picker {
+    right: 3.8rem;
+    bottom: 1rem;
+  }
 }
 
 .c-chat-history {
@@ -50,17 +50,17 @@
 
   &__new-message {
     position: absolute;
-    bottom: 60px;
+    bottom: 6rem;
     width: 100%;
     display: none;
-  }
 
-  &__new-message .c-chat-history__item {
-    margin: 0 auto;
-    width: 140px;
-    text-align: center;
-    background-color: var(--color-primary);
-    cursor: pointer;
+    .c-chat-history__item {
+      margin: 0 auto;
+      width: 14rem;
+      text-align: center;
+      background-color: var(--color-primary);
+      cursor: pointer;
+    }
   }
 
   &__item {
