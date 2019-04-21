@@ -6,6 +6,7 @@
 
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400" rel="stylesheet">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.css" />
+    <link rel="stylesheet" href="//ned.im/wdt-emoji-bundle/wdt-emoji-bundle.css" />
     <link href="/css/style.css" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="img/favicon.ico">
     <title>CDR &mdash; your splice of music</title>
@@ -60,10 +61,15 @@
             <div class="c-chat-history">
               <div id="chat-history" class="c-chat-history__messages">
                 <div id="chat-history-start" class="c-chat-history__start"></div>
+                <div id="chat-history-new-message" class="c-chat-history__new-message">
+                  <div class="c-chat-history__item">
+                    <div class="c-chat-history__message">New message (Click to see)</div>
+                  </div>
+                </div>
                 <!-- t-message || t-system-message -->
               </div>
               <form action="#" class="c-message-form">
-                <input type="textarea" id="message-input" class="c-input-basic c-input-basic--with-icon" placeholder="Type your message here...">
+                <input type="textarea" id="message-input" class="c-input-basic wdt-emoji-open-on-colon" placeholder="Type your message here...">
                 <button id="message-submit" class="c-btn c-message-form__submit">
                   <span class="c-icon c-icon--small c-icon--bordered">
                     <i class="c-icon__content c-icon__content--chat"></i>
@@ -181,7 +187,7 @@
                 <h2 class="u-h2">Please ener your (nick) name</h2>
                 <h3 class="u-h3 u-h-secondary u-mb-small">(It will be visible for all CDRadio users)</h3>
               </label>
-              <input type="text" id="username-input" class="c-input-basic" placeholder="Your (nick) name"> 
+              <input type="text" id="username-input" class="c-input-basic" placeholder="Your (nick) name">
             </div>
             <div class="c-username-form__content-item--secondary">
               <div class="u-h3 u-h-secondary u-center">- or -</div>
@@ -210,6 +216,7 @@
       <div class="c-chat-history__item">
         <span class="c-chat-history__author">-</span>
         <div class="c-chat-history__message">-</div>
+        <div class="c-chat-history__created"></div>
       </div>
     </template>
 
@@ -217,7 +224,7 @@
       <div class="c-chat-history__item c-chat-history__item--right c-chat-history__item--system">
         <span class="c-chat-history__author">Now Playing:</span>
         <div class="c-chat-history__message">
-          <span class="c-chat-history__text">-</span> - 
+          <span class="c-chat-history__text">-</span> -
           <span class="c-chat-history__timer">-</span>
         </div>
       </div>
@@ -249,7 +256,47 @@
       </li>
     </template>
 
+    <div class="wdt-emoji-popup">
+      <a href="#" class="wdt-emoji-popup-mobile-closer"> × </a>
+      <div class="wdt-emoji-menu-content">
+        <div id="wdt-emoji-menu-header">
+          <a class="wdt-emoji-tab active" data-group-name="Recent"></a>
+          <a class="wdt-emoji-tab" data-group-name="People"></a>
+          <a class="wdt-emoji-tab" data-group-name="Nature"></a>
+          <a class="wdt-emoji-tab" data-group-name="Foods"></a>
+          <a class="wdt-emoji-tab" data-group-name="Activity"></a>
+          <a class="wdt-emoji-tab" data-group-name="Places"></a>
+          <a class="wdt-emoji-tab" data-group-name="Objects"></a>
+          <a class="wdt-emoji-tab" data-group-name="Symbols"></a>
+          <a class="wdt-emoji-tab" data-group-name="Flags"></a>
+          <a class="wdt-emoji-tab" data-group-name="Custom"></a>
+        </div>
+        <div class="wdt-emoji-scroll-wrapper">
+          <div id="wdt-emoji-menu-items">
+            <input id="wdt-emoji-search" type="text" placeholder="Search">
+            <h3 id="wdt-emoji-search-result-title">Search Results</h3>
+            <div class="wdt-emoji-sections"></div>
+            <div id="wdt-emoji-no-result">No emoji found</div>
+          </div>
+        </div>
+        <div id="wdt-emoji-footer">
+          <div id="wdt-emoji-preview">
+            <span id="wdt-emoji-preview-img"></span>
+            <div id="wdt-emoji-preview-text">
+              <span id="wdt-emoji-preview-name"></span><br>
+              <span id="wdt-emoji-preview-aliases"></span>
+            </div>
+          </div>
+          <div id="wdt-emoji-preview-bundle">
+            <span>WDT Emoji Bundle</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="/socket.io/socket.io.js"></script>
+    <script src="//ned.im/wdt-emoji-bundle/emoji.min.js"></script>
+    <script src="//ned.im/wdt-emoji-bundle/wdt-emoji-bundle.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.js"></script>
     <script src="//unpkg.com/popper.js/dist/umd/popper.min.js"></script>

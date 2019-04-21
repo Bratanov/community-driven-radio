@@ -72,19 +72,24 @@ $('#message-submit').on('click', function(e) {
 	onMessageSubmit($('#message-input'));
 });
 
+wdtEmojiBundle.defaults.emojiSheets.apple = '//ned.im/wdt-emoji-bundle/sheets/sheet_apple_64_indexed_128.png';
+wdtEmojiBundle.defaults.type = 'apple';
+wdtEmojiBundle.init('#message-input');
+
 function onMessageSubmit($input) {
 	var value = $input.val();
 	if (!value) return;
 
 	var message = {
 		author: userName,
-		value: value
+		value: value,
+		created: new Date() // local use only
 	};
 
 	// Send msg
 	socket.emit('chat_msg', message);
 
-	addMessage(message);
+	addMessage(message, true);
 
 	// Clear text in input
 	$input.val('');
@@ -191,6 +196,15 @@ $('body').on('click', '.js-btn-add', function() {
 	socket.emit('new_song', $(this).data('youtube-id'));
 });
 
+var getTimeShort = function (date) {
+	var hours = date.getHours();
+	var minutes = date.getMinutes();
+	var hoursPadded = hours.toString().padStart(2, '0');
+	var minutesPadded = minutes.toString().padStart(2, '0');
+
+	return [hoursPadded, minutesPadded].join(':');
+};
+
 var renderer = {
 
 	_cloneTemplate: function(templateId) {
@@ -251,8 +265,16 @@ var renderer = {
 			$clone.addClass('c-chat-history__item--left');
 		}
 
-		$clone.find('.c-chat-history__author').text(message.author);
-		$clone.find('.c-chat-history__message').text(message.value);
+		var createdShort = getTimeShort(message.created);
+		var createdLong = message.created.toISOString();
+		// note: escapes original message here, so we can use .html to show emojis in messages
+		var messageEscaped = $('<div></div>').text(message.value).html();
+		var messageWithEmojis = wdtEmojiBundle.render(messageEscaped);
+
+		$clone.find('.c-chat-history__author').text(message.author + ':');
+		$clone.find('.c-chat-history__message').html(messageWithEmojis);
+		$clone.find('.c-chat-history__created').text(createdShort);
+		$clone.find('.c-chat-history__created').attr('title', createdLong);
 
 		return $clone;
 	},
@@ -276,8 +298,57 @@ var renderer = {
 	}
 };
 
+function isChatHistoryScrolledToBottom() {
+	var chatHistory = $('#chat-history');
+	var totalScrollAvailable = chatHistory[0].scrollHeight;
+	var currentScrollPosition = chatHistory.scrollTop() + chatHistory.height();
+
+	return (currentScrollPosition >= totalScrollAvailable);
+}
+
+function showNewMessageNotice() {
+	$('#chat-history-new-message').show();
+}
+
+function hideNewMessageNotice() {
+	$('#chat-history-new-message').hide();
+}
+
+/**
+ * Allows (optional) append a message to the chat,
+ * and scrolls the chat if the chat is already
+ * scrolled to the bottom before new message
+ * is appended, or if force was specified
+ * @param $message DOM element with new message
+ * @param forceScroll Boolean
+ */
+function appendAndScrollChatToTopIfNeeded($message, forceScroll) {
+	if (typeof forceScroll === 'undefined') {
+		forceScroll = false;
+	}
+
+	var chatHistory = $('#chat-history');
+
+	// important to take this measurement before adding the new message
+	// so we know if history was scrolled *before* new message arrived
+	var chatHistoryScrolledToBottom = isChatHistoryScrolledToBottom();
+
+	if($message) {
+		chatHistory.append($message);
+	}
+
+	if (chatHistoryScrolledToBottom || forceScroll) {
+		chatHistory.scrollTop(999999999);
+	} else {
+		if($message && !$message.hasClass('c-chat-history__item--system')) {
+			// show new message notice, for all non-system messages
+			showNewMessageNotice();
+		}
+	}
+}
+
 socket.on('chat_msg', function(data) {
-	addMessage(data);
+	addMessage(data, false);
 });
 
 socket.on('new_song', function(song) {
@@ -285,8 +356,8 @@ socket.on('new_song', function(song) {
 
 	renderer.updateStickyMessage(song.info.youtubeId, song.info.title, song.info.duration);
 	$message = renderer.getChatSystemMessage(song.info.youtubeId, song.info.title, song.info.duration);
-	$('#chat-history').append($message);
-	$('#chat-history').scrollTop(999999999);
+
+	appendAndScrollChatToTopIfNeeded($message);
 
 	player.play(songUrlParams.url, songUrlParams);
 
@@ -341,7 +412,7 @@ socket.on('song_info', function(data) {
 	player.streamPlayingAt(data.playingAt);
 });
 
-// set currently playing song postion on top of mesage container
+// set currently playing song position on top of message container
 // when it's not visible
 // TODO: Soooo many corner cases. What if song persist more than once in the same list?
 (function() {
@@ -405,6 +476,12 @@ socket.on('song_info', function(data) {
 		$chatHistoryStart.html(`<i>${chosenMessages.join('<br />')}</i>`);
 	}
 
+	function hideNewMessageNoticeIfNeeded() {
+		if(isChatHistoryScrolledToBottom()) {
+			hideNewMessageNotice();
+		}
+	}
+
 	function setStickyMessagePosition(e) {
 		// song not loaded yet, do nothing
 		if (!player.instance) return;
@@ -420,6 +497,9 @@ socket.on('song_info', function(data) {
 		}
 		// find song in chat messages
 		var $songMessage = findSongSystemMessage(currentlyPlayingSongId);
+
+		// radio just started, no songs playing
+		if(!$songMessage.length) return;
 
 		var $chatHistory = $('#chat-history');
 		var visibleVerticalCoords = {
@@ -456,6 +536,11 @@ socket.on('song_info', function(data) {
 	$('#chat-history').append($stickyMessage);
 
 	$('#chat-history').on('scroll', setStickyMessagePosition);
+	$('#chat-history').on('scroll', hideNewMessageNoticeIfNeeded);
+	$('#chat-history-new-message').on('click', function() {
+		appendAndScrollChatToTopIfNeeded(null, true);
+		hideNewMessageNotice();
+	});
 })();
 
 function findSongSystemMessage (youtubeId) {
@@ -466,11 +551,15 @@ function findSongSystemMessageSticky (youtubeId) {
 	return $('.c-chat-history__item[data-id=' + youtubeId + '].c-chat-history__item--sticky');
 }
 
-function addMessage(message) {
+function addMessage(message, ownMessage) {
+	// allows date to be passed as a string
+	if (typeof message.created === 'string') {
+		message.created = new Date(message.created);
+	}
+
 	var $chatHistory = $('#chat-history');
 	var $message = renderer.getChatMessage(userName, message);
-	$chatHistory.append($message);
-	$chatHistory.scrollTop(999999999);
+	appendAndScrollChatToTopIfNeeded($message, ownMessage);
 }
 
 socket.on('queue_info', function(data) {
