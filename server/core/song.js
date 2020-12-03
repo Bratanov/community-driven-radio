@@ -1,6 +1,7 @@
 const Logger = require('./logger.js');
 const YoutubeApi = require('./youtube-api.js');
 const youTubeApi = new YoutubeApi(process.env.YOUTUBE_API_KEY);
+const MAX_DURATION = process.env.MAX_DURATION || 5;
 
 /**
  * Contains information about a song in the queue, or an active song
@@ -35,7 +36,7 @@ class Song {
 		this.votes = 0;
 
 		// Limit duration of a song to 5min
-		this.duration = Math.min(this.duration, 5 * 60 * 1000);
+		this.duration = Math.min(this.duration, MAX_DURATION * 60 * 1000);
 
 		// Internally used (private-ish)
 		this.startedPlayingAt = null;
