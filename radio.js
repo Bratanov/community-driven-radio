@@ -5,6 +5,7 @@ const Queue = require('./server/core/queue.js');
 const QueueManager = require('./server/core/queue-manager.js');
 const VotesManager = require('./server/core/votes-manager.js');
 const Chat = require('./server/core/chat.js');
+const Kiro = require('./server/core/kiro.js');
 const Logger = require('./server/core/logger.js');
 const ClientManager = require('./server/core/client-manager.js');
 
@@ -20,12 +21,19 @@ const queue = new Queue(clientManager);
 const votesManager = new VotesManager(queue);
 const queueManager = new QueueManager(queue);
 const chat = new Chat();
+const kiro = new Kiro({
+	updateTime: process.env.KIRO_UPDATE_TIME || 50,
+	trailRetentionTime: process.env.KIRO_TRAIL_RETENTION_TIME || 1000*30,
+	maxTrails: process.env.KIRO_MAX_TRAILS || 20,
+	icons: process.env.KIRO_ICONS || '😀 😃 😄 😁 😆 😅 😂 🤣 ☺ 😊 😇 🙂 🙃 😉 😌 😍 🥰 😘 😗 😙 😚 😋 😛 😝 😜 🤪 🤨 🧐 🤓 😎 🥸 🤩 🥳 😏 😒 😞 😔 😟 😕 🙁 ☹️ 😣 😖 😫 😩 🥺 😢 😭 😤 😠 😡 🤬 😳 🥵 🥶 😱 😨 😰 😥 😓 🤗 🤔 🤭 🤫 🤥 😶 😐 😑 😬 🙄 😯 😦 😧 😮 😲 🥱 😴 🤤 😪 😵 🤐 🥴 🤢 🤮 🤧 😷 🤒 🤕 🤑 🤠 😈 👿 👹 👺 🤡 💩 👻 💀 ☠️ 👽 👾 🤖 🎃 😺 😸 😹 😻 😼 😽 🙀 😿 😾'
+});
 
 clientManager.on('new-client', client => {
 	// attach client to our components
 	chat.attachClient(client);
 	queueManager.attachClient(client);
 	votesManager.attachClient(client);
+	kiro.attachClient(client);
 
 	clientManager.emitToAll('usersCount', clientManager.getClientsCount());
 	client.on('disconnect', () => {
