@@ -1,5 +1,5 @@
 const express = require('express');
-const socketIo = require('socket.io');
+const SocketIo = require('socket.io');
 
 /**
  * Used to create a socket.io server on the provided `config.port`
@@ -23,7 +23,7 @@ const socketIoExpressInitializer = config => {
 	server.listen(config.port || 4000);
 
 	// Start socket.io
-	let io = socketIo.listen(server);
+	let io = SocketIo(server);
 
 	return io;
 };

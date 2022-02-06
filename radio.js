@@ -8,7 +8,7 @@ const Chat = require('./server/core/chat.js');
 const Logger = require('./server/core/logger.js');
 const ClientManager = require('./server/core/client-manager.js');
 
-const SERVER_PORT = 4000;
+const SERVER_PORT = process.env.PORT || 4000;
 const io = require('./server/core/socketio-express-initializer')({
 	port: SERVER_PORT
 });

@@ -4,24 +4,24 @@
   "description": "A radio station that anyone can enjoy",
   "main": "radio.js",
   "dependencies": {
+    "autoprefixer": "^8.0.0",
     "dotenv": "^6.0.0",
     "express": "^4.13.4",
     "inuitcss": "^6.0.0",
     "moment": "^2.11.2",
     "request": "^2.69.0",
-    "socket.io": "^1.4.5"
-  },
-  "devDependencies": {
-    "autoprefixer": "^8.0.0",
-    "chai": "^4.1.2",
-    "docdash": "^0.4.0",
-    "fs-extra": "^2.1.2",
-    "jsdoc": "^3.4.3",
-    "lodash": "^4.17.10",
-    "mocha": "^5.2.0",
     "node-sass": "^4.7.2",
     "npm-run-all": "^4.1.2",
     "postcss-cli": "^5.0.0",
+    "fs-extra": "^2.1.2",
+    "socket.io": ">=2.4.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "docdash": "^0.4.0",
+    "jsdoc": "^3.4.3",
+    "lodash": "^4.17.10",
+    "mocha": "^5.2.0",
     "sinon": "^6.1.5"
   },
   "scripts": {
@@ -39,6 +39,9 @@
   "keywords": [
     "radio"
   ],
+  "engines": {
+    "node": "14.x"
+  },
   "author": "Veselin Bratanov",
   "license": "ISC"
 }
