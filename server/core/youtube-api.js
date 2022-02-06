@@ -1,4 +1,6 @@
 const request = require('request');
+const cacheManager = require('cache-manager');
+const memoryCache = cacheManager.caching({store: 'memory', max: 300, ttl: 36000/*seconds*/});
 const URL_BASE = 'https://www.googleapis.com/youtube/v3/';
 
 /**
@@ -39,6 +41,12 @@ class YoutubeApi {
 		});
 	}
 
+	simpleGetRequestCached(youTubeApiRequestUrl) {
+		return memoryCache.wrap(youTubeApiRequestUrl, () => {
+			return this.simpleGetRequest(youTubeApiRequestUrl);
+		});
+	}
+
 	/**
 	 * Gets YouTube API information about a video
 	 * {@link https://developers.google.com/youtube/v3/docs/videos/list}
@@ -48,7 +56,7 @@ class YoutubeApi {
 	 */
 	getVideo(youtubeId) {
 		let youTubeApiRequestUrl = `${URL_BASE}videos?id=${youtubeId}&part=contentDetails,status,snippet&key=${this.apiKey}`;
-		return this.simpleGetRequest(youTubeApiRequestUrl);
+		return this.simpleGetRequestCached(youTubeApiRequestUrl);
 	}
 
 	/**
@@ -60,7 +68,7 @@ class YoutubeApi {
 	 */
 	getRelatedVideos(youtubeId) {
 		let youTubeApiRequestUrl = `${URL_BASE}search?type=video&relatedToVideoId=${youtubeId}&part=snippet&videoEmbeddable=true&key=${this.apiKey}`;
-		return this.simpleGetRequest(youTubeApiRequestUrl);
+		return this.simpleGetRequestCached(youTubeApiRequestUrl);
 	}
 
 	/**
@@ -73,7 +81,7 @@ class YoutubeApi {
 	 */
 	search(queryString, maxResults = 10) {
 		const youTubeApiRequestUrl = `${URL_BASE}search?part=snippet&q=${encodeURI(queryString)}&type=video&videoEmbeddable=true&maxResults=${maxResults}&key=${this.apiKey}`;
-		return this.simpleGetRequest(youTubeApiRequestUrl);
+		return this.simpleGetRequestCached(youTubeApiRequestUrl);
 	}
 }
 
