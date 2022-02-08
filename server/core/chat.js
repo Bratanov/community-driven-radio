@@ -5,11 +5,14 @@
  */
 class Chat {
 	/**
+	 * @param {ClientManager} clientManager for attaching to the clients events
 	 * @param {int} historySize Default: 50, The amount of messages to be stored and send to new users initially
 	 */
-	constructor(historySize = 50) {
+	constructor(clientManager, historySize = 50) {
 		this.lastMessages = [];
 		this.historySize = historySize;
+
+		clientManager.on('new-client', client => this.attachClient(client));
 	}
 
 	/**

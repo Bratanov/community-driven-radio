@@ -45,6 +45,24 @@ class ClientManager extends EventEmitter {
 
 			this.emit('new-client', client);
 		});
+
+		this.on('new-client', client => {
+			this.emitToAll('usersCount', this.getClientsCount());
+			client.on('disconnect', () => {
+				this.emitToAll('usersCount', this.getClientsCount());
+
+				Logger.info('Client', client.id, 'disconnected');
+			});
+
+			let isAdmin = false; // TODO: Implement admin functionality
+			if(isAdmin) {
+				client.on('refresh-them', () => {
+					this.emitToAll('getRefreshed', true);
+				});
+			}
+
+			Logger.info('Client', client.id, 'connected');
+		});
 	}
 
 	/**

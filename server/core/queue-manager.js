@@ -7,9 +7,12 @@
 class QueueManager {
 	/**
 	 * @param {Queue} queue The Queue that is handled by this manager
+	 * @param {ClientManager} clientManager for attaching to the clients events
 	 */
-	constructor(queue) {
+	constructor(queue, clientManager) {
 		this.queue = queue;
+
+		clientManager.on('new-client', client => this.attachClient(client));
 	}
 
 	/**
@@ -20,6 +23,7 @@ class QueueManager {
 	 * @param {Client} client
 	 */
 	attachClient(client) {
+		console.log('attaching client to queue')
 		// Send current song and current queue to user
 		if(this.queue.active && ! this.queue.active.isOver()) {
 			let info = {

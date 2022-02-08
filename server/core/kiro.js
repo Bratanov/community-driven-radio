@@ -5,7 +5,12 @@
  * @type {Chat}
  */
 class Kiro {
-	constructor(options) {
+	/**
+	 *
+	 * @param {ClientManager} clientManager for attaching to the clients events
+	 * @param options
+	 */
+	constructor(clientManager, options) {
 		this.pointers = {};
 		this.clients = {};
 		this.icons = options.icons ? options.icons.split(' ') : [];
@@ -13,6 +18,8 @@ class Kiro {
 		this.trailRetentionTime = options.trailRetentionTime || 1000 * 30;
 		this.maxTrails = options.maxTrails || 20;
 		this.updateInterval = setInterval(this.update.bind(this), options.updateTime);
+
+		clientManager.on('new-client', client => this.attachClient(client));
 	}
 
 	/**

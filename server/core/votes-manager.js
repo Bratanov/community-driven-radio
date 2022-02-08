@@ -7,10 +7,13 @@ class VotesManager {
 
 	/**
 	 * @param {Queue} queue Songs from this {@link Queue} will be available for voting and will have votes counted
+	 * @param {ClientManager} clientManager for attaching to the clients events
 	 */
-	constructor(queue) {
+	constructor(queue, clientManager) {
 		this.queue = queue;
 		this.voters = [];
+
+		clientManager.on('new-client', client => this.attachClient(client));
 	}
 
 	/**
@@ -73,7 +76,7 @@ class VotesManager {
 			song.setVotes(newVotesCount);
 		});
 
-		// calculate votes for the active 
+		// calculate votes for the active
 		// queue song (if there is any)
 		if(this.queue.active) {
 			let activeSongVotesCount = this.getVotesCount(this.queue.active);
