@@ -96,6 +96,7 @@ class Wordio {
 
 		if (data.toUpperCase() === this.currentWord) {
 			client.emit('be_alerted', `Congratulations, you have solved today's mystery! The wordio riddle today was ${data}, yey!`);
+			this.chat.newSystemMessage('Wordio', new Date(), `Someone has just solved today's Wordio riddle in ${client.wordio_state.length} guesses! Compliments!`);
 		} else {
 			client.emit('be_alerted', `${this.maxGuesses - client.wordio_state.length} tries remaning`);
 		}
