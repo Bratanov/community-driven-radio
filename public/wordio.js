@@ -23,7 +23,7 @@ const stateStrength = {
 };
 
 function renderWordio(states) {
-	const allLetters = 'явертъуиопшщасдфгхйклюзьцжбнм'.toUpperCase().split('').map((el) => {
+	const allLetters = 'чявертъуиопшщасдфгхйклюзьцжбнм'.toUpperCase().split('').map((el) => {
 		return { letter: el, state: 'white' };
 	});
 
