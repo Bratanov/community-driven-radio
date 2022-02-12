@@ -1,23 +1,30 @@
+const Logger = require('./logger.js');
+
 /**
  * Kiro is here to share your cursor pointer's location with the rest of the community,
  * you can also perform a very basic drawing of specific shapes using Kiro's trails.
  *
- * @type {Chat}
+ * @type {Kiro}
  */
 class Kiro {
 	/**
 	 *
 	 * @param {ClientManager} clientManager for attaching to the clients events
-	 * @param options
+	 * @param {Config} config
 	 */
-	constructor(clientManager, options) {
+	constructor(clientManager, config) {
+		if (config.get('kiro', 'true') !== 'true') {
+			Logger.info('Kiro is disabled in config, not initializing');
+			return;
+		}
+
 		this.pointers = {};
 		this.clients = {};
-		this.icons = options.icons ? options.icons.split(' ') : [];
+		this.icons = config.get('icons', '').split(' ');
 		this.pointersDirty = false;
-		this.trailRetentionTime = options.trailRetentionTime || 1000 * 30;
-		this.maxTrails = options.maxTrails || 20;
-		this.updateInterval = setInterval(this.update.bind(this), options.updateTime);
+		this.trailRetentionTime = config.get('trailRetentionTime', 1000 * 30);
+		this.maxTrails = config.get('maxTrails', 20);
+		this.updateInterval = setInterval(this.update.bind(this), config.get('updateTime', 50));
 
 		clientManager.on('new-client', client => this.attachClient(client));
 	}

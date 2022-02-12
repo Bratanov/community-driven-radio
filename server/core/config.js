@@ -11,7 +11,11 @@ class Config {
 		return this.values[key];
 	}
 
-	set(key, value) {
+	set(key, value, defaultValue) {
+		if (typeof value === 'undefined') {
+			value = defaultValue;
+		}
+
 		this.values[key] = value;
 	}
 }

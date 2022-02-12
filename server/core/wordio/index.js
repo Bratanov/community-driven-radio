@@ -1,26 +1,33 @@
+const Logger = require('./../logger.js');
+
 /**
  * Wordio is the thing where you guess words and stuff
  *
- * @type {Chat}
+ * @type {Wordio}
  */
 class Wordio {
 	/**
 	 * @param {ClientManager} clientManager for attaching to the clients events
 	 * @param {Chat} chat
-	 * @param options
+	 * @param {Config} config
 	 */
-	constructor(clientManager, chat, options) {
+	constructor(clientManager, chat, config) {
+		if (config.get('wordio', 'true') !== 'true') {
+			Logger.info('Wordio is disabled in config, not initializing');
+			return;
+		}
+
 		this.chat = chat;
-		this.words = options && options.words || [];
+		this.words = config.get('words', []);
 
 		// sanitize words
 		this.words = this.words.map(el => el.toUpperCase().trim());
 
-		const dailyWordPool = options && options.dailyWordPool || this.words;
+		const dailyWordPool = config.get('dailyWordPool', this.words);
 		this.clients = {};
 
-		this.maxGuesses = options && options.maxGuesses || 8;
-		this.wordSize = options && options.wordSize || 6;
+		this.maxGuesses = config.get('maxGuesses', 8);
+		this.wordSize = config.get('wordSize', 6);
 		this.currentWord = dailyWordPool[parseInt(Math.random()*dailyWordPool.length)].toUpperCase().trim();
 
 		clientManager.on('new-client', client => this.attachClient(client));

@@ -14,15 +14,25 @@ const Logger = require('./server/core/logger.js');
 const ClientManager = require('./server/core/client-manager.js');
 const Config = require('./server/core/config.js');
 
-const config = new Config();
+const container = new ContainerBuilder();
+container.register('Config', Config);
+const config = container.get('Config');
 config.set('port', process.env.PORT);
-if (process.env.KIRO) {
-	config.set('kiro', process.env.KIRO);
-}
+
+// Kiro configuration variables
+config.set('kiro', process.env.KIRO, 'true');
+config.set('updateTime', process.env.KIRO_UPDATE_TIME, 50);
+config.set('trailRetentionTime', process.env.KIRO_TRAIL_RETENTION_TIME, 1000*30);
+config.set('maxTrails', process.env.KIRO_MAX_TRAILS, 20);
+config.set('icons', process.env.KIRO_ICONS, '😀 😃 😄 😁 😆 😅 😂 🤣 ☺ 😊 😇 🙂 🙃 😉 😌 😍 🥰 😘 😗 😙 😚 😋 😛 😝 😜 🤪 🤨 🧐 🤓 😎 🥸 🤩 🥳 😏 😒 😞 😔 😟 😕 🙁 ☹️ 😣 😖 😫 😩 🥺 😢 😭 😤 😠 😡 🤬 😳 🥵 🥶 😱 😨 😰 😥 😓 🤗 🤔 🤭 🤫 🤥 😶 😐 😑 😬 🙄 😯 😦 😧 😮 😲 🥱 😴 🤤 😪 😵 🤐 🥴 🤢 🤮 🤧 😷 🤒 🤕 🤑 🤠 😈 👿 👹 👺 🤡 💩 👻 💀 ☠️ 👽 👾 🤖 🎃 😺 😸 😹 😻 😼 😽 🙀 😿 😾');
+
+// Wordio configuration variables
+config.set('wordio', process.env.WORDIO, 'true');
+config.set('words', process.env.WORDS_LIST || fs.readFileSync(path.resolve(__dirname, process.env.WORDS_FILENAME || 'server/core/wordio/wordio_6.csv')).toString().split("\n"));
+config.set('dailyWordPool', process.env.DAILY_WORDS_LIST || fs.readFileSync(path.resolve(__dirname, process.env.DAILY_WORDS_FILENAME || 'server/core/wordio/wordio_6.csv')).toString().split("\n"));
 
 const io = require('./server/core/socketio-express-initializer')(config);
 
-const container = new ContainerBuilder();
 // start the server components
 container.register('ClientManager', ClientManager)
 	.addArgument(io);
@@ -36,21 +46,13 @@ container.register('QueueManager', QueueManager)
 	.addArgument(new Reference('ClientManager'));
 container.register('Kiro', Kiro)
 	.addArgument(new Reference('ClientManager'))
-	.addArgument({
-		updateTime: process.env.KIRO_UPDATE_TIME || 50,
-		trailRetentionTime: process.env.KIRO_TRAIL_RETENTION_TIME || 1000*30,
-		maxTrails: process.env.KIRO_MAX_TRAILS || 20,
-		icons: process.env.KIRO_ICONS || '😀 😃 😄 😁 😆 😅 😂 🤣 ☺ 😊 😇 🙂 🙃 😉 😌 😍 🥰 😘 😗 😙 😚 😋 😛 😝 😜 🤪 🤨 🧐 🤓 😎 🥸 🤩 🥳 😏 😒 😞 😔 😟 😕 🙁 ☹️ 😣 😖 😫 😩 🥺 😢 😭 😤 😠 😡 🤬 😳 🥵 🥶 😱 😨 😰 😥 😓 🤗 🤔 🤭 🤫 🤥 😶 😐 😑 😬 🙄 😯 😦 😧 😮 😲 🥱 😴 🤤 😪 😵 🤐 🥴 🤢 🤮 🤧 😷 🤒 🤕 🤑 🤠 😈 👿 👹 👺 🤡 💩 👻 💀 ☠️ 👽 👾 🤖 🎃 😺 😸 😹 😻 😼 😽 🙀 😿 😾'
-	});
+	.addArgument(new Reference('Config'));
 container.register('Chat', Chat)
 	.addArgument(new Reference('ClientManager'));
 container.register('Wordio', Wordio)
 	.addArgument(new Reference('ClientManager'))
 	.addArgument(new Reference('Chat'))
-	.addArgument({
-		words: process.env.WORDS_LIST || fs.readFileSync(path.resolve(__dirname, process.env.WORDS_FILENAME || 'server/core/wordio/wordio_6.csv')).toString().split("\n"),
-		dailyWordPool: process.env.DAILY_WORDS_LIST || fs.readFileSync(path.resolve(__dirname, process.env.DAILY_WORDS_FILENAME || 'server/core/wordio/wordio_6.csv')).toString().split("\n"),
-	});
+	.addArgument(new Reference('Config'));
 
 container.compile();
 
