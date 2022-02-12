@@ -7,7 +7,6 @@ let lastPositionSent = 0;
 let kiroEnabled = true;
 
 socket.on('kiro_pointers', function(data) {
-	console.log('kiro_pointers', data);
 	renderPointers(data);
 });
 
