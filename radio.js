@@ -8,12 +8,15 @@ const Chat = require('./server/core/chat.js');
 const Kiro = require('./server/core/kiro.js');
 const Logger = require('./server/core/logger.js');
 const ClientManager = require('./server/core/client-manager.js');
+const Config = require('./server/core/config.js');
 
-const SERVER_PORT = process.env.PORT || 4000;
-const io = require('./server/core/socketio-express-initializer')({
-	port: SERVER_PORT
-});
-Logger.info('Server started successfully on port', SERVER_PORT);
+const config = new Config();
+config.set('port', process.env.PORT);
+if (process.env.KIRO) {
+	config.set('kiro', process.env.KIRO);
+}
+
+const io = require('./server/core/socketio-express-initializer')(config);
 
 // start the server components
 const clientManager = new ClientManager(io);
@@ -39,17 +42,17 @@ clientManager.on('new-client', client => {
 	client.on('disconnect', () => {
 		clientManager.emitToAll('usersCount', clientManager.getClientsCount());
 
-        Logger.info('Client', client.id, 'disconnected');
+		Logger.info('Client', client.id, 'disconnected');
 	});
 
-    let isAdmin = false; // TODO: Implement admin functionality
+	let isAdmin = false; // TODO: Implement admin functionality
 	if(isAdmin) {
 		client.on('refresh-them', () => {
 			clientManager.emitToAll('getRefreshed', true);
 		});
 	}
 
-    Logger.info('Client', client.id, 'connected');
+	Logger.info('Client', client.id, 'connected');
 });
 
 Logger.info('Radio components initialized and waiting');
