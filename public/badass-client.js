@@ -158,7 +158,7 @@ var suggestCb = new Function();
 var badassSearch = new autoComplete({
 	selector: '#badass-search',
 	minChars: 2,
-	delay: 500,
+	delay: 2500,
 	source: function(term, suggest) {
 		// normalize term
 		term = term.toLowerCase();
