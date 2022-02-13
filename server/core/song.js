@@ -136,7 +136,7 @@ class Song {
 	 */
 	loadRelatedVideos(callback) {
 		// Load and add related videos in the this.relatedVideos array
-		youTubeApi.getRelatedVideos(this.youtubeId).then(data => {
+		this.youtubeApi.getRelatedVideos(this.youtubeId).then(data => {
 			if(data.pageInfo.totalResults > 0 && data.items.length) {
 				for(let item of data.items) {
 					// The data we need from the YouTube response

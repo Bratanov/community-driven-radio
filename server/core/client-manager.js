@@ -33,7 +33,7 @@ class ClientManager extends EventEmitter {
 			});
 
 			client.on('youtube_search', qs => {
-				youTubeApi.search(qs)
+				this.youtubeApi.search(qs)
 					.then(res => {
 						client.emit('youtube_search', res);
 					})
