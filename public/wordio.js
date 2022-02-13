@@ -9,6 +9,7 @@ elWordioWrapper.appendChild(elWordioResults);
 elWordioInput.setAttribute('class', 'u-h2');
 elWordioInput.setAttribute('style', 'color: black');
 elWordioInput.setAttribute('placeholder', 'ПИШИ ТУК');
+elWordioInput.maxLength = 6;
 elWordioWrapper.appendChild(elWordioInput);
 elWordioGuess.setAttribute('class', 'u-h2');
 elWordioGuess.setAttribute('style', 'background-color: gray');
@@ -22,8 +23,20 @@ const stateStrength = {
 	green: 3
 };
 
+function wordioType(letter) {
+	if (elWordioInput.value.length < 6) {
+		elWordioInput.value	+= letter;
+	}
+}
+
+function wordioBackspace() {
+	if (elWordioInput.value.length) {
+		elWordioInput.value = elWordioInput.value.slice(0, -1);
+	}
+}
+
 function renderWordio(states) {
-	const allLetters = 'чявертъуиопшщасдфгхйклюзьцжбнм'.toUpperCase().split('').map((el) => {
+	const allLetters = 'чявертъуиопшщ асдфгхйклю зьцжбнм'.toUpperCase().split('').map((el) => {
 		return { letter: el, state: 'white' };
 	});
 
@@ -59,7 +72,12 @@ function renderWordio(states) {
 
 	result += `
 		<br /><div>
-			${allLetters.map((el) => `<span style="background-color: ${el.state}; color: ${el.state=='gray' ? 'white' : 'black'}">[${el.letter}]</span>`).join(' ')}
+			${allLetters.map((el) => {
+				if (el.letter === ' ') return '<br />';
+
+				return `<a style="text-decoration: none; background-color: ${el.state}; color: ${el.state == 'gray' ? 'white' : 'black'}" href="javascript:wordioType('${el.letter}');">[${el.letter}]</a>`
+			}).join(' ')}
+			<a style="text-decoration: none; background-color: white; color: black" href="javascript:wordioBackspace();">&nbsp;⌫&nbsp;</a>
 		</div>
 	`;
 
