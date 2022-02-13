@@ -2,9 +2,6 @@ const EventEmitter = require('events');
 const Client = require('./client');
 const Logger = require('./logger.js');
 
-const YoutubeApi = require('./youtube-api.js');
-const youTubeApi = new YoutubeApi(process.env.YOUTUBE_API_KEY);
-
 /**
  * Handles connections of socket.io clients.
  * Will hold refferences to all clients
@@ -16,10 +13,12 @@ const youTubeApi = new YoutubeApi(process.env.YOUTUBE_API_KEY);
 class ClientManager extends EventEmitter {
 
 	/**
+	 * @param {YoutubeApi} youtubeApi
 	 * @param {io} socketIo The socketIo instance
 	 */
-	constructor(socketIo) {
+	constructor(youtubeApi, socketIo) {
 		super();
+		this.youtubeApi = youtubeApi;
 		this.socketIo = socketIo;
 		this.clients = [];
 

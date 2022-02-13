@@ -12,6 +12,7 @@ const Kiro = require('./server/core/kiro.js');
 const Wordio = require('./server/core/wordio');
 const Logger = require('./server/core/logger.js');
 const ClientManager = require('./server/core/client-manager.js');
+const YoutubeApi = require('./server/core/youtube-api.js');
 const Config = require('./server/core/config.js');
 
 const container = new ContainerBuilder();
@@ -33,11 +34,15 @@ config.set('dailyWordPool', process.env.DAILY_WORDS_LIST || fs.readFileSync(path
 
 const io = require('./server/core/socketio-express-initializer')(config);
 
+container.register('YoutubeApi', YoutubeApi)
+	.addArgument(process.env.YOUTUBE_API_KEY);
 // start the server components
 container.register('ClientManager', ClientManager)
+	.addArgument(new Reference('YoutubeApi'))
 	.addArgument(io);
 container.register('Queue', Queue)
-	.addArgument(new Reference('ClientManager'));
+	.addArgument(new Reference('ClientManager'))
+	.addArgument(new Reference('YoutubeApi'));
 container.register('VotesManager', VotesManager)
 	.addArgument(new Reference('Queue'))
 	.addArgument(new Reference('ClientManager'));

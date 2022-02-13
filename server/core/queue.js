@@ -1,8 +1,6 @@
 const moment = require('moment');
 const Song = require('./song.js');
 const Logger = require('./logger.js');
-const YoutubeApi = require('./youtube-api.js');
-const youTubeApi = new YoutubeApi(process.env.YOUTUBE_API_KEY);
 const _ = require('lodash');
 
 /**
@@ -14,8 +12,11 @@ class Queue {
 
 	/**
 	 * @param {ClientManager} clientManager For sending song and queue info to clients
+	 * @param {YoutubeApi} youtubeApi
 	 */
-	constructor(clientManager) {
+	constructor(clientManager, youtubeApi) {
+		this.youtubeApi = youtubeApi;
+
 		this.items = [];
 		this.active = null;
 		this.relatedVideoIsLoading = false;
@@ -125,7 +126,7 @@ class Queue {
 			}
 		}
 
-		youTubeApi.getVideo(videoId).then(data => {
+		this.youtubeApi.getVideo(videoId).then(data => {
 			if (data.pageInfo.totalResults > 0) {
 				if( ! data.items[0].status.embeddable) {
 					userSocket.emit('be_alerted', `Sorry, the video with ID: ${videoId} is not embeddable. Try adding a different one.`);
@@ -145,7 +146,7 @@ class Queue {
 				let resultDuration = data.items[0].contentDetails.duration;
 				let durationInMs = moment.duration(resultDuration).asMilliseconds();
 
-				this.items.push(new Song(videoId, title, durationInMs, client));
+				this.items.push(new Song(this.youtubeApi, videoId, title, durationInMs, client));
 
 				this.triggerOnQueueChanged();
 			}

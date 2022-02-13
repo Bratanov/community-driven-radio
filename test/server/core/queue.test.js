@@ -6,14 +6,17 @@ const Queue = require('../../../server/core/queue');
 const VotesManager = require('../../../server/core/votes-manager');
 const Client = require('../../../server/core/client');
 
+const getVideoMock = require('./youtube-get-video-mock.json');
+
 describe('Queue', function() {
 	let queue;
 	let client;
 	let clientManager;
+	let youtubeApi;
 	/**
 	 * A collection of a few completely random song ids that will be a valid match in a YT query
 	 */
-	let songIds = [
+	const songIds = [
 		'-gd0psCIdmM',
 		'abg5DVHMAnM',
 		'ROAVuLc28IY',
@@ -31,8 +34,18 @@ describe('Queue', function() {
 
 	describe('sorting', function() {
 		beforeEach(function() {
-			clientManager = {};
-			queue = new Queue(clientManager);
+			youtubeApi = {
+				getVideo: async (videoId) => {
+					const getVideoMockClone = JSON.parse(JSON.stringify(getVideoMock));
+					getVideoMockClone.items[0].id = videoId;
+
+					return getVideoMock
+				}
+			};
+			clientManager = {
+				on: sinon.stub()
+			};
+			queue = new Queue(clientManager, youtubeApi);
 			queue.stop(); // we don't need the queue to run for those tests
 		});
 
@@ -41,7 +54,7 @@ describe('Queue', function() {
 		});
 
 		it('should sort by most recent if votes are the same', function(next) {
-			let songIdsCopy = songIds.slice();
+			const songIdsCopy = songIds.slice();
 
 			clientManager.emitToAll = function (event, data) {
 				// catch the "item added to queue" event
@@ -68,7 +81,7 @@ describe('Queue', function() {
 
 		it('should sort highest rated first', function(next) {
 			// votes manager calculates votes of clients for the queue items
-			let votesManager = new VotesManager(queue);
+			let votesManager = new VotesManager(queue, clientManager);
 			// client has own votes attached
 			let client1 = new Client(sinon.mock());
 			votesManager.attachClient(client1);

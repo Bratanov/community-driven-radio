@@ -30,9 +30,11 @@ class YoutubeApi {
 	simpleGetRequest(youTubeApiRequestUrl) {
 		return new Promise((resolve, reject) => {
 			request(youTubeApiRequestUrl, (error, response, body) => {
+				console.log(response);
 				if (!error && response.statusCode === 200) {
 					let data = JSON.parse(body); // Parse response from YouTube
 
+					console.log(body);
 					resolve(data);
 				} else {
 					reject(error || response.statusCode);
