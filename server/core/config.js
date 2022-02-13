@@ -1,6 +1,6 @@
 class Config {
-	constructor() {
-		this.values = {};
+	constructor(initialValues = {}) {
+		this.values = initialValues;
 	}
 
 	get(key, defaultValue) {

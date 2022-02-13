@@ -54,36 +54,42 @@ class Wordio {
 	}
 
 	getStateForWord(word) {
-		const states = [];
 		const letters = word.split('');
 		const wordCheck = this.currentWord.split('');
+		// populate initial state to gray for all letters
+		const states = letters.map((el) => {
+			return {
+				letter: el,
+				state: 'gray'
+			}
+		});
 
+		// check for exact/green matches
 		for (let index in letters) {
 			const letter = letters[index];
-			let state = 'gray';
+
+			if(letter === this.currentWord[index]) {
+				delete wordCheck[index]; // remove found letter
+				states[index].state = 'green';
+			}
+		}
+
+		// check for non-exact/yellow matches
+		for (let index in letters) {
+			const letter = letters[index];
 
 			const letterLocation = wordCheck.indexOf(letter);
-			if (letterLocation != -1) {
-				wordCheck.splice(letterLocation, 1);
-
-				if(letter == this.currentWord[index]) {
-					state = 'green';
-				} else {
-					state = 'yellow';
-				}
+			if (letterLocation !== -1) {
+				delete wordCheck[letterLocation]; // remove found letter
+				states[index].state = 'yellow';
 			}
-
-			states.push({
-				letter,
-				state
-			});
 		}
 
 		return states;
 	}
 
 	guess(client, data) {
-		if (typeof data !== 'string' || data.length != this.wordSize) {
+		if (typeof data !== 'string' || data.length !== this.wordSize) {
 			client.emit('be_alerted', 'Nemoesh izlaga wordio kopelence!');
 			return;
 		}
