@@ -13,6 +13,7 @@
     "inuitcss": "^6.0.0",
     "lodash": "^4.17.10",
     "moment": "^2.11.2",
+    "node-dependency-injection": "^2.7.1",
     "node-sass": "^4.7.2",
     "npm-run-all": "^4.1.2",
     "postcss-cli": "^5.0.0",

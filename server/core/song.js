@@ -1,6 +1,4 @@
 const Logger = require('./logger.js');
-const YoutubeApi = require('./youtube-api.js');
-const youTubeApi = new YoutubeApi(process.env.YOUTUBE_API_KEY);
 const MAX_DURATION = process.env.MAX_DURATION || 5;
 
 /**
@@ -17,12 +15,15 @@ const MAX_DURATION = process.env.MAX_DURATION || 5;
  */
 class Song {
 	/**
+	 * @param {YoutubeApi} youtubeApi - dependency, for fetching related songs
 	 * @param {String} youtubeId
 	 * @param {String} title
 	 * @param {Number} duration in milliseconds, parsed from Youtube response in {@link Queue.add}
 	 * @param {Client} addedBy
 	 */
-	constructor(youtubeId, title, duration, addedBy) {
+	constructor(youtubeApi, youtubeId, title, duration, addedBy) {
+		this.youtubeApi = youtubeApi;
+
 		/**
 		 * Generate a unique id for the song
 		 * It doesn't have to be very random
@@ -135,7 +136,7 @@ class Song {
 	 */
 	loadRelatedVideos(callback) {
 		// Load and add related videos in the this.relatedVideos array
-		youTubeApi.getRelatedVideos(this.youtubeId).then(data => {
+		this.youtubeApi.getRelatedVideos(this.youtubeId).then(data => {
 			if(data.pageInfo.totalResults > 0 && data.items.length) {
 				for(let item of data.items) {
 					// The data we need from the YouTube response

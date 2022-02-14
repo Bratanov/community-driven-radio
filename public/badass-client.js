@@ -128,7 +128,7 @@ $('#badaass-song-add').on('click', function(e) {
 
 /**
  * Callback for when badassSearch autocomplete options needs to be refreshed.
- * Passes result array into the latest badassSearch suggestion callback 
+ * Passes result array into the latest badassSearch suggestion callback
  * so they can be processed by the plugin.
  * @param  {Object} results
  */
@@ -158,7 +158,7 @@ var suggestCb = new Function();
 var badassSearch = new autoComplete({
 	selector: '#badass-search',
 	minChars: 2,
-	delay: 500,
+	delay: 2500,
 	source: function(term, suggest) {
 		// normalize term
 		term = term.toLowerCase();
@@ -167,12 +167,12 @@ var badassSearch = new autoComplete({
 		suggestCb = suggest;
 	},
 	renderItem: function(item, search) {
-		// Autocomplete item html. 
+		// Autocomplete item html.
 		// "data-val" is what we see in input when item is selected.
 		return '<div class="autocomplete-suggestion" data-id="'+item.videoId+'" data-title="'+item.title+'" data-val="'+item.title+'">' +
 			'<img class="autocomplete-suggestion__thumb" src="'+item.thumbnail+'"> ' +
 			'<div class="autocomplete-suggestion__title">' + item.title + '</div>' +
-		'</div>';
+			'</div>';
 	},
 	onSelect: function(e, term, item) {
 		// add to queue by id
@@ -257,7 +257,10 @@ var renderer = {
 	getChatMessage: function(currentUserName, message) {
 		var $clone = this._cloneTemplate('t-message');
 
-		if (currentUserName === message.author) {
+		if (message.system) {
+			// system message
+			$clone.addClass('c-chat-history__item--right c-chat-history__item--inverse c-chat-history__item--system');
+		} else if (currentUserName === message.author) {
 			// logged user's message
 			$clone.addClass('c-chat-history__item--right c-chat-history__item--inverse');
 		} else {
@@ -271,7 +274,7 @@ var renderer = {
 		var messageEscaped = $('<div></div>').text(message.value).html();
 		var messageWithEmojis = wdtEmojiBundle.render(messageEscaped);
 
-		$clone.find('.c-chat-history__author').text(message.author + ':');
+		$clone.find('.c-chat-history__author').text(message.author + (message.system ? '' : ':'));
 		$clone.find('.c-chat-history__message').html(messageWithEmojis);
 		$clone.find('.c-chat-history__created').text(createdShort);
 		$clone.find('.c-chat-history__created').attr('title', createdLong);
@@ -659,8 +662,8 @@ var player = {
 		// since event doesn't bubble up to current page
 		var self = player;
 		console.log('Player state changed to', Object.keys(YT.PlayerState).filter(function(key) {
-			return self.instance.getPlayerState() === YT.PlayerState[key];
-		})[0].toLowerCase() + ".");
+				return self.instance.getPlayerState() === YT.PlayerState[key];
+			})[0].toLowerCase() + ".");
 		switch (self.instance.getPlayerState()) {
 			case YT.PlayerState.PAUSED:
 				// player paused.

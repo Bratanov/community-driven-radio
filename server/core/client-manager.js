@@ -2,9 +2,6 @@ const EventEmitter = require('events');
 const Client = require('./client');
 const Logger = require('./logger.js');
 
-const YoutubeApi = require('./youtube-api.js');
-const youTubeApi = new YoutubeApi(process.env.YOUTUBE_API_KEY);
-
 /**
  * Handles connections of socket.io clients.
  * Will hold refferences to all clients
@@ -16,10 +13,12 @@ const youTubeApi = new YoutubeApi(process.env.YOUTUBE_API_KEY);
 class ClientManager extends EventEmitter {
 
 	/**
+	 * @param {YoutubeApi} youtubeApi
 	 * @param {io} socketIo The socketIo instance
 	 */
-	constructor(socketIo) {
+	constructor(youtubeApi, socketIo) {
 		super();
+		this.youtubeApi = youtubeApi;
 		this.socketIo = socketIo;
 		this.clients = [];
 
@@ -34,7 +33,7 @@ class ClientManager extends EventEmitter {
 			});
 
 			client.on('youtube_search', qs => {
-				youTubeApi.search(qs)
+				this.youtubeApi.search(qs)
 					.then(res => {
 						client.emit('youtube_search', res);
 					})
@@ -44,6 +43,24 @@ class ClientManager extends EventEmitter {
 			});
 
 			this.emit('new-client', client);
+		});
+
+		this.on('new-client', client => {
+			this.emitToAll('usersCount', this.getClientsCount());
+			client.on('disconnect', () => {
+				this.emitToAll('usersCount', this.getClientsCount());
+
+				Logger.info('Client', client.id, 'disconnected');
+			});
+
+			let isAdmin = false; // TODO: Implement admin functionality
+			if(isAdmin) {
+				client.on('refresh-them', () => {
+					this.emitToAll('getRefreshed', true);
+				});
+			}
+
+			Logger.info('Client', client.id, 'connected');
 		});
 	}
 

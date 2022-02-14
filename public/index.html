@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en" class="water-color-theme">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.css" />
+    <link rel="stylesheet" href="//ned.im/wdt-emoji-bundle/wdt-emoji-bundle.css" />
+    <link href="/css/style.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+    <title>CDR &mdash; your splice of music</title>
+  </head>
+  <body class="container">
+    <div class="o-content">
+
+      <header class="c-header">
+        <div class="c-action-icon js-name-change">
+          <div class="c-sound-wave js-sound-wave c-sound-wave--stopped">
+            <i class="c-sound-wave__bar"></i>
+            <i class="c-sound-wave__bar"></i>
+            <i class="c-sound-wave__bar"></i>
+            <i class="c-sound-wave__bar"></i>
+            <i class="c-sound-wave__bar"></i>
+            <i class="c-sound-wave__bar"></i>
+            <i class="c-sound-wave__bar"></i>
+            <i class="c-sound-wave__bar"></i>
+            <i class="c-sound-wave__bar"></i>
+            <i class="c-sound-wave__bar"></i>
+            <i class="c-sound-wave__bar"></i>
+            <i class="c-sound-wave__bar"></i>
+            <i class="c-sound-wave__bar"></i>
+            <i class="c-sound-wave__bar"></i>
+            <i class="c-sound-wave__bar"></i>
+            <i class="c-sound-wave__bar"></i>
+            <i class="c-sound-wave__bar"></i>
+            <i class="c-sound-wave__bar"></i>
+            <i class="c-sound-wave__bar"></i>
+            <i class="c-sound-wave__bar"></i>
+          </div>
+        </div>
+        <div class="c-header__logo">
+          <img src="img/cdradio-logo.png" width="200" alt="cdr-logo">
+        </div>
+        <div class="c-action-icon js-mute">
+          <span class="c-icon c-icon--bordered">
+            <i class="c-icon__content c-icon__content--musical-note"></i>
+          </span>
+        </div>
+      </header>
+
+      <div class="o-grid">
+        <section class="c-video-player">
+          <figure id="song-container" class="c-video-player__container">
+            <div class="c-video-player__background"></div>
+            <div id="player" class="c-video-player__youtube-player"></div>
+          </figure>
+        </section>
+        <section class="c-chat">
+          <div class="c-chat__container">
+            <div class="c-chat-history">
+              <div id="chat-history" class="c-chat-history__messages">
+                <div id="chat-history-start" class="c-chat-history__start"></div>
+                <div id="chat-history-new-message" class="c-chat-history__new-message">
+                  <div class="c-chat-history__item">
+                    <div class="c-chat-history__message">New message (Click to see)</div>
+                  </div>
+                </div>
+                <!-- t-message || t-system-message -->
+              </div>
+              <form action="#" class="c-message-form">
+                <input type="textarea" id="message-input" class="c-input-basic wdt-emoji-open-on-colon" placeholder="Type your message here...">
+                <button id="message-submit" class="c-btn c-message-form__submit">
+                  <span class="c-icon c-icon--small c-icon--bordered">
+                    <i class="c-icon__content c-icon__content--chat"></i>
+                  </span>
+                </button>
+              </form>
+            </div>
+          </div>
+        </section>
+        <section class="c-song-queue">
+          <h2 class="u-h2">Queue:</h2>
+          <h3 class="u-h3 u-h-secondary u-mb-small">(Highest voted will play first)</h3>
+          <ol id="queue-list" class="c-queue-list">
+            <!-- t-queue-list-item -->
+          </ol>
+        </section>
+        <section class="c-related">
+          <h2 class="u-h2 u-mb-small">Add Song to Queue:</h2>
+          <form action="#" class="c-add-form">
+            <input type="text" id="badass-search" class="c-input-basic c-input-basic--with-icon" placeholder="Paste youtube URL, ID or type a song">
+            <button id="badaass-song-add" class="c-btn c-add-form__btn-add">
+              <span class="c-icon c-icon--small c-icon--bordered">
+                <i class="c-icon__content c-icon__content--search"></i>
+              </span>
+            </button>
+          </form>
+          <h2 class="u-h2">Related:</h2>
+          <h3 class="u-h3 u-h-secondary u-mb-small">(First one will play if nothing in queue)</h3>
+          <ul id="related-list">
+            <!-- t-related-list-item -->
+          </ul>
+          <section class="c-chat">
+            <div class="c-chat__container">
+              <div id="zawordio" class="c-chat-history u-mb-small">
+                <h2 class="u-h2 u-mb-small">Wordio:</h2>
+              </div>
+            </div>
+          </section>
+        </section>
+      </div>
+
+      <footer class="c-footer">
+        <div class="c-controls-container">
+          <div class="c-theme-controls js-theme-controls">
+            <p>Themes</p>
+            <div class="c-theme-controls__toggle">
+              <div>
+                <input class="c-tgl c-tgl-light js-theme-toggle" id="calm-green" type="checkbox"/>
+                <label class="c-tgl-btn" for="calm-green"></label>
+              </div>
+              <span>Calm green</span>
+            </div>
+            <div class="c-theme-controls__toggle">
+              <div>
+                <input class="c-tgl c-tgl-light js-theme-toggle" id="crazy-orange" type="checkbox"/>
+                <label class="c-tgl-btn" for="crazy-orange"></label>
+              </div>
+              <span>Crazy orange</span>
+            </div>
+            <div class="c-theme-controls__toggle">
+              <div>
+                <input class="c-tgl c-tgl-light js-theme-toggle" id="water-color" type="checkbox"/>
+                <label class="c-tgl-btn" for="water-color"></label>
+              </div>
+              <span>Water color</span>
+            </div>
+            <div class="c-theme-controls__toggle">
+              <div>
+                <input class="c-tgl c-tgl-light js-theme-toggle" id="beauty-lila" type="checkbox"/>
+                <label class="c-tgl-btn" for="beauty-lila"></label>
+              </div>
+              <span>Beauty lila</span>
+            </div>
+            <div class="c-theme-controls__toggle u-mb-tiny">
+              <div>
+                <input class="c-tgl c-tgl-light js-theme-toggle" id="playstrip" type="checkbox"/>
+                <label class="c-tgl-btn" for="playstrip"></label>
+              </div>
+              <span>PlayStrip</span>
+            </div>
+            <div class="c-theme-controls__toggle u-mb-tiny">
+              <div>
+                <input class="c-tgl c-tgl-light js-theme-toggle" id="focus" type="checkbox"/>
+                <label class="c-tgl-btn" for="focus"></label>
+              </div>
+              <span>Focus</span>
+            </div>
+            <p>Other settings</p>
+            <div class="c-theme-controls__toggle u-mb-tiny">
+              <div>
+                <input class="c-tgl c-tgl-light js-kiro-toggle" id="kiro" type="checkbox"/>
+                <label class="c-tgl-btn" for="kiro"></label>
+              </div>
+              <span>Kiro</span>
+            </div>
+            <div class="u-center">
+              <button class="c-btn c-btn--link js-name-change">Rename me</button>
+            </div>
+          </div>
+          <div class="c-action-icon js-theme-controls-toggle">
+            <span class="c-icon c-icon--bordered">
+              <i class="c-icon__content c-icon__content--settings"></i>
+            </span>
+          </div>
+        </div>
+        <div class="c-footer__content">
+          <p class="c-footer__text">
+            &lt;/&gt; with &hearts; by <a href="https://devlabs.bg">DevLabs</a> ☭
+          </p>
+        </div>
+        <div class="c-footer__users">
+          <div class="c-footer__users-count js-users-count u-hidden"><span id="users-count">-</span> users online</div>
+          <div class="c-action-icon js-users-online">
+            <span class="c-icon c-icon--bordered">
+              <i class="c-icon__content c-icon__content--headphones-user"></i>
+            </span>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+
+    <dialog id="username-dialog" class="c-dialog">
+      <div class="c-dialog-container">
+        <form method="dialog" id="username-form" class="c-username-form">
+          <h1 class="c-username-form__heading u-h1">Community Driven Radio</h1>
+          <section class="c-username-form__content">
+            <div class="c-username-form__content-item--primary">
+              <label for="username-input" class="u-center">
+                <h2 class="u-h2">Please ener your (nick) name</h2>
+                <h3 class="u-h3 u-h-secondary u-mb-small">(It will be visible for all CDRadio users)</h3>
+              </label>
+              <input type="text" id="username-input" class="c-input-basic" placeholder="Your (nick) name">
+            </div>
+            <div class="c-username-form__content-item--secondary">
+              <div class="u-h3 u-h-secondary u-center">- or -</div>
+            </div>
+            <div class="c-username-form__content-item--primary">
+              <label for="special-username-input" class="u-center">
+                <h2 class="u-h2">Select from specials</h2>
+                <h3 class="u-h3 u-h-secondary u-mb-small">(Special selection for you)</h3>
+              </label>
+              <div class="c-username-form__select-wrapper">
+                <select id="badass-usernames" class="c-input-oval c-username-form__select">
+                  <option value="" disabled selected>Your (nick) name</option>
+                </select>
+                <span class="c-username-form__select-icon"></span>
+              </div>
+            </div>
+          </section>
+          <menu class="c-username-form__actions">
+            <button class="c-btn c-btn--enter" type="submit"></button>
+          </menu>
+        </form>
+      </div>
+    </dialog>
+
+    <template id="t-message">
+      <div class="c-chat-history__item">
+        <span class="c-chat-history__author">-</span>
+        <div class="c-chat-history__message">-</div>
+        <div class="c-chat-history__created"></div>
+      </div>
+    </template>
+
+    <template id="t-system-message">
+      <div class="c-chat-history__item c-chat-history__item--right c-chat-history__item--system">
+        <span class="c-chat-history__author">Now Playing:</span>
+        <div class="c-chat-history__message">
+          <span class="c-chat-history__text">-</span> -
+          <span class="c-chat-history__timer">-</span>
+        </div>
+      </div>
+    </template>
+
+    <template id="t-queue-list-item">
+      <li class="c-song-list-item">
+        <span class="c-song-list-item__number">-</span>
+        <a href="" target="_blank" class="c-song-list-item__title">-</a>
+        <span class="c-song-list-item__duration">-</span>
+        <button class="c-btn c-song-list-item__btn-upvote js-btn-vote">
+          <span class="c-icon c-icon--small c-icon--bordered">
+            <i class="c-icon__content c-icon__content--arrow-up"></i>
+          </span>
+          <span class="c-song-list-item__votes">-</span>
+        </button>
+      </li>
+    </template>
+
+    <template id="t-related-list-item">
+      <li class="c-song-list-item">
+        <span class="c-song-list-item__number">-</span>
+        <a href="" target="_blank" class="c-song-list-item__title">-</a>
+        <button class="c-btn c-song-list-item__btn-add js-btn-add">
+          <span class="c-icon c-icon--small c-icon--bordered">
+            <i class="c-icon__content c-icon__content--plus"></i>
+          </span>
+        </button>
+      </li>
+    </template>
+
+    <div class="wdt-emoji-popup">
+      <a href="#" class="wdt-emoji-popup-mobile-closer"> × </a>
+      <div class="wdt-emoji-menu-content">
+        <div id="wdt-emoji-menu-header">
+          <a class="wdt-emoji-tab active" data-group-name="Recent"></a>
+          <a class="wdt-emoji-tab" data-group-name="People"></a>
+          <a class="wdt-emoji-tab" data-group-name="Nature"></a>
+          <a class="wdt-emoji-tab" data-group-name="Foods"></a>
+          <a class="wdt-emoji-tab" data-group-name="Activity"></a>
+          <a class="wdt-emoji-tab" data-group-name="Places"></a>
+          <a class="wdt-emoji-tab" data-group-name="Objects"></a>
+          <a class="wdt-emoji-tab" data-group-name="Symbols"></a>
+          <a class="wdt-emoji-tab" data-group-name="Flags"></a>
+          <a class="wdt-emoji-tab" data-group-name="Custom"></a>
+        </div>
+        <div class="wdt-emoji-scroll-wrapper">
+          <div id="wdt-emoji-menu-items">
+            <input id="wdt-emoji-search" type="text" placeholder="Search">
+            <h3 id="wdt-emoji-search-result-title">Search Results</h3>
+            <div class="wdt-emoji-sections"></div>
+            <div id="wdt-emoji-no-result">No emoji found</div>
+          </div>
+        </div>
+        <div id="wdt-emoji-footer">
+          <div id="wdt-emoji-preview">
+            <span id="wdt-emoji-preview-img"></span>
+            <div id="wdt-emoji-preview-text">
+              <span id="wdt-emoji-preview-name"></span><br>
+              <span id="wdt-emoji-preview-aliases"></span>
+            </div>
+          </div>
+          <div id="wdt-emoji-preview-bundle">
+            <span>WDT Emoji Bundle</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="//ned.im/wdt-emoji-bundle/emoji.min.js"></script>
+    <script src="//ned.im/wdt-emoji-bundle/wdt-emoji-bundle.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.js"></script>
+    <script src="//unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+    <script src="//unpkg.com/tooltip.js/dist/umd/tooltip.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="/badass-client.js"></script>
+    <script src="//www.youtube.com/iframe_api"></script>
+    <script src="/alena.js"></script>
+    <script src="/kiro.js"></script>
+    <script src="/wordio.js"></script>
+  </body>
+</html>
