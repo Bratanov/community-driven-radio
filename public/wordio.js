@@ -22,6 +22,7 @@ const stateStrength = {
 	yellow: 2,
 	green: 3
 };
+let wordioId = null;
 
 function wordioType(letter) {
 	if (elWordioInput.value.length < 6) {
@@ -85,6 +86,7 @@ function renderWordio(states) {
 }
 
 socket.on('wordio_state', (data) => {
+	localStorage.setItem('wordio_state_'+wordioId, JSON.stringify(data));
 	renderWordio(data);
 });
 
@@ -94,5 +96,10 @@ elWordioGuess.onclick = () => {
 	socket.emit('wordio_guess', elWordioInput.value);
 	elWordioInput.value = '';
 };
+
+socket.on('wordio', (identifier) => {
+	wordioId = identifier;
+	socket.emit('wordio_sync_state', JSON.parse(localStorage.getItem('wordio_state_'+wordioId, '[]')));
+});
 
 renderWordio([]);

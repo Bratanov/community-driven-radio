@@ -26,6 +26,8 @@ class Wordio {
 		this.wordSize = config.get('wordSize', 6);
 		this.currentWord = dictionary.getDailyWord();
 
+		this.identifier = ''+Date.now()+Math.random();
+
 		clientManager.on('new-client', client => this.attachClient(client));
 	}
 
@@ -43,10 +45,14 @@ class Wordio {
 		client.on('wordio_guess', data => {
 			this.guess(client, data);
 		});
+		client.on('wordio_sync_state', states => {
+			this.syncState(client, states);
+		});
 
 		client.on('disconnect', () => {
 			delete this.clients[client.id];
 		});
+		client.emit('wordio', this.identifier);
 	}
 
 	getStateForWord(word) {
@@ -84,31 +90,44 @@ class Wordio {
 		return states;
 	}
 
-	guess(client, data) {
+	guess(client, data, silent=false) {
 		if (typeof data !== 'string' || data.length !== this.wordSize) {
-			client.emit('be_alerted', 'Nemoesh izlaga wordio kopelence!');
+			if (!silent) client.emit('be_alerted', 'Nemoesh izlaga wordio kopelence!');
 			return;
 		}
 
 		if (!this.dictionary.isValid(data)) {
-			client.emit('be_alerted', 'Wordio does not recognise this word.');
+			if (!silent) client.emit('be_alerted', 'Wordio does not recognise this word.');
 			return;
 		}
 
 		if (client.wordio_state.length >= this.maxGuesses) {
-			client.emit('be_alerted', 'You\'ve already used up your guesses, try again tomorrow (or refresh the page :troll:).');
+			if (!silent) client.emit('be_alerted', 'You\'ve already used up your guesses, try again tomorrow (or clear cache :troll:).');
 			return;
 		}
 
-		client.wordio_state.push(this.getStateForWord(data.toUpperCase()));
+		client.wordio_state.push(this.getStateForWord(data.toUpperCase()))
 		client.emit('wordio_state', client.wordio_state);
 
 		if (data.toUpperCase() === this.currentWord) {
-			client.emit('be_alerted', `Congratulations, you have solved today's mystery! The wordio riddle today was ${data}, yey!`);
-			this.chat.newSystemMessage('Wordio', new Date(), `Someone has just solved today's Wordio riddle in ${client.wordio_state.length} guesses! Compliments!`);
+			if (!silent) client.emit('be_alerted', `Congratulations, you have solved today's mystery! The wordio riddle today was ${data}, yey!`);
+			if (!silent) this.chat.newSystemMessage('Wordio', new Date(), `Someone has just solved today's Wordio riddle in ${client.wordio_state.length} guesses! Compliments!`);
 		} else {
-			client.emit('be_alerted', `${this.maxGuesses - client.wordio_state.length} tries remaning`);
+			if (!silent) client.emit('be_alerted', `${this.maxGuesses - client.wordio_state.length} tries remaning`);
 		}
+	}
+
+	syncState(client, states) {
+		if (states && states.length && Array.isArray(states)) {
+			for (const state of states) {
+				if (state.length && Array.isArray(state)) {
+					const word = state.map(el => el && el.letter).join('');
+
+					this.guess(client, word, true);
+				}
+			}
+		}
+		client.emit('wordio_state', client.wordio_state);
 	}
 }
 
