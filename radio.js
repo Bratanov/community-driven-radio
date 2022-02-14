@@ -14,6 +14,8 @@ const Logger = require('./server/core/logger.js');
 const ClientManager = require('./server/core/client-manager.js');
 const YoutubeApi = require('./server/core/youtube-api.js');
 const Config = require('./server/core/config.js');
+const { Dictionary } = require('./server/core/wordio/dictionary');
+const CsvDictionary = require('./server/core/wordio/csv-dictionary');
 
 const container = new ContainerBuilder();
 container.register('Config', Config);
@@ -29,8 +31,24 @@ config.set('icons', process.env.KIRO_ICONS, '😀 😃 😄 😁 😆 😅 😂 
 
 // Wordio configuration variables
 config.set('wordio', process.env.WORDIO, 'true');
-config.set('words', process.env.WORDS_LIST || fs.readFileSync(path.resolve(__dirname, process.env.WORDS_FILENAME || 'server/core/wordio/wordio_6.csv')).toString().split("\n"));
-config.set('dailyWordPool', process.env.DAILY_WORDS_LIST || fs.readFileSync(path.resolve(__dirname, process.env.DAILY_WORDS_FILENAME || 'server/core/wordio/wordio_6.csv')).toString().split("\n"));
+
+if (process.env.WORDS_LIST) {
+	Logger.info('Loading dictionary from provided csv word list');
+	container.register('Dictionary', Dictionary)
+		.addArgument(process.env.WORDS_LIST.split(','))
+		.addArgument((process.env.DAILY_WORDS_LIST || process.env.WORDS_LIST).split(','));
+} else if (process.env.WORDS_FILENAME) {
+	Logger.info('Loading dictionary from provided CSV file');
+	container.register('Dictionary', CsvDictionary)
+		.addArgument(process.env.WORDS_FILENAME)
+		.addArgument(process.env.DAILY_WORDS_FILENAME || process.env.WORDS_FILENAME);
+} else {
+	Logger.info('Loading default dictionary');
+	// default dictionary if none provided
+	container.register('Dictionary', CsvDictionary)
+		.addArgument('wordio_6.csv')
+		.addArgument('wordio_6.csv');
+}
 
 const io = require('./server/core/socketio-express-initializer')(config);
 
@@ -57,7 +75,8 @@ container.register('Chat', Chat)
 container.register('Wordio', Wordio)
 	.addArgument(new Reference('ClientManager'))
 	.addArgument(new Reference('Chat'))
-	.addArgument(new Reference('Config'));
+	.addArgument(new Reference('Config'))
+	.addArgument(new Reference('Dictionary'));
 
 container.compile();
 

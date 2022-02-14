@@ -15,8 +15,7 @@ describe('Wordio', function() {
 		chat = sinon.stub();
 		chat.newSystemMessage = sinon.stub();
 		config = new Config({
-			wordio: 'true',
-			words: ['клитор', 'опържа', 'работа']
+			wordio: 'true'
 		});
 	});
 
@@ -24,8 +23,11 @@ describe('Wordio', function() {
 	});
 
 	it('should guess word states correctly', async () => {
-		const wordio = new Wordio(clientManager, chat, config);
-		wordio.currentWord = 'ОПЪРЖА';
+		const dictionary = {
+			getDailyWord: () => 'ОПЪРЖА',
+			isValid: (word) => ['КЛИТОР', 'ОПЪРЖА', 'РАБОТА'].includes(word.toUpperCase())
+		}
+		const wordio = new Wordio(clientManager, chat, config, dictionary);
 		const client = {
 			on: sinon.stub(),
 			emit: sinon.stub()

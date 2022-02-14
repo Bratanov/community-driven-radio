@@ -10,25 +10,21 @@ class Wordio {
 	 * @param {ClientManager} clientManager for attaching to the clients events
 	 * @param {Chat} chat
 	 * @param {Config} config
+	 * @param {IDictionary} dictionary
 	 */
-	constructor(clientManager, chat, config) {
+	constructor(clientManager, chat, config, dictionary) {
 		if (config.get('wordio', 'true') !== 'true') {
 			Logger.info('Wordio is disabled in config, not initializing');
 			return;
 		}
 
 		this.chat = chat;
-		this.words = config.get('words', []);
-
-		// sanitize words
-		this.words = this.words.map(el => el.toUpperCase().trim());
-
-		const dailyWordPool = config.get('dailyWordPool', this.words);
+		this.dictionary = dictionary;
 		this.clients = {};
 
 		this.maxGuesses = config.get('maxGuesses', 8);
 		this.wordSize = config.get('wordSize', 6);
-		this.currentWord = dailyWordPool[parseInt(Math.random()*dailyWordPool.length)].toUpperCase().trim();
+		this.currentWord = dictionary.getDailyWord();
 
 		clientManager.on('new-client', client => this.attachClient(client));
 	}
@@ -94,7 +90,7 @@ class Wordio {
 			return;
 		}
 
-		if (!this.words.includes(data.toUpperCase())) {
+		if (!this.dictionary.isValid(data)) {
 			client.emit('be_alerted', 'Wordio does not recognise this word.');
 			return;
 		}
