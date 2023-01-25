@@ -7,8 +7,10 @@ const VotesManager = require('./server/core/votes-manager.js');
 const Chat = require('./server/core/chat.js');
 const Logger = require('./server/core/logger.js');
 const ClientManager = require('./server/core/client-manager.js');
+const Tunnel = require('./server/core/tunnel.js');
 
 const SERVER_PORT = process.env.PORT || 4000;
+const LOCALTUNNEL_SUBDOMAIN = process.env.LOCALTUNNEL_SUBDOMAIN || false;
 const io = require('./server/core/socketio-express-initializer')({
 	port: SERVER_PORT
 });
@@ -43,5 +45,13 @@ clientManager.on('new-client', client => {
 
     Logger.info('Client', client.id, 'connected');
 });
+
+if (LOCALTUNNEL_SUBDOMAIN) {
+	Logger.info('Localtunnel is enabled');
+	const tunnel = new Tunnel(LOCALTUNNEL_SUBDOMAIN, SERVER_PORT);
+	tunnel.start();
+} else {
+	Logger.info('Localtunnel is not enabled');
+}
 
 Logger.info('Radio components initialized and waiting');
